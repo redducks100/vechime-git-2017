@@ -10,5 +10,12 @@ namespace VechimeSoftware
         public string Nume { get; set; }
         public string Prenume { get; set; }
         public List<Perioada> Perioade { get; set; }
+        public string NumeIntreg
+        {
+            get
+            {
+                return Nume.ToUpper() + " " + Prenume.ToUpper();
+            }
+        }
     }
 }
