@@ -75,6 +75,11 @@ namespace VechimeSoftware
             this.resultLabel = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.searchTextBox = new System.Windows.Forms.TextBox();
+            this.tableLayoutPanel8 = new System.Windows.Forms.TableLayoutPanel();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.perioadaInvTB = new System.Windows.Forms.TextBox();
+            this.perioadaTotalTB = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -86,6 +91,7 @@ namespace VechimeSoftware
             this.personContextMenuStrip.SuspendLayout();
             this.tableLayoutPanel6.SuspendLayout();
             this.tableLayoutPanel7.SuspendLayout();
+            this.tableLayoutPanel8.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -144,21 +150,22 @@ namespace VechimeSoftware
             // adaugaToolStripMenuItem1
             // 
             this.adaugaToolStripMenuItem1.Name = "adaugaToolStripMenuItem1";
-            this.adaugaToolStripMenuItem1.Size = new System.Drawing.Size(137, 22);
+            this.adaugaToolStripMenuItem1.Size = new System.Drawing.Size(132, 22);
             this.adaugaToolStripMenuItem1.Text = "Adauga";
             this.adaugaToolStripMenuItem1.Click += new System.EventHandler(this.adaugaToolPerioadaStripMenuItem_Click);
             // 
             // stergeToolStripMenuItem1
             // 
             this.stergeToolStripMenuItem1.Name = "stergeToolStripMenuItem1";
-            this.stergeToolStripMenuItem1.Size = new System.Drawing.Size(137, 22);
+            this.stergeToolStripMenuItem1.Size = new System.Drawing.Size(132, 22);
             this.stergeToolStripMenuItem1.Text = "Sterge";
             // 
             // actualizareToolStripMenuItem
             // 
             this.actualizareToolStripMenuItem.Name = "actualizareToolStripMenuItem";
-            this.actualizareToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
-            this.actualizareToolStripMenuItem.Text = "Actualizare?";
+            this.actualizareToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
+            this.actualizareToolStripMenuItem.Text = "Actualizare";
+            this.actualizareToolStripMenuItem.Click += new System.EventHandler(this.actualizareToolStripMenuItem_Click);
             // 
             // raportToolStripMenuItem
             // 
@@ -503,6 +510,7 @@ namespace VechimeSoftware
             this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 35F));
             this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 65F));
             this.tableLayoutPanel6.Controls.Add(this.tableLayoutPanel7, 0, 0);
+            this.tableLayoutPanel6.Controls.Add(this.tableLayoutPanel8, 1, 0);
             this.tableLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel6.Location = new System.Drawing.Point(3, 3);
             this.tableLayoutPanel6.Name = "tableLayoutPanel6";
@@ -572,6 +580,65 @@ namespace VechimeSoftware
             this.searchTextBox.TabIndex = 1;
             this.searchTextBox.TextChanged += new System.EventHandler(this.searchTextBox_TextChanged);
             // 
+            // tableLayoutPanel8
+            // 
+            this.tableLayoutPanel8.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Single;
+            this.tableLayoutPanel8.ColumnCount = 2;
+            this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 38.68613F));
+            this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 61.31387F));
+            this.tableLayoutPanel8.Controls.Add(this.perioadaTotalTB, 1, 1);
+            this.tableLayoutPanel8.Controls.Add(this.label4, 0, 0);
+            this.tableLayoutPanel8.Controls.Add(this.label6, 0, 1);
+            this.tableLayoutPanel8.Controls.Add(this.perioadaInvTB, 1, 0);
+            this.tableLayoutPanel8.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel8.Location = new System.Drawing.Point(374, 3);
+            this.tableLayoutPanel8.Name = "tableLayoutPanel8";
+            this.tableLayoutPanel8.RowCount = 2;
+            this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel8.Size = new System.Drawing.Size(685, 74);
+            this.tableLayoutPanel8.TabIndex = 1;
+            // 
+            // label4
+            // 
+            this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(4, 10);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(257, 16);
+            this.label4.TabIndex = 1;
+            this.label4.Text = "Perioada Invatamant:";
+            // 
+            // label6
+            // 
+            this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.Location = new System.Drawing.Point(4, 47);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(257, 16);
+            this.label6.TabIndex = 4;
+            this.label6.Text = "Perioada Total:";
+            // 
+            // perioadaInvTB
+            // 
+            this.perioadaInvTB.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.perioadaInvTB.Location = new System.Drawing.Point(268, 8);
+            this.perioadaInvTB.Name = "perioadaInvTB";
+            this.perioadaInvTB.ReadOnly = true;
+            this.perioadaInvTB.Size = new System.Drawing.Size(413, 20);
+            this.perioadaInvTB.TabIndex = 5;
+            // 
+            // perioadaTotalTB
+            // 
+            this.perioadaTotalTB.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.perioadaTotalTB.Location = new System.Drawing.Point(268, 45);
+            this.perioadaTotalTB.Name = "perioadaTotalTB";
+            this.perioadaTotalTB.ReadOnly = true;
+            this.perioadaTotalTB.Size = new System.Drawing.Size(413, 20);
+            this.perioadaTotalTB.TabIndex = 6;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -596,6 +663,8 @@ namespace VechimeSoftware
             this.tableLayoutPanel6.ResumeLayout(false);
             this.tableLayoutPanel7.ResumeLayout(false);
             this.tableLayoutPanel7.PerformLayout();
+            this.tableLayoutPanel8.ResumeLayout(false);
+            this.tableLayoutPanel8.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -647,6 +716,11 @@ namespace VechimeSoftware
         private System.Windows.Forms.DataGridViewTextBoxColumn tip;
         private System.Windows.Forms.DataGridViewTextBoxColumn locMunca;
         private System.Windows.Forms.DataGridViewCheckBoxColumn lucreaza;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel8;
+        private System.Windows.Forms.TextBox perioadaTotalTB;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TextBox perioadaInvTB;
     }
 }
 

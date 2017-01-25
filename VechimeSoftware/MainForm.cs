@@ -37,6 +37,7 @@ namespace VechimeSoftware
         private void UpdatePeople()
         {
             peopleDictionary = GetPeople();
+            displayPeople = peopleDictionary.Values.ToList();
             UpdateList();
         }
 
@@ -257,6 +258,7 @@ namespace VechimeSoftware
             }
 
             peopleDictionary = GetPeople();
+            displayPeople = peopleDictionary.Values.ToList();
             UpdatePeopleInfo();
         } //done
 
@@ -408,10 +410,7 @@ namespace VechimeSoftware
                     newRow.Cells[3].Value = perioada.DTSfarsit.ToShortDateString();
                     newRow.Cells[4].Value = perioada.CFSAni_Personal.ToString() + "-" + perioada.CFSLuni_Personal.ToString() + "-" + perioada.CFSZile_Personal.ToString();
                     newRow.Cells[5].Value = perioada.CFSAni_Studii.ToString() + "-" + perioada.CFSLuni_Studii.ToString() + "-" + perioada.CFSZile_Studii.ToString();
-
-                    DateDiff dateDiff = new DateDiff(perioada.DTInceput, perioada.DTSfarsit);
-                    newRow.Cells[6].Value = dateDiff.ElapsedYears + "-" + dateDiff.ElapsedMonths + "-" + dateDiff.ElapsedDays;
-
+                    newRow.Cells[6].Value = perioada.Difference.ElapsedYears + "-" + perioada.Difference.ElapsedMonths + "-" + perioada.Difference.ElapsedDays;
                     newRow.Cells[7].Value = perioada.Norma.ToUpper();
                     newRow.Cells[8].Value = perioada.Functie.ToUpper();
                     newRow.Cells[9].Value = perioada.IOM.ToUpper();
@@ -420,10 +419,18 @@ namespace VechimeSoftware
                     dataGridView1.Rows.Add(newRow);
                     count++;
                 }
+
+                PerioadaTotal inv = selectedPerson.perioadaInv;
+                PerioadaTotal total = selectedPerson.perioadaTotal;
+                perioadaInvTB.Text = inv.ANI.ToString() + " ani " + inv.LUNI.ToString() + " luni " + inv.ZILE.ToString() + " zile";
+                perioadaTotalTB.Text = total.ANI.ToString() + " ani " + total.LUNI.ToString() + " luni " + total.ZILE.ToString() + " zile";
+
             }
             else
             {
                 dataGridView1.Rows.Clear();
+                perioadaInvTB.Text = "";
+                perioadaTotalTB.Text = "";
             }
         } //done
 
@@ -529,8 +536,10 @@ namespace VechimeSoftware
 
         private void adaugaToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            PersonForm personForm = new PersonForm(this, null);
-            personForm.ShowDialog();
+            using (PersonForm personForm = new PersonForm(this, null))
+            {
+                personForm.ShowDialog();
+            }
         }
 
         private void adaugaToolPerioadaStripMenuItem_Click(object sender, EventArgs e)
@@ -540,8 +549,10 @@ namespace VechimeSoftware
                 selectedIndex = peopleDictionary[(peopleListBox.SelectedItem as Person).ID].ID;
             if (selectedIndex != -1)
             {
-                PerioadaForm perioadaForm = new PerioadaForm(this, null, selectedIndex);
-                perioadaForm.ShowDialog();
+                using (PerioadaForm perioadaForm = new PerioadaForm(this, null, selectedIndex))
+                {
+                    perioadaForm.ShowDialog();
+                }
             }
         }
 
@@ -585,7 +596,33 @@ namespace VechimeSoftware
 
         #endregion DeleteHandlers
 
-        #endregion Menu Strip Handlers
+        #region UpdateHandlers
+
+        private void actualizareToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Person selectedPerson = null;
+            if (peopleListBox.SelectedIndex >= 0 && peopleDictionary.ContainsKey((peopleListBox.SelectedItem as Person).ID))
+                selectedPerson = peopleDictionary[(peopleListBox.SelectedItem as Person).ID];
+            if (selectedPerson != null)
+            {
+                if (MessageBox.Show("Sigur doriti sa actualizati perioadele?", "Atentie", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    for (int i = 0; i < selectedPerson.Perioade.Count; i++)
+                    {
+                        if(selectedPerson.Perioade[i].Lucreaza == true)
+                        {
+                            selectedPerson.Perioade[i].DTSfarsit = DateTime.Today;
+                            ModifyPerioada(selectedPerson.Perioade[i], selectedPerson.ID);
+                        }
+                    }
+                }
+            }
+
+        }
+
+        #endregion
+
+        #endregion
 
         #region DrawHandlers
 

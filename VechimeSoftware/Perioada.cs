@@ -1,4 +1,5 @@
 using System;
+using Itenso.TimePeriod;
 
 namespace VechimeSoftware
 {
@@ -20,5 +21,12 @@ namespace VechimeSoftware
         public string LocMunca { get; set; }
         public bool Lucreaza { get; set; }
         public bool Somaj { get; set; }
+
+        public DateDiff Difference {
+            get
+            {
+                return new DateDiff(DTInceput, DTSfarsit);
+            }
+        }
     }
 }
