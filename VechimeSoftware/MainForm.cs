@@ -662,7 +662,7 @@ namespace VechimeSoftware
                 // Adaug informatii despre persoana
                 XFont font = new XFont("Verdana", 11);
 
-                gfx.DrawString("Persoana: " + selectedPerson.Nume
+                gfx.DrawString("Persoana: " + selectedPerson.Nume+" "+selectedPerson.Prenume
                               , font, XBrushes.Black,
                                new XRect(45, 70, page.Width, page.Height),
                                XStringFormats.TopLeft);
@@ -690,6 +690,9 @@ namespace VechimeSoftware
                 gfx.DrawLine(new XPen(XColor.FromName("black")), new System.Windows.Point(20, 130), new System.Windows.Point(wd - 20, 130));
 
                 int count = 0;
+
+
+
 
                 // Suma timpului
                 int ani = 0, luni = 0, zile = 0;
@@ -725,22 +728,45 @@ namespace VechimeSoftware
                                    new XRect(25, currentHeight, page.Width, page.Height),
                                    XStringFormats.TopLeft);
 
-                    double norma = 1;
 
-                    if (perioada.Norma == "1/2")
-                        norma = 0.5;
-                    else if (perioada.Norma == "1/4")
-                        norma = 0.25;
 
-                    ani += diff.ElapsedYears;
-                    luni += diff.ElapsedMonths;
-                    zile += diff.ElapsedDays;
+                    //    if (perioada.Norma == "1/2")
 
-                    if (perioada.IOM.ToUpper() == "INVATAMANT")
+                    //   else if (perioada.Norma == "1/4")
+
+                    DateTime change = new DateTime(2002, 1, 1);
+
+                    if (!perioada.Somaj || perioada.DTInceput.CompareTo(change) >= 0)
                     {
-                        aniInv += diff.ElapsedYears;
-                        luniInv += diff.ElapsedMonths;
-                        zileInv += diff.ElapsedDays;
+
+                        TimePeriod np = new TimePeriod();
+                        np.Years = diff.ElapsedYears;
+                        np.Months = diff.ElapsedMonths;
+                        np.Days = diff.ElapsedDays;
+
+
+                        // aplic norma,, folosesc inainte de 2002
+                        if(perioada.DTInceput.CompareTo(change) <= 0)
+                        if (perioada.Norma == "1/2")
+                            np = HaflTime(np);
+                        else if (perioada.Norma == "1/4")
+                            np = QuarterTime(np);
+
+                        ani += perioada.CFSAni_Studii;
+                        luni += perioada.CFSLuni_Studii;
+                        zile += perioada.CFSZile_Studii;
+
+
+                        ani += np.Years;
+                        luni += np.Months;
+                        zile += np.Days;
+
+                        if (perioada.IOM.ToUpper() == "INVATAMANT")
+                        {
+                            aniInv += np.Years;
+                            luniInv += np.Months;
+                            zileInv += np.Days;
+                        }
                     }
                 }
 
@@ -748,7 +774,7 @@ namespace VechimeSoftware
                 currentHeight += 40;
 
                 // Clalculez timp in invatamant
-                int zileInvCalc = Convert.ToInt32(zileInv % 30.4368499);
+                int zileInvCalc = Convert.ToInt32(zileInv % 30);
                 int luniInvCalc = (luniInv + Convert.ToInt32(Math.Floor(zileInv / 30.4368499))) % 12;
                 int aniInvCalc = aniInv + (luniInv + Convert.ToInt32(Math.Floor(zileInv / 30.4368499))) / 12;
 
@@ -1061,6 +1087,66 @@ namespace VechimeSoftware
               .Select(s => s[random.Next(s.Length)]).ToArray());
         }
 
+        class TimePeriod
+        {
+            public int Years { get; set; }
+            public int Months { get; set; }
+            public int Days { get; set; }
+
+        }
+
+
+        TimePeriod HaflTime(TimePeriod time)
+        {
+
+            int addMonths = 0, addDays = 0;
+            if (time.Years % 2 == 1)
+                addMonths = 6;
+
+            time.Years /= 2;
+
+            if (time.Months % 2 == 1)
+                addDays = 15;
+
+            time.Months /= 2;
+            time.Days /= 2;
+
+            time.Months += addMonths;
+            time.Days += addDays;
+
+            return time;
+        }
+
+        TimePeriod QuarterTime(TimePeriod time)
+        {
+
+            int addMonths = 0, addDays = 0;
+            if (time.Years % 4 == 1)
+                addMonths = 3;
+            else if (time.Years % 4 == 2)
+                addMonths = 6;
+            else if (time.Years % 4 == 3)
+                addMonths = 9;
+
+
+            time.Years /= 4;
+
+            if (time.Months % 4 == 1)
+                addDays = 7;
+            else if (time.Months % 4 == 2)
+                addDays = 15;
+            else if (time.Months % 4 == 3)
+                addDays = 23;
+
+            time.Months /= 4;
+            time.Days /= 4;
+
+            time.Months += addMonths;
+            time.Days += addDays;
+
+
+            return time;
+        }
         #endregion GeneratePdf
     }
 }
