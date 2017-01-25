@@ -21,13 +21,14 @@ namespace VechimeSoftware
         private string databasePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/Baza.mdb";
         private string connectionString = "";
         public Dictionary<int, Person> peopleDictionary = new Dictionary<int, Person>();
-        private List<int> listToDictionary;
+        private List<Person> displayPeople = new List<Person>();
 
         public MainForm()
         {
             InitializeComponent();
             connectionString = @"Provider=Microsoft.ACE.OLEDB.12.0; Data Source=" + databasePath + @"; Persist Security Info=False;";
             peopleDictionary = GetPeople();
+            displayPeople = peopleDictionary.Values.ToList();
             UpdatePeopleInfo();
         }
 
@@ -36,18 +37,16 @@ namespace VechimeSoftware
         private void UpdatePeople()
         {
             peopleDictionary = GetPeople();
+            displayPeople = peopleDictionary.Values.ToList();
             UpdateList();
         }
 
         private void UpdateList()
         {
-            listToDictionary = new List<int>();
-            peopleListBox.Items.Clear();
-            foreach (Person p in peopleDictionary.Values)
-            {
-                peopleListBox.Items.Add(p.Nume + " " + p.Prenume);
-                listToDictionary.Add(p.ID);
-            }
+            peopleListBox.DataSource = null;
+            peopleListBox.DataSource = displayPeople;
+            peopleListBox.DisplayMember = "NumeIntreg";
+            peopleListBox.ValueMember = "ID";
 
             peopleListBox.SelectedIndex = -1;
         }
@@ -179,7 +178,6 @@ namespace VechimeSoftware
 
                                 if (peopleDictionary.ContainsKey(ID_Person))
                                 {
-                                    newPerioada.ListNumber = peopleDictionary[ID_Person].Perioade.Count;
                                     peopleDictionary[ID_Person].Perioade.Add(newPerioada);
                                 }
                             }
@@ -260,6 +258,7 @@ namespace VechimeSoftware
             }
 
             peopleDictionary = GetPeople();
+            displayPeople = peopleDictionary.Values.ToList();
             UpdatePeopleInfo();
         } //done
 
@@ -310,11 +309,12 @@ namespace VechimeSoftware
 
         public void ModifyPerioada(Perioada currentPerioada, int personID)
         {
+            int recordsChanged = 0;
             using (OleDbConnection connection = new OleDbConnection(connectionString))
             {
-                string commandString = @"UPDATE Perioade SET Id_Persoana=@Id_Persona,Data_Inceput=@Data_Inceput,Data_Sfarsit=@Data_Sfarsit,CFS_Zile_Personal=@CFS_Zile_Personal,
-                                                             CFS_Luni_Personal=@CFS_Luni_Personal,CFS_Ani_Personal=@CFS_Ani_Personal,CFS_Zile_Studii=@CFS_Zile_Studii,CFS_Luni_Studii=@CFS_Luni_Studii,
-                                                             CFS_Ani_Studii=@CFS_Ani_Studii,Norma=@Norma,Functie=@Functie,InvORMunca=@InvORMunca,Loc_Munca=@Loc_Munca,Lucreaza=@Lucreaza,Somaj=@Somaj WHERE Id=@Id";
+                string commandString = "UPDATE Perioade SET Id_Persoana=@Id_Persoana,Data_Inceput=@Data_Inceput,Data_Sfarsit=@Data_Sfarsit,CFS_Zile_Personal=@CFS_Zile_Personal," +
+                                                             "CFS_Luni_Personal=@CFS_Luni_Personal,CFS_Ani_Personal=@CFS_Ani_Personal,CFS_Zile_Studii=@CFS_Zile_Studii,CFS_Luni_Studii=@CFS_Luni_Studii,"+
+                                                             "CFS_Ani_Studii=@CFS_Ani_Studii,Norma=@Norma,Functie=@Functie,InvORMunca=@InvORMunca,Loc_Munca=@Loc_Munca,Lucreaza=@Lucreaza,Somaj=@Somaj WHERE Id=@Id";
                 using (OleDbCommand command = new OleDbCommand(commandString, connection))
                 {
                     command.Parameters.Add("@Id_Persoana", OleDbType.Integer).Value = personID;
@@ -337,7 +337,7 @@ namespace VechimeSoftware
 
                     try
                     {
-                        command.ExecuteNonQuery();
+                        recordsChanged = command.ExecuteNonQuery();
                     }
                     catch (Exception e)
                     {
@@ -346,15 +346,16 @@ namespace VechimeSoftware
                 }
             }
 
-            if (peopleDictionary.ContainsKey(personID))
+            if (peopleDictionary.ContainsKey(personID) && recordsChanged != 0)
             {
                 peopleDictionary[personID].Perioade = GetPerioadaList(personID);
-                peopleListBox.SelectedIndex = -1;
             }
+            peopleListBox.SelectedIndex = -1;
         } //done
 
         public void DeletePerioada(int perioadaID, int personID)
         {
+            int recordsChanged = 0;
             using (OleDbConnection connection = new OleDbConnection(connectionString))
             {
                 using (OleDbCommand command = new OleDbCommand("DELETE FROM Perioade WHERE Id=@Id", connection))
@@ -363,7 +364,7 @@ namespace VechimeSoftware
                     connection.Open();
                     try
                     {
-                        command.ExecuteNonQuery();
+                        recordsChanged = command.ExecuteNonQuery();
                     }
                     catch (Exception e)
                     {
@@ -372,11 +373,11 @@ namespace VechimeSoftware
                 }
             }
 
-            if (peopleDictionary.ContainsKey(personID))
+            if (peopleDictionary.ContainsKey(personID) && recordsChanged!=0)
             {
                 peopleDictionary[personID].Perioade = GetPerioadaList(personID);
-                peopleListBox.SelectedIndex = -1;
             }
+            peopleListBox.SelectedIndex = -1;
         } //done
 
         #endregion SQL-Methods
@@ -388,8 +389,8 @@ namespace VechimeSoftware
             if (peopleListBox.SelectedIndex >= 0)
             {
                 Person selectedPerson = null;
-                if (peopleDictionary.ContainsKey(listToDictionary[peopleListBox.SelectedIndex]))
-                    selectedPerson = peopleDictionary[listToDictionary[peopleListBox.SelectedIndex]];
+                if (peopleDictionary.ContainsKey((peopleListBox.SelectedItem as Person).ID))
+                    selectedPerson = peopleDictionary[(peopleListBox.SelectedItem as Person).ID];
                 else
                 {
                     MessageBox.Show("Person doesn't exist!", "Error!");
@@ -404,15 +405,12 @@ namespace VechimeSoftware
                     DataGridViewRow newRow = new DataGridViewRow();
                     newRow.CreateCells(dataGridView1);
                     newRow.Cells[0].Value = perioada.ID;
-                    newRow.Cells[1].Value = perioada.ListNumber;
+                    newRow.Cells[1].Value = count;
                     newRow.Cells[2].Value = perioada.DTInceput.ToShortDateString();
                     newRow.Cells[3].Value = perioada.DTSfarsit.ToShortDateString();
                     newRow.Cells[4].Value = perioada.CFSAni_Personal.ToString() + "-" + perioada.CFSLuni_Personal.ToString() + "-" + perioada.CFSZile_Personal.ToString();
                     newRow.Cells[5].Value = perioada.CFSAni_Studii.ToString() + "-" + perioada.CFSLuni_Studii.ToString() + "-" + perioada.CFSZile_Studii.ToString();
-
-                    DateDiff dateDiff = new DateDiff(perioada.DTInceput, perioada.DTSfarsit);
-                    newRow.Cells[6].Value = dateDiff.ElapsedYears + "-" + dateDiff.ElapsedMonths + "-" + dateDiff.ElapsedDays;
-
+                    newRow.Cells[6].Value = perioada.Difference.ElapsedYears + "-" + perioada.Difference.ElapsedMonths + "-" + perioada.Difference.ElapsedDays;
                     newRow.Cells[7].Value = perioada.Norma.ToUpper();
                     newRow.Cells[8].Value = perioada.Functie.ToUpper();
                     newRow.Cells[9].Value = perioada.IOM.ToUpper();
@@ -421,10 +419,18 @@ namespace VechimeSoftware
                     dataGridView1.Rows.Add(newRow);
                     count++;
                 }
+
+                PerioadaTotal inv = selectedPerson.perioadaInv;
+                PerioadaTotal total = selectedPerson.perioadaTotal;
+                perioadaInvTB.Text = inv.ANI.ToString() + " ani " + inv.LUNI.ToString() + " luni " + inv.ZILE.ToString() + " zile";
+                perioadaTotalTB.Text = total.ANI.ToString() + " ani " + total.LUNI.ToString() + " luni " + total.ZILE.ToString() + " zile";
+
             }
             else
             {
                 dataGridView1.Rows.Clear();
+                perioadaInvTB.Text = "";
+                perioadaTotalTB.Text = "";
             }
         } //done
 
@@ -440,26 +446,20 @@ namespace VechimeSoftware
                 newList = peopleDictionary.Values.Where(x => x.Nume.ToLower().Contains(searchTextBox.Text.ToLower()) || x.Prenume.ToLower().Contains(searchTextBox.Text.ToLower())).ToList();
                 if (newList != null)
                 {
-                    peopleListBox.Items.Clear();
-                    listToDictionary.Clear();
-                    foreach (Person p in newList)
-                    {
-                        peopleListBox.Items.Add(p.Nume + " " + p.Prenume);
-                        listToDictionary.Add(p.ID);
-                    }
-                    peopleListBox.SelectedIndex = -1;
+                    displayPeople = newList;
+                    UpdateList();
                     ChangeResultLabel(newList.Count);
                 }
                 else
                 {
-                    listToDictionary.Clear();
-                    peopleListBox.Items.Clear();
-                    peopleListBox.SelectedIndex = -1;
+                    displayPeople = new List<Person>();
+                    UpdateList();
                     ChangeResultLabel(0);
                 }
             }
             else
             {
+                displayPeople = peopleDictionary.Values.ToList();
                 UpdateList();
                 ChangeResultLabel(-1);
             }
@@ -499,12 +499,14 @@ namespace VechimeSoftware
         private void veziDetaliiModificaToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Person selectedPerson = null;
-            if (peopleListBox.SelectedIndex >= 0 && peopleDictionary.ContainsKey(listToDictionary[peopleListBox.SelectedIndex]))
-                selectedPerson = peopleDictionary[listToDictionary[peopleListBox.SelectedIndex]];
+            if (peopleListBox.SelectedIndex >= 0 && peopleDictionary.ContainsKey((peopleListBox.SelectedItem as Person).ID))
+                selectedPerson = peopleDictionary[(peopleListBox.SelectedItem as Person).ID];
             if (selectedPerson != null)
             {
-                PersonForm personForm = new PersonForm(this, selectedPerson);
-                personForm.ShowDialog();
+                using (PersonForm personForm = new PersonForm(this, selectedPerson))
+                {
+                    personForm.ShowDialog();
+                }
             }
         }
 
@@ -512,18 +514,19 @@ namespace VechimeSoftware
         {
             Perioada selectedPerioada = null;
             int selectedIndex = -1;
-            if (dataGridView1.SelectedRows.Count > 0 && peopleDictionary.ContainsKey(listToDictionary[peopleListBox.SelectedIndex]))
+            if (dataGridView1.SelectedRows.Count > 0 && peopleDictionary.ContainsKey((peopleListBox.SelectedItem as Person).ID))
             {
-                selectedIndex = peopleDictionary[listToDictionary[peopleListBox.SelectedIndex]].ID;
-                int selectedIndexPerioada = Convert.ToInt32(dataGridView1.SelectedRows[0].Cells["placeList"].Value);
-                MessageBox.Show(selectedIndexPerioada.ToString());
-                selectedPerioada = peopleDictionary[listToDictionary[peopleListBox.SelectedIndex]].Perioade[selectedIndexPerioada];
+                selectedIndex = peopleDictionary[(peopleListBox.SelectedItem as Person).ID].ID;
+                int selectedIndexPerioada = Convert.ToInt32(dataGridView1.Rows[dataGridView1.SelectedCells[0].RowIndex].Cells["placeList"].Value);
+                selectedPerioada = peopleDictionary[(peopleListBox.SelectedItem as Person).ID].Perioade[selectedIndexPerioada];
             }
 
             if (selectedPerioada != null && selectedIndex != -1)
             {
-                PerioadaForm perioadaForm = new PerioadaForm(this, selectedPerioada, selectedIndex);
-                perioadaForm.ShowDialog();
+                using (PerioadaForm perioadaForm = new PerioadaForm(this, selectedPerioada, selectedIndex))
+                {
+                    perioadaForm.ShowDialog();
+                }
             }
         }
 
@@ -533,19 +536,23 @@ namespace VechimeSoftware
 
         private void adaugaToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            PersonForm personForm = new PersonForm(this, null);
-            personForm.ShowDialog();
+            using (PersonForm personForm = new PersonForm(this, null))
+            {
+                personForm.ShowDialog();
+            }
         }
 
         private void adaugaToolPerioadaStripMenuItem_Click(object sender, EventArgs e)
         {
             int selectedIndex = -1;
-            if (peopleListBox.SelectedIndex >= 0 && peopleDictionary.ContainsKey(listToDictionary[peopleListBox.SelectedIndex]))
-                selectedIndex = peopleDictionary[listToDictionary[peopleListBox.SelectedIndex]].ID;
+            if (peopleListBox.SelectedIndex >= 0 && peopleDictionary.ContainsKey((peopleListBox.SelectedItem as Person).ID))
+                selectedIndex = peopleDictionary[(peopleListBox.SelectedItem as Person).ID].ID;
             if (selectedIndex != -1)
             {
-                PerioadaForm perioadaForm = new PerioadaForm(this, null, selectedIndex);
-                perioadaForm.ShowDialog();
+                using (PerioadaForm perioadaForm = new PerioadaForm(this, null, selectedIndex))
+                {
+                    perioadaForm.ShowDialog();
+                }
             }
         }
 
@@ -556,8 +563,8 @@ namespace VechimeSoftware
         private void stergeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Person selectedPerson = null;
-            if (peopleListBox.SelectedIndex >= 0 && peopleDictionary.ContainsKey(listToDictionary[peopleListBox.SelectedIndex]))
-                selectedPerson = peopleDictionary[listToDictionary[peopleListBox.SelectedIndex]];
+            if (peopleListBox.SelectedIndex >= 0 && peopleDictionary.ContainsKey((peopleListBox.SelectedItem as Person).ID))
+                selectedPerson = peopleDictionary[(peopleListBox.SelectedItem as Person).ID];
             if (selectedPerson != null)
             {
                 if (MessageBox.Show("Sigur doriti sa stergeti aceasta persoana?", "Atentie", MessageBoxButtons.YesNo) == DialogResult.Yes)
@@ -571,11 +578,11 @@ namespace VechimeSoftware
         {
             Perioada selectedPerioada = null;
             int selectedIndex = -1;
-            if (dataGridView1.SelectedRows.Count > 0 && peopleDictionary.ContainsKey(listToDictionary[peopleListBox.SelectedIndex]))
+            if (dataGridView1.SelectedRows.Count > 0 && peopleDictionary.ContainsKey((peopleListBox.SelectedItem as Person).ID))
             {
-                selectedIndex = peopleDictionary[listToDictionary[peopleListBox.SelectedIndex]].ID;
+                selectedIndex = peopleDictionary[(peopleListBox.SelectedItem as Person).ID].ID;
                 int selectedIndexPerioada = Convert.ToInt32(dataGridView1.SelectedRows[0].Cells["placeList"].Value);
-                selectedPerioada = peopleDictionary[listToDictionary[peopleListBox.SelectedIndex]].Perioade[selectedIndexPerioada];
+                selectedPerioada = peopleDictionary[(peopleListBox.SelectedItem as Person).ID].Perioade[selectedIndexPerioada];
             }
 
             if (selectedPerioada != null && selectedIndex != -1)
@@ -589,7 +596,33 @@ namespace VechimeSoftware
 
         #endregion DeleteHandlers
 
-        #endregion Menu Strip Handlers
+        #region UpdateHandlers
+
+        private void actualizareToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Person selectedPerson = null;
+            if (peopleListBox.SelectedIndex >= 0 && peopleDictionary.ContainsKey((peopleListBox.SelectedItem as Person).ID))
+                selectedPerson = peopleDictionary[(peopleListBox.SelectedItem as Person).ID];
+            if (selectedPerson != null)
+            {
+                if (MessageBox.Show("Sigur doriti sa actualizati perioadele?", "Atentie", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    for (int i = 0; i < selectedPerson.Perioade.Count; i++)
+                    {
+                        if(selectedPerson.Perioade[i].Lucreaza == true)
+                        {
+                            selectedPerson.Perioade[i].DTSfarsit = DateTime.Today;
+                            ModifyPerioada(selectedPerson.Perioade[i], selectedPerson.ID);
+                        }
+                    }
+                }
+            }
+
+        }
+
+        #endregion
+
+        #endregion
 
         #region DrawHandlers
 
@@ -607,7 +640,7 @@ namespace VechimeSoftware
             int index = e.Index;
             if (index >= 0 && index < peopleListBox.Items.Count)
             {
-                string text = peopleListBox.Items[index].ToString();
+                string FullName = (peopleListBox.Items[index] as Person).NumeIntreg;
                 Graphics g = e.Graphics;
 
                 //background:
@@ -622,7 +655,7 @@ namespace VechimeSoftware
 
                 //text:
                 SolidBrush foregroundBrush = (selected) ? reportsForegroundBrushSelected : reportsForegroundBrush;
-                g.DrawString(text, e.Font, foregroundBrush, new PointF(e.Bounds.X, e.Bounds.Y));
+                g.DrawString(FullName, e.Font, foregroundBrush, new PointF(e.Bounds.X, e.Bounds.Y));
             }
 
             e.DrawFocusRectangle();
@@ -638,8 +671,8 @@ namespace VechimeSoftware
             if (peopleListBox.SelectedIndex >= 0)
             {
                 Person selectedPerson = null;
-                if (peopleDictionary.ContainsKey(listToDictionary[peopleListBox.SelectedIndex]))
-                    selectedPerson = peopleDictionary[listToDictionary[peopleListBox.SelectedIndex]];
+                if (peopleDictionary.ContainsKey((peopleListBox.SelectedItem as Person).ID))
+                    selectedPerson = peopleDictionary[(peopleListBox.SelectedItem as Person).ID];
                 else
                 {
                     MessageBox.Show("Person doesn't exist!", "Error!");
@@ -662,7 +695,8 @@ namespace VechimeSoftware
                 // Adaug informatii despre persoana
                 XFont font = new XFont("Verdana", 11);
 
-                gfx.DrawString("Persoana: " + selectedPerson.Nume+" "+selectedPerson.Prenume
+
+                gfx.DrawString("Persoana: " + selectedPerson.NumeIntreg
                               , font, XBrushes.Black,
                                new XRect(45, 70, page.Width, page.Height),
                                XStringFormats.TopLeft);
@@ -672,22 +706,27 @@ namespace VechimeSoftware
                                new XRect(45, 82, page.Width, page.Height),
                                XStringFormats.TopLeft);
 
+                gfx.DrawString("SERIE: " + selectedPerson.Serie
+                            , font, XBrushes.Black,
+                              new XRect(45, 94, page.Width, page.Height),
+                              XStringFormats.TopLeft);
+
                 int wd = Convert.ToInt32(page.Width.Value);
 
                 // Prima linie
-                gfx.DrawLine(new XPen(XColor.FromName("black")), new System.Windows.Point(20, 100), new System.Windows.Point(wd - 20, 100));
+                gfx.DrawLine(new XPen(XColor.FromName("black")), new System.Windows.Point(20, 118), new System.Windows.Point(wd - 20, 118));
 
                 XFont fontTableHead = new XFont("Verdana", 10);
 
-                gfx.DrawString("Nr.crt.  Data inceput  Data sfarsit  CFS(aa-ll-zz)  Norma  Invatamant/Munca  Ani  Luni  Zile  Locul de munca"
+                gfx.DrawString("Nr.crt.  Data inceput  Data sfarsit  CFST(aa-ll-zz)  Norma  Invatamant/Munca  Ani  Luni  Zile  Locul de munca"
                               , fontTableHead, XBrushes.Black,
-                              new XRect(25, 110, page.Width, page.Height),
+                              new XRect(25, 128, page.Width, page.Height),
                               XStringFormats.TopLeft);
 
                 XFont fontList = new XFont("Consolas", 10);
 
                 // A doua linie
-                gfx.DrawLine(new XPen(XColor.FromName("black")), new System.Windows.Point(20, 130), new System.Windows.Point(wd - 20, 130));
+                gfx.DrawLine(new XPen(XColor.FromName("black")), new System.Windows.Point(20, 148), new System.Windows.Point(wd - 20, 148));
 
                 int count = 0;
 
@@ -701,7 +740,7 @@ namespace VechimeSoftware
                 int aniInv = 0, luniInv = 0, zileInv = 0;
 
                 // Pastreaza inaltimea la care am ajuns in pagina
-                int currentHeight = 130;
+                int currentHeight = 148;
 
                 foreach (Perioada perioada in selectedPerson.Perioade)
                 {
@@ -893,7 +932,7 @@ namespace VechimeSoftware
                                 new XRect(40, currentHeight, page.Width, page.Height),
                                 XStringFormats.TopLeft);
 
-                gfx.DrawString(person.Nume, fontList, XBrushes.Black,
+                gfx.DrawString(person.NumeIntreg, fontList, XBrushes.Black,
                              new XRect(70, currentHeight, page.Width, page.Height),
                               XStringFormats.TopLeft);
 
@@ -1066,7 +1105,7 @@ namespace VechimeSoftware
 
             pdfRenderer.RenderDocument();
 
-            string filename = "HelloWorld1.pdf";
+            string filename = "Adeverinta"+RandomString(4)+".pdf";
 
             pdfRenderer.PdfDocument.Save(filename);
 

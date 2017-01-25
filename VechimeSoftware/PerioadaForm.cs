@@ -163,7 +163,6 @@ namespace VechimeSoftware
                 return;
             }
 
-            currentPerioada = new Perioada();
             currentPerioada.DTInceput = inceputTimePicker.Value;
             currentPerioada.DTSfarsit = sfarsitTimePicker.Value;
             currentPerioada.CFSAni_Personal = Convert.ToInt32(cfsani_personalTB.Text);

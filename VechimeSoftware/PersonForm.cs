@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace VechimeSoftware
@@ -15,6 +16,16 @@ namespace VechimeSoftware
             currentPerson = _currentPerson;
             UpdateTitle();
             UpdateForm();
+        }
+        
+        private bool CheckCNP(string CNP)
+        {
+            if (parent.peopleDictionary.Values.ToList().Where(x => x.CNP == CNP).Count() > 0)
+            {
+                MessageBox.Show("Deja exista o persoana cu acest CNP: " + CNP + "!", "Eroare!");
+                return false;
+            }
+            return true;
         }
 
         private bool ValidateCNP()
@@ -98,6 +109,10 @@ namespace VechimeSoftware
             //    MessageBox.Show("CNP-ul nu este valid!","Erroare!");
             //    return;
             //}
+            if(CheckCNP(cnpTextBox.Text) == false)
+            {
+                return;
+            }
             if (string.IsNullOrWhiteSpace(nameTextBox.Text) || string.IsNullOrWhiteSpace(prenumeTextBox.Text))
             {
                 MessageBox.Show("Toate casutele trebuie completate!");
@@ -110,8 +125,8 @@ namespace VechimeSoftware
             currentPerson.Serie = serieTextBox.Text.ToUpper();
 
             parent.AddPerson(currentPerson);
-
             this.Close();
+            
         }
 
         private void saveButton_Click(object sender, EventArgs e)
@@ -121,6 +136,10 @@ namespace VechimeSoftware
             //    MessageBox.Show("CNP-ul nu este valid!","Erroare!");
             //    return;
             //}
+            if(CheckCNP(cnpTextBox.Text) == false)
+            {
+                return;
+            }
             if (string.IsNullOrWhiteSpace(nameTextBox.Text) || string.IsNullOrWhiteSpace(prenumeTextBox.Text) || string.IsNullOrWhiteSpace(serieTextBox.Text))
             {
                 MessageBox.Show("Toate casutele trebuie completate!");
@@ -133,7 +152,6 @@ namespace VechimeSoftware
             currentPerson.Serie = serieTextBox.Text.ToUpper();
 
             parent.ModifyPerson(currentPerson);
-
             this.Close();
         }
 
