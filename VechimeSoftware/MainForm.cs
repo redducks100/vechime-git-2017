@@ -773,19 +773,25 @@ namespace VechimeSoftware
 
                     //   else if (perioada.Norma == "1/4")
 
-                    DateTime change = new DateTime(2002, 1, 1);
+                    DateTime changeSomaj = new DateTime(2002, 03, 01);
 
-                    if (!perioada.Somaj || perioada.DTInceput.CompareTo(change) >= 0)
+                    DateTime changeNorma = new DateTime(2006, 09, 18);
+
+                    if (!perioada.Somaj || perioada.DTInceput.CompareTo(changeSomaj) < 0)
                     {
 
+                        if(perioada.DTSfarsit.CompareTo(changeSomaj)>0 && perioada.Somaj)
+                            diff = new DateDiff(perioada.DTInceput, changeSomaj);
+
                         TimePeriod np = new TimePeriod();
-                        np.Years = diff.ElapsedYears;
-                        np.Months = diff.ElapsedMonths;
-                        np.Days = diff.ElapsedDays;
+
+                        np.Years = diff.ElapsedYears-perioada.CFSAni_Personal;
+                        np.Months = diff.ElapsedMonths-perioada.CFSLuni_Personal;
+                        np.Days = diff.ElapsedDays-perioada.CFSZile_Personal;
 
 
                         // aplic norma,, folosesc inainte de 2002
-                        if(perioada.DTInceput.CompareTo(change) <= 0)
+                        if(perioada.DTInceput.CompareTo(changeNorma) < 0)
                         if (perioada.Norma == "1/2")
                             np = HaflTime(np);
                         else if (perioada.Norma == "1/4")
@@ -1005,15 +1011,11 @@ namespace VechimeSoftware
             Paragraph paragraphContent1 = section.AddParagraph();
             paragraphContent1.Format.Font.Size = 9;
             paragraphContent1.Format.Font.Italic = true;
-            paragraphContent1.AddFormattedText("          " + " Prin prezenta se atesta faptul ca dl./dna               ., domiciliat(a) in        .." +
-                                      ",str.          .., nr.    ., bl.    ., sc   ., ap    , sect    , jud    ." +
+            paragraphContent1.AddFormattedText("          " + " Prin prezenta se atesta faptul ca dl./dna               ."+
                                       ", posesor al BI/CI   .., seria    ., nr.      .., CNP             ." +
-                                      ", a fost angajatul (a) societatii               ., CUI          " +
-                                      ", cu sediul social in         .." +
-                                      ", in baza contractului individual de munca cu norma intreaga / cu timp partial de      . .ore / zi" +
-                                      ", incheiat pe durata determinata / nedeterminata" +
-                                      ", inregistrat la Inspectoratul Teritorial de Munca        cu nr.    ../    ." +
-                                      ", in functia / meseria de               .. . \n" +
+                                      ", a fost angajatul al unitatii               ." +
+                                     
+                                      ", in functia de               .. . \n" +
                                       "          " + " Pe durata executarii contractului individual de munca au intervenit urmatoarele mutatii " +
                                       "( incheierea, modificarea, suspendarea si incetarea contractului individual de munca ): \n\n");
 
@@ -1035,13 +1037,7 @@ namespace VechimeSoftware
             column = table.AddColumn("3cm");
             column.Borders.Color = Colors.Black;
             column.Format.Alignment = ParagraphAlignment.Right;
-            column = table.AddColumn("4cm");
-            column.Borders.Color = Colors.Black;
-            column.Format.Alignment = ParagraphAlignment.Center;
-            column = table.AddColumn("3cm");
-            column.Borders.Color = Colors.Black;
-            column.Format.Alignment = ParagraphAlignment.Right;
-
+          
             Row row = table.AddRow();
 
             Row row2 = table.AddRow();
@@ -1062,17 +1058,10 @@ namespace VechimeSoftware
             row.Cells[2].AddParagraph("Anul");
             row.Cells[2].Format.Alignment = ParagraphAlignment.Left;
 
-            row.Cells[3].AddParagraph("Meseria/Functia");
+            row.Cells[3].AddParagraph("Functia");
             row.Cells[3].Format.Alignment = ParagraphAlignment.Left;
             row.Cells[3].MergeDown = 2;
 
-            row.Cells[4].AddParagraph("Salariul de baza, inclusiv sporurile care intra in calculul punctajului mediu anual");
-            row.Cells[4].Format.Alignment = ParagraphAlignment.Left;
-            row.Cells[4].MergeDown = 2;
-
-            row.Cells[5].AddParagraph("Nr.si data actului pe baza caruia se face inscrierea si temeiul legal");
-            row.Cells[5].Format.Alignment = ParagraphAlignment.Left;
-            row.Cells[5].MergeDown = 2;
 
             for (int i = 0; i < 5; i++)
             {
@@ -1080,7 +1069,7 @@ namespace VechimeSoftware
                 row2 = table.AddRow();
                 row2 = table.AddRow();
 
-                for (int j = 0; j < 6; j++)
+                for (int j = 0; j < 4; j++)
                 {
                     row.Cells[j].MergeDown = 2;
                 }
@@ -1091,13 +1080,9 @@ namespace VechimeSoftware
             paragraphContent2.Format.Font.Size = 9;
             paragraphContent2.Format.Font.Italic = true;
             paragraphContent2.AddFormattedText("          " + "Incepind cu data de              .. " +
-                ", contractul individual de munca al domnului (ei) a incetat la data de             in baza prevederilor art.    .." +
-                ", alin.    , lit.     din Legea nr. 53/2003   Codul Muncii, modificata si completata.\n" +
-               "          " + "In perioada lucrata a avut     . zile de absente nemotivate si      zile concediu fara plata.\n" +
-               "          " + "In perioada de la      .pana la      .. a lucrat in grupa(I sau II de munca)" +
-               ", pozitia nr.        din anexa la Ordinul nr.     ..din     . al ministrului       .." +
-               ", in total      ani    . luni      zile(                    ). \n\n" +
-                "                   " + "Reprezentant legal,                             Intocmit,");
+                ", contractul individual de munca al domnului (ei) a incetat."+
+               "          " + "In perioada lucrata a avut          zile de absente nemotivate.\n" +
+          "                   " + "Reprezentant legal,                         Intocmit,");
 
             PdfDocumentRenderer pdfRenderer = new PdfDocumentRenderer(false, PdfFontEmbedding.Always);
 
@@ -1171,7 +1156,7 @@ namespace VechimeSoftware
             time.Years /= 4;
 
             if (time.Months % 4 == 1)
-                addDays = 7;
+                addDays = 8;
             else if (time.Months % 4 == 2)
                 addDays = 15;
             else if (time.Months % 4 == 3)
