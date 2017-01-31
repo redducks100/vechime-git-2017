@@ -400,7 +400,7 @@ namespace VechimeSoftware
                 dataGridView1.Rows.Clear();
 
                 int count = 0;
-                foreach (Perioada perioada in selectedPerson.Perioade)
+                foreach (Perioada perioada in selectedPerson.Perioade.OrderBy(c=>c.DTSfarsit))
                 {
                     DataGridViewRow newRow = new DataGridViewRow();
                     newRow.CreateCells(dataGridView1);
@@ -751,6 +751,18 @@ namespace VechimeSoftware
                     count++;
 
                     currentHeight += 13;
+
+                    if (currentHeight + 50 > page.Height)
+                    {
+                        
+
+                        page = document.AddPage();
+
+                         gfx = XGraphics.FromPdfPage(page);
+
+                        currentHeight = 30;
+                    }
+
                     DateDiff diff = new DateDiff(perioada.DTInceput, perioada.DTSfarsit);
 
                     TimePeriod periodCalc = CalculatePeriodTime(perioada);
@@ -778,6 +790,15 @@ namespace VechimeSoftware
 
                 // Adaug spatiu dupa enumerarea perioadelor
                 currentHeight += 40;
+
+                if (currentHeight + 40 > page.Height)
+                {
+                     page = document.AddPage();
+
+                    gfx = XGraphics.FromPdfPage(page);
+
+                    currentHeight = 30;
+                }
 
                 // Clalculez timp 
 
@@ -868,6 +889,17 @@ namespace VechimeSoftware
                 count++;
                 currentHeight += 15;
 
+                if (currentHeight + 50 > page.Height)
+                {
+
+
+                    page = document.AddPage();
+
+                    gfx = XGraphics.FromPdfPage(page);
+
+                    currentHeight = 30;
+                }
+
                 TimePeriodSum periodsSum = CalculateIndividualTime(person.Perioade);
 
                 gfx.DrawString(count.ToString(), fontList, XBrushes.Black,
@@ -942,7 +974,7 @@ namespace VechimeSoftware
 
             paragraphTitle.Format.Font.Size = 15;
             paragraphTitle.Format.Alignment = ParagraphAlignment.Center;
-            paragraphTitle.AddText("\nAdeverinta\n");
+            paragraphTitle.AddText("\nAdeverinta\n\n");
 
 
             if (peopleListBox.SelectedIndex < 0)
@@ -958,6 +990,7 @@ namespace VechimeSoftware
             }
 
             Paragraph paragraphContent1 = section.AddParagraph();
+            paragraphContent1.Format.Font.Name = "Verdana";
             paragraphContent1.Format.Font.Size = 9;
             paragraphContent1.Format.Font.Italic = true;
             paragraphContent1.AddFormattedText("         " + " Prin prezenta se atesta faptul ca dl./dna " + selectedPerson.NumeIntreg +
@@ -973,64 +1006,93 @@ namespace VechimeSoftware
 
             var form = section.AddTextFrame();
 
-            Column column = table.AddColumn("1cm");
+            Column column = table.AddColumn("1.5cm");
             column.Borders.Color = Colors.Black;
             column.Format.Alignment = ParagraphAlignment.Center;
+          
+            column = table.AddColumn("4cm");
+            column.Borders.Color = Colors.Black;
+            column.Format.Alignment = ParagraphAlignment.Right;
+
             column = table.AddColumn("3cm");
             column.Borders.Color = Colors.Black;
             column.Format.Alignment = ParagraphAlignment.Right;
-            column = table.AddColumn("1.5cm");
+
+            column = table.AddColumn("3cm");
             column.Borders.Color = Colors.Black;
             column.Format.Alignment = ParagraphAlignment.Right;
+
             column = table.AddColumn("3cm");
             column.Borders.Color = Colors.Black;
             column.Format.Alignment = ParagraphAlignment.Right;
 
             Row row = table.AddRow();
 
-            Row row2 = table.AddRow();
-            row2.Cells[2].AddParagraph("Luna");
-            row2 = table.AddRow();
-            row2.Cells[2].AddParagraph("Ziua");
+            
 
             row.Cells[0].AddParagraph("Nr. crt");
             row.Cells[0].Format.Font.Bold = false;
             row.Cells[0].Format.Alignment = ParagraphAlignment.Left;
             // row.Cells[0].VerticalAlignment = VerticalAlignment.Bottom;
-            row.Cells[0].MergeDown = 2;
+            
 
-            row.Cells[1].AddParagraph("Mutatia interventia");
+            row.Cells[1].AddParagraph("Mutatia / interventia");
             row.Cells[1].Format.Alignment = ParagraphAlignment.Left;
-            row.Cells[1].MergeDown = 2;
+            
 
-            row.Cells[2].AddParagraph("Anul");
+            row.Cells[2].AddParagraph("Data inceput");
             row.Cells[2].Format.Alignment = ParagraphAlignment.Left;
 
-            row.Cells[3].AddParagraph("Functia");
+            row.Cells[3].AddParagraph("Data sfarsit");
             row.Cells[3].Format.Alignment = ParagraphAlignment.Left;
-            row.Cells[3].MergeDown = 2;
+            
+
+            row.Cells[4].AddParagraph("Functia");
+            row.Cells[4].Format.Alignment = ParagraphAlignment.Left;
 
 
-            for (int i = 0; i < 5; i++)
+            int count = 1;
+            DateTime ultimaData = new DateTime();
+            foreach(Perioada perioada in selectedPerson.Perioade.OrderBy(c=>c.DTSfarsit).ToList())
             {
-                row = table.AddRow();
-                row2 = table.AddRow();
-                row2 = table.AddRow();
-
-                for (int j = 0; j < 4; j++)
+                if(perioada.LocMunca == "CNPR")
                 {
-                    row.Cells[j].MergeDown = 2;
+                     row = table.AddRow();
+
+                    for(int i=0;i<5;i++)
+                    row.Cells[i].Format.Font.Size = 9;
+
+                    row.Cells[0].AddParagraph(count.ToString());
+                    row.Cells[0].Format.Font.Bold = false;
+                    row.Cells[0].Format.Alignment = ParagraphAlignment.Center;
+                    // row.Cells[0].VerticalAlignment = VerticalAlignment.Bottom;
+                    count++;
+
+                    row.Cells[1].AddParagraph("");
+                    row.Cells[1].Format.Alignment = ParagraphAlignment.Left;
+
+
+                    row.Cells[2].AddParagraph(perioada.DTInceput.ToString("dd/MM/yyyy"));
+                    row.Cells[2].Format.Alignment = ParagraphAlignment.Left;
+
+                    row.Cells[3].AddParagraph(perioada.DTSfarsit.ToString("dd/MM/yyyy"));
+                    row.Cells[3].Format.Alignment = ParagraphAlignment.Left;
+
+
+                    row.Cells[4].AddParagraph(perioada.Functie);
+                    row.Cells[4].Format.Alignment = ParagraphAlignment.Left;
+
+                    ultimaData = perioada.DTSfarsit;
                 }
-                row.Cells[2].MergeDown = 0;
             }
 
             Paragraph paragraphContent2 = section.AddParagraph();
             paragraphContent2.Format.Font.Size = 9;
             paragraphContent2.Format.Font.Italic = true;
-            paragraphContent2.AddFormattedText("          " + "Incepind cu data de              .. " +
-                ", contractul individual de munca al domnului (ei) a incetat.\n" +
+            paragraphContent2.AddFormattedText("          " + "Incepind cu data de  " + ultimaData.ToString("dd/MM/yyyy") +
+                ", contractul individual de munca al domnului (ei) a incetat.\n\n\n" +
 
-          "         " + "Reprezentant legal," + "                  " + "Intocmit,");
+          "                        " + "Reprezentant legal," + "                          " + "Intocmit,");
 
             PdfDocumentRenderer pdfRenderer = new PdfDocumentRenderer(false, PdfFontEmbedding.Always);
 
