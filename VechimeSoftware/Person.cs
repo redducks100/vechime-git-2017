@@ -119,7 +119,6 @@ namespace VechimeSoftware
                         luni += Perioade[i].Difference.ElapsedMonths;
                         zile += Perioade[i].Difference.ElapsedDays;
                     }
-
                     total.Days = Convert.ToInt32(zile % 30);
                     total.Months = (luni + Convert.ToInt32(zile / 30)) % 12;
                     total.Years = ani + (luni + Convert.ToInt32(zile / 30)) / 12;
@@ -151,7 +150,6 @@ namespace VechimeSoftware
                     total.Years = ani + (luni + Convert.ToInt32(zile / 30)) / 12;
                     _perioadaInv = total;
                 }
-
                 return _perioadaInv;
             }
         }
