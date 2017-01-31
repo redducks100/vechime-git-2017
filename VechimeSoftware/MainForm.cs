@@ -313,7 +313,7 @@ namespace VechimeSoftware
             using (OleDbConnection connection = new OleDbConnection(connectionString))
             {
                 string commandString = "UPDATE Perioade SET Id_Persoana=@Id_Persoana,Data_Inceput=@Data_Inceput,Data_Sfarsit=@Data_Sfarsit,CFS_Zile_Personal=@CFS_Zile_Personal," +
-                                                             "CFS_Luni_Personal=@CFS_Luni_Personal,CFS_Ani_Personal=@CFS_Ani_Personal,CFS_Zile_Studii=@CFS_Zile_Studii,CFS_Luni_Studii=@CFS_Luni_Studii,"+
+                                                             "CFS_Luni_Personal=@CFS_Luni_Personal,CFS_Ani_Personal=@CFS_Ani_Personal,CFS_Zile_Studii=@CFS_Zile_Studii,CFS_Luni_Studii=@CFS_Luni_Studii," +
                                                              "CFS_Ani_Studii=@CFS_Ani_Studii,Norma=@Norma,Functie=@Functie,InvORMunca=@InvORMunca,Loc_Munca=@Loc_Munca,Lucreaza=@Lucreaza,Somaj=@Somaj WHERE Id=@Id";
                 using (OleDbCommand command = new OleDbCommand(commandString, connection))
                 {
@@ -373,7 +373,7 @@ namespace VechimeSoftware
                 }
             }
 
-            if (peopleDictionary.ContainsKey(personID) && recordsChanged!=0)
+            if (peopleDictionary.ContainsKey(personID) && recordsChanged != 0)
             {
                 peopleDictionary[personID].Perioade = GetPerioadaList(personID);
             }
@@ -411,7 +411,17 @@ namespace VechimeSoftware
                     newRow.Cells[4].Value = perioada.CFSAni_Personal.ToString() + "-" + perioada.CFSLuni_Personal.ToString() + "-" + perioada.CFSZile_Personal.ToString();
                     newRow.Cells[5].Value = perioada.CFSAni_Studii.ToString() + "-" + perioada.CFSLuni_Studii.ToString() + "-" + perioada.CFSZile_Studii.ToString();
                     newRow.Cells[6].Value = perioada.Difference.ElapsedYears + "-" + perioada.Difference.ElapsedMonths + "-" + perioada.Difference.ElapsedDays;
-                    newRow.Cells[7].Value = perioada.Norma.ToUpper();
+
+                    // Am specificat daca se aplica norma de 1/1 
+                    DateTime changeNorma = new DateTime(2006, 09, 18);
+                    string normaSpecification = "";
+                    if (perioada.Norma.ToUpper() != "1/1" && perioada.DTSfarsit.CompareTo(changeNorma) > 0)
+                    {
+                        normaSpecification = " (1/1)";
+                        newRow.Cells[7].ToolTipText = "De la data de  18/09/2006 se aplica norma 1/1.";
+                    }
+
+                    newRow.Cells[7].Value = perioada.Norma.ToUpper() + normaSpecification;
                     newRow.Cells[8].Value = perioada.Functie.ToUpper();
                     newRow.Cells[9].Value = perioada.IOM.ToUpper();
                     newRow.Cells[10].Value = perioada.LocMunca.ToUpper();
@@ -609,7 +619,7 @@ namespace VechimeSoftware
                 {
                     for (int i = 0; i < selectedPerson.Perioade.Count; i++)
                     {
-                        if(selectedPerson.Perioade[i].Lucreaza == true)
+                        if (selectedPerson.Perioade[i].Lucreaza == true)
                         {
                             selectedPerson.Perioade[i].DTSfarsit = DateTime.Today;
                             ModifyPerioada(selectedPerson.Perioade[i], selectedPerson.ID);
@@ -733,12 +743,6 @@ namespace VechimeSoftware
 
 
 
-                // Suma timpului
-                int ani = 0, luni = 0, zile = 0;
-
-                // Doar timpul in invatamant
-                int aniInv = 0, luniInv = 0, zileInv = 0;
-
                 // Pastreaza inaltimea la care am ajuns in pagina
                 int currentHeight = 148;
 
@@ -749,6 +753,8 @@ namespace VechimeSoftware
                     currentHeight += 13;
                     DateDiff diff = new DateDiff(perioada.DTInceput, perioada.DTSfarsit);
 
+                    TimePeriod periodCalc = CalculatePeriodTime(perioada);
+
                     string rowString = string.Empty.PadLeft(100);
 
                     rowString = rowString.Insert(3, count.ToString());
@@ -758,86 +764,39 @@ namespace VechimeSoftware
                     rowString = rowString.Insert(36, perioada.CFSAni_Personal.ToString() + "-" + perioada.CFSLuni_Personal.ToString() + "-" + perioada.CFSZile_Personal.ToString());
                     rowString = rowString.Insert(47, perioada.Norma.ToUpper());
                     rowString = rowString.Insert(55, perioada.IOM.ToUpper());
-                    rowString = rowString.Insert(72, diff.ElapsedYears.ToString());
-                    rowString = rowString.Insert(77, diff.ElapsedMonths.ToString());
-                    rowString = rowString.Insert(82, diff.ElapsedDays.ToString());
+                    rowString = rowString.Insert(72, periodCalc.Years.ToString());
+                    rowString = rowString.Insert(77, periodCalc.Months.ToString());
+                    rowString = rowString.Insert(82, periodCalc.Days.ToString());
                     rowString = rowString.Insert(87, perioada.LocMunca.ToUpper());
 
                     gfx.DrawString(rowString, fontList, XBrushes.Black,
                                    new XRect(25, currentHeight, page.Width, page.Height),
                                    XStringFormats.TopLeft);
 
-
-
-                    //    if (perioada.Norma == "1/2")
-
-                    //   else if (perioada.Norma == "1/4")
-
-                    DateTime changeSomaj = new DateTime(2002, 03, 01);
-
-                    DateTime changeNorma = new DateTime(2006, 09, 18);
-
-                    if (!perioada.Somaj || perioada.DTInceput.CompareTo(changeSomaj) < 0)
-                    {
-
-                        if(perioada.DTSfarsit.CompareTo(changeSomaj)>0 && perioada.Somaj)
-                            diff = new DateDiff(perioada.DTInceput, changeSomaj);
-
-                        TimePeriod np = new TimePeriod();
-
-                        np.Years = diff.ElapsedYears-perioada.CFSAni_Personal;
-                        np.Months = diff.ElapsedMonths-perioada.CFSLuni_Personal;
-                        np.Days = diff.ElapsedDays-perioada.CFSZile_Personal;
-
-
-                        // aplic norma,, folosesc inainte de 2002
-                        if(perioada.DTInceput.CompareTo(changeNorma) < 0)
-                        if (perioada.Norma == "1/2")
-                            np = HaflTime(np);
-                        else if (perioada.Norma == "1/4")
-                            np = QuarterTime(np);
-
-                        ani += perioada.CFSAni_Studii;
-                        luni += perioada.CFSLuni_Studii;
-                        zile += perioada.CFSZile_Studii;
-
-
-                        ani += np.Years;
-                        luni += np.Months;
-                        zile += np.Days;
-
-                        if (perioada.IOM.ToUpper() == "INVATAMANT")
-                        {
-                            aniInv += np.Years;
-                            luniInv += np.Months;
-                            zileInv += np.Days;
-                        }
-                    }
                 }
+
 
                 // Adaug spatiu dupa enumerarea perioadelor
                 currentHeight += 40;
 
-                // Clalculez timp in invatamant
-                int zileInvCalc = Convert.ToInt32(zileInv % 30);
-                int luniInvCalc = (luniInv + Convert.ToInt32(Math.Floor(zileInv / 30.4368499))) % 12;
-                int aniInvCalc = aniInv + (luniInv + Convert.ToInt32(Math.Floor(zileInv / 30.4368499))) / 12;
+                // Clalculez timp 
+
+                TimePeriodSum periodsSum = CalculateIndividualTime(selectedPerson.Perioade);
+
 
                 // Adaug timp invatamant
-                gfx.DrawString("Vechime in invatamant: " + aniInvCalc + " ani, " + luniInvCalc + " luni, " + zileInvCalc + " zile. "
+                gfx.DrawString("Vechime in invatamant: " + periodsSum.YearsInv + " ani, " + periodsSum.MonthsInv + " luni, " + periodsSum.DaysInv + " zile. "
                                 , fontList, XBrushes.Black,
                                 new XRect(0, currentHeight, page.Width, page.Height),
                                 XStringFormats.TopCenter);
 
                 currentHeight += 15;
 
-                // Calculez timp total
-                int zileCalc = Convert.ToInt32(zile % 30.4368499);
-                int luniCalc = (luni + Convert.ToInt32(Math.Floor(zile / 30.4368499))) % 12;
-                int aniCalc = ani + (luni + Convert.ToInt32(Math.Floor(zile / 30.4368499))) / 12;
+
+
 
                 // Adaug timp total
-                gfx.DrawString("Vechime total: " + aniCalc + " ani, " + luniCalc + " luni, " + zileCalc + " zile. "
+                gfx.DrawString("Vechime total: " + periodsSum.Years + " ani, " + periodsSum.Months + " luni, " + periodsSum.Days + " zile. "
                                  , fontList, XBrushes.Black,
                                  new XRect(0, currentHeight, page.Width, page.Height),
                                  XStringFormats.TopCenter);
@@ -865,6 +824,9 @@ namespace VechimeSoftware
             }
             else MessageBox.Show("Selectati mai intai o persoana!");
         }
+
+
+
 
         // Generez pdf pentru raport general
         private void toatePersoaneleGenerateToolStripMenuItem_Click(object sender, EventArgs e)
@@ -897,42 +859,16 @@ namespace VechimeSoftware
 
             XFont fontList = new XFont("Verdana", 8);
 
-            int ani = 0, luni = 0, zile = 0, aniInv = 0, luniInv = 0, zileInv = 0;
+
             int currentHeight = 100, count = 0;
 
-            int zileInvCalc = 0, luniInvCalc = 0, aniInvCalc = 0;
-            int zileCalc = 0, luniCalc = 0, aniCalc = 0;
 
             foreach (Person person in peopleDictionary.Values)
             {
                 count++;
                 currentHeight += 15;
 
-                foreach (Perioada period in person.Perioade)
-                {
-                    DateDiff diff = new DateDiff(period.DTInceput, period.DTSfarsit);
-                    ani += diff.ElapsedYears;
-                    luni += diff.ElapsedMonths;
-                    zile += diff.ElapsedDays;
-
-                    if (period.IOM.ToUpper() == "INVATAMANT")
-                    {
-                        aniInv += diff.ElapsedYears;
-                        luniInv += diff.ElapsedMonths;
-                        zileInv += diff.ElapsedDays;
-                    }
-                }
-
-                zileInvCalc = Convert.ToInt32(zileInv % 30.4368499);
-                luniInvCalc = (luniInv + Convert.ToInt32(Math.Floor(zileInv / 30.4368499))) % 12;
-                aniInvCalc = aniInv + (luniInv + Convert.ToInt32(Math.Floor(zileInv / 30.4368499))) / 12;
-
-                zileCalc = Convert.ToInt32(zile % 30.4368499);
-                luniCalc = (luni + Convert.ToInt32(Math.Floor(zile / 30.4368499))) % 12;
-                aniCalc = ani + (luni + Convert.ToInt32(Math.Floor(zile / 30.4368499))) / 12;
-
-                ani = 0; luni = 0; zile = 0;
-                aniInv = 0; luniInv = 0; zileInv = 0;
+                TimePeriodSum periodsSum = CalculateIndividualTime(person.Perioade);
 
                 gfx.DrawString(count.ToString(), fontList, XBrushes.Black,
                                 new XRect(40, currentHeight, page.Width, page.Height),
@@ -946,12 +882,12 @@ namespace VechimeSoftware
                             new XRect(200, currentHeight, page.Width, page.Height),
                              XStringFormats.TopLeft);
 
-                gfx.DrawString(aniInvCalc + " ani, " + luniInvCalc + " luni, " + zileInvCalc + " zile. "
+                gfx.DrawString(periodsSum.YearsInv + " ani, " + periodsSum.MonthsInv + " luni, " + periodsSum.DaysInv + " zile. "
                                 , fontList, XBrushes.Black,
                                 new XRect(310, currentHeight, page.Width, page.Height),
                                 XStringFormats.TopLeft);
 
-                gfx.DrawString(aniCalc + " ani, " + luniCalc + " luni, " + zileCalc + " zile. "
+                gfx.DrawString(periodsSum.Years + " ani, " + periodsSum.Months + " luni, " + periodsSum.Days + " zile. "
                                 , fontList, XBrushes.Black,
                                 new XRect(460, currentHeight, page.Width, page.Height),
                                 XStringFormats.TopLeft);
@@ -996,7 +932,7 @@ namespace VechimeSoftware
                                         "Str.                            ......................................nr    ..loc      ..jud      \n" +
                                         "Tel:.............................; Fax:           .\n" +
                                         "CUI               ..\n\n" +
-                                        "Nr.de inregistrare      . / data          ");
+                                        "Nr.de inregistrare      . \n Data " + DateTime.Now.ToString("dd/MM/yyyy"));
 
             //Add title
 
@@ -1008,15 +944,27 @@ namespace VechimeSoftware
             paragraphTitle.Format.Alignment = ParagraphAlignment.Center;
             paragraphTitle.AddText("\nAdeverinta\n");
 
+
+            if (peopleListBox.SelectedIndex < 0)
+                return;
+
+            Person selectedPerson = null;
+            if (peopleDictionary.ContainsKey((peopleListBox.SelectedItem as Person).ID))
+                selectedPerson = peopleDictionary[(peopleListBox.SelectedItem as Person).ID];
+            else
+            {
+                MessageBox.Show("Person doesn't exist!", "Error!");
+                return;
+            }
+
             Paragraph paragraphContent1 = section.AddParagraph();
             paragraphContent1.Format.Font.Size = 9;
             paragraphContent1.Format.Font.Italic = true;
-            paragraphContent1.AddFormattedText("          " + " Prin prezenta se atesta faptul ca dl./dna               ."+
-                                      ", posesor al BI/CI   .., seria    ., nr.      .., CNP             ." +
-                                      ", a fost angajatul al unitatii               ." +
-                                     
-                                      ", in functia de               .. . \n" +
-                                      "          " + " Pe durata executarii contractului individual de munca au intervenit urmatoarele mutatii " +
+            paragraphContent1.AddFormattedText("         " + " Prin prezenta se atesta faptul ca dl./dna " + selectedPerson.NumeIntreg +
+                                      ", posesor al BI/CI ..., seria " + selectedPerson.Serie.Substring(0, 2) + ", nr " + selectedPerson.Serie.Substring(2) + ", CNP " + selectedPerson.CNP +
+                                      ", a fost angajat al unitatii               ." +
+                                      ", in functia de ........ \n" +
+                                      "         " + " Pe durata executarii contractului individual de munca au intervenit urmatoarele mutatii " +
                                       "( incheierea, modificarea, suspendarea si incetarea contractului individual de munca ): \n\n");
 
             table = section.AddTable();
@@ -1037,7 +985,7 @@ namespace VechimeSoftware
             column = table.AddColumn("3cm");
             column.Borders.Color = Colors.Black;
             column.Format.Alignment = ParagraphAlignment.Right;
-          
+
             Row row = table.AddRow();
 
             Row row2 = table.AddRow();
@@ -1080,9 +1028,9 @@ namespace VechimeSoftware
             paragraphContent2.Format.Font.Size = 9;
             paragraphContent2.Format.Font.Italic = true;
             paragraphContent2.AddFormattedText("          " + "Incepind cu data de              .. " +
-                ", contractul individual de munca al domnului (ei) a incetat."+
-               "          " + "In perioada lucrata a avut          zile de absente nemotivate.\n" +
-          "                   " + "Reprezentant legal,                         Intocmit,");
+                ", contractul individual de munca al domnului (ei) a incetat.\n" +
+
+          "         " + "Reprezentant legal," + "                  " + "Intocmit,");
 
             PdfDocumentRenderer pdfRenderer = new PdfDocumentRenderer(false, PdfFontEmbedding.Always);
 
@@ -1090,7 +1038,7 @@ namespace VechimeSoftware
 
             pdfRenderer.RenderDocument();
 
-            string filename = "Adeverinta"+RandomString(4)+".pdf";
+            string filename = "Adeverinta" + RandomString(4) + ".pdf";
 
             pdfRenderer.PdfDocument.Save(filename);
 
@@ -1116,6 +1064,15 @@ namespace VechimeSoftware
             public int Years { get; set; }
             public int Months { get; set; }
             public int Days { get; set; }
+
+        }
+
+        class TimePeriodSum : TimePeriod
+        {
+
+            public int YearsInv { get; set; }
+            public int MonthsInv { get; set; }
+            public int DaysInv { get; set; }
 
         }
 
@@ -1171,6 +1128,214 @@ namespace VechimeSoftware
 
             return time;
         }
+
+
+        TimePeriodSum CalculateIndividualTime(List<Perioada> perioade)
+        {
+
+
+
+            // Suma timpului
+            int ani = 0, luni = 0, zile = 0;
+
+            // Doar timpul in invatamant
+            int aniInv = 0, luniInv = 0, zileInv = 0;
+
+
+            foreach (Perioada perioada in perioade)
+            {
+
+                DateDiff diff = new DateDiff(perioada.DTInceput, perioada.DTSfarsit);
+
+
+
+                DateTime changeSomaj = new DateTime(2002, 03, 01);
+
+                DateTime changeNorma = new DateTime(2006, 09, 18);
+
+                if (!perioada.Somaj || perioada.DTInceput.CompareTo(changeSomaj) < 0)
+                {
+
+                    if (perioada.DTSfarsit.CompareTo(changeSomaj) > 0 && perioada.Somaj)
+                        diff = new DateDiff(perioada.DTInceput, changeSomaj);
+
+                    TimePeriod np = new TimePeriod();
+
+
+                    //Mi se pare inutil daca separam cfs de restul
+
+                    //np.Years = diff.ElapsedYears - perioada.CFSAni_Personal;
+                    //np.Months = diff.ElapsedMonths - perioada.CFSLuni_Personal;
+                    //np.Days = diff.ElapsedDays - perioada.CFSZile_Personal;
+
+
+                    np.Years = diff.ElapsedYears;
+                    np.Months = diff.ElapsedMonths;
+                    np.Days = diff.ElapsedDays;
+
+                    // aplic norma
+                    if (perioada.DTInceput.CompareTo(changeNorma) < 0 && perioada.Norma != "1/1")
+                        if (perioada.DTSfarsit.CompareTo(changeNorma) > 0)
+                        {
+                            diff = new DateDiff(perioada.DTInceput, changeNorma);
+
+                            np.Years = diff.ElapsedYears;
+                            np.Months = diff.ElapsedMonths;
+                            np.Days = diff.ElapsedDays;
+
+                            if (perioada.Norma == "1/2")
+                                np = HaflTime(np);
+                            else if (perioada.Norma == "1/4")
+                                np = QuarterTime(np);
+
+                            diff = new DateDiff(changeNorma, perioada.DTSfarsit);
+
+                            np.Years += diff.ElapsedYears;
+                            np.Months += diff.ElapsedMonths;
+                            np.Days += diff.ElapsedDays;
+
+                        }
+                        else
+                        {
+                            if (perioada.Norma == "1/2")
+                                np = HaflTime(np);
+                            else if (perioada.Norma == "1/4")
+                                np = QuarterTime(np);
+                        }
+
+                    // Inutil daca separam cfs
+
+                    //ani += perioada.CFSAni_Studii;
+                    //luni += perioada.CFSLuni_Studii;
+                    //zile += perioada.CFSZile_Studii;
+
+
+                    ani += np.Years;
+                    luni += np.Months;
+                    zile += np.Days;
+
+                    if (perioada.IOM.ToUpper() == "INVATAMANT")
+                    {
+                        aniInv += np.Years;
+                        luniInv += np.Months;
+                        zileInv += np.Days;
+                    }
+                }
+            }
+
+
+
+            TimePeriodSum periodsSum = new TimePeriodSum();
+
+
+            // Clalculez timp in invatamant
+            periodsSum.DaysInv = Convert.ToInt32(zileInv % 30);
+            periodsSum.MonthsInv = (luniInv + Convert.ToInt32(Math.Floor(zileInv / 30.0))) % 12;
+            periodsSum.YearsInv = aniInv + (luniInv + Convert.ToInt32(Math.Floor(zileInv / 30.0))) / 12;
+
+
+
+            // Calculez timp total
+            periodsSum.Days = Convert.ToInt32(zile % 30.0);
+            periodsSum.Months = (luni + Convert.ToInt32(Math.Floor(zile / 30.0))) % 12;
+            periodsSum.Years = ani + (luni + Convert.ToInt32(Math.Floor(zile / 30.0))) / 12;
+
+
+            return periodsSum;
+
+        }
+
+
+
+        TimePeriod CalculatePeriodTime(Perioada perioada)
+        {
+
+
+
+            // Suma timpului
+            int ani = 0, luni = 0, zile = 0;
+
+            // Doar timpul in invatamant
+            int aniInv = 0, luniInv = 0, zileInv = 0;
+
+
+
+
+            DateDiff diff = new DateDiff(perioada.DTInceput, perioada.DTSfarsit);
+
+
+
+            DateTime changeSomaj = new DateTime(2002, 03, 01);
+
+            DateTime changeNorma = new DateTime(2006, 09, 18);
+
+            if (!perioada.Somaj || perioada.DTInceput.CompareTo(changeSomaj) < 0)
+            {
+
+                if (perioada.DTSfarsit.CompareTo(changeSomaj) > 0 && perioada.Somaj)
+                    diff = new DateDiff(perioada.DTInceput, changeSomaj);
+
+
+                TimePeriod np = new TimePeriod();
+                np.Years = diff.ElapsedYears;
+                np.Months = diff.ElapsedMonths;
+                np.Days = diff.ElapsedDays;
+
+                // aplic norma
+                if (perioada.DTInceput.CompareTo(changeNorma) < 0 && perioada.Norma != "1/1")
+                    if (perioada.DTSfarsit.CompareTo(changeNorma) > 0)
+                    {
+                        diff = new DateDiff(perioada.DTInceput, changeNorma);
+
+                        np.Years = diff.ElapsedYears;
+                        np.Months = diff.ElapsedMonths;
+                        np.Days = diff.ElapsedDays;
+
+                        if (perioada.Norma == "1/2")
+                            np = HaflTime(np);
+                        else if (perioada.Norma == "1/4")
+                            np = QuarterTime(np);
+
+                        diff = new DateDiff(changeNorma, perioada.DTSfarsit);
+
+                        np.Years += diff.ElapsedYears;
+                        np.Months += diff.ElapsedMonths;
+                        np.Days += diff.ElapsedDays;
+
+                    }
+                    else
+                    {
+                        if (perioada.Norma == "1/2")
+                            np = HaflTime(np);
+                        else if (perioada.Norma == "1/4")
+                            np = QuarterTime(np);
+                    }
+
+
+
+                ani += np.Years;
+                luni += np.Months;
+                zile += np.Days;
+
+
+
+            }
+
+
+
+            TimePeriod periodSum = new TimePeriod();
+
+
+
+            periodSum.Days = Convert.ToInt32(zile % 30.0);
+            periodSum.Months = (luni + Convert.ToInt32(Math.Floor(zile / 30.0))) % 12;
+            periodSum.Years = ani + (luni + Convert.ToInt32(Math.Floor(zile / 30.0))) / 12;
+
+
+            return periodSum;
+
+        }
+
         #endregion GeneratePdf
     }
 }

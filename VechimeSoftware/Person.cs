@@ -40,9 +40,9 @@ namespace VechimeSoftware
                     }   
                 }
 
-                total.ZILE = Convert.ToInt32(zile % 30.4368499);
-                total.LUNI = (luni + Convert.ToInt32(Math.Floor(zile / 30.4368499))) % 12;
-                total.ANI = ani + (luni + Convert.ToInt32(Math.Floor(zile / 30.4368499))) / 12;
+                total.ZILE = Convert.ToInt32(zile % 30.0);
+                total.LUNI = (luni + Convert.ToInt32(Math.Floor(zile / 30.0))) % 12;
+                total.ANI = ani + (luni + Convert.ToInt32(Math.Floor(zile / 30.0))) / 12;
                 return total;
             }
         }
@@ -62,9 +62,9 @@ namespace VechimeSoftware
                     }
                 }
 
-                total.ZILE = Convert.ToInt32(zile % 30.4368499);
-                total.LUNI = (luni + Convert.ToInt32(Math.Floor(zile / 30.4368499))) % 12;
-                total.ANI = ani + (luni + Convert.ToInt32(Math.Floor(zile / 30.4368499))) / 12;
+                total.ZILE = Convert.ToInt32(zile % 30.0);
+                total.LUNI = (luni + Convert.ToInt32(Math.Floor(zile / 30.0))) % 12;
+                total.ANI = ani + (luni + Convert.ToInt32(Math.Floor(zile / 30.0))) / 12;
                 return total;
             }
         }
@@ -80,9 +80,9 @@ namespace VechimeSoftware
                 ani = inv.ANI + munca.ANI;
                 luni = inv.LUNI + munca.LUNI;
                 zile = inv.ZILE + munca.ZILE;
-                total.ZILE = Convert.ToInt32(zile % 30.4368499);
-                total.LUNI = (luni + Convert.ToInt32(Math.Floor(zile / 30.4368499))) % 12;
-                total.ANI = ani + (luni + Convert.ToInt32(Math.Floor(zile / 30.4368499))) / 12;
+                total.ZILE = Convert.ToInt32(zile % 30.0);
+                total.LUNI = (luni + Convert.ToInt32(Math.Floor(zile / 30.0))) % 12;
+                total.ANI = ani + (luni + Convert.ToInt32(Math.Floor(zile / 30.0))) / 12;
                 return total;
 
             }
