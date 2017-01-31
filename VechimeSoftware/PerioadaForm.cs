@@ -127,6 +127,10 @@ namespace VechimeSoftware
                 MessageBox.Show("Toate casutele trebuie completate!", "Atentie!");
                 return;
             }
+
+            if (!VerificaData(inceputTimePicker.Value, sfarsitTimePicker.Value))
+                return;
+
             currentPerioada = new Perioada();
             currentPerioada.DTInceput = inceputTimePicker.Value;
             currentPerioada.DTSfarsit = sfarsitTimePicker.Value;
@@ -163,6 +167,9 @@ namespace VechimeSoftware
                 return;
             }
 
+            if (!VerificaData(inceputTimePicker.Value, sfarsitTimePicker.Value))
+                return;
+
             currentPerioada.DTInceput = inceputTimePicker.Value;
             currentPerioada.DTSfarsit = sfarsitTimePicker.Value;
             currentPerioada.CFSAni_Personal = Convert.ToInt32(cfsani_personalTB.Text);
@@ -189,6 +196,33 @@ namespace VechimeSoftware
 
             this.Close();
         }
+
+        bool VerificaData(DateTime inceput, DateTime sfarsit)
+        {
+            Person selectedPerson = null;
+            if (parent.peopleDictionary.ContainsKey(currentPersonIndex))
+                selectedPerson = parent.peopleDictionary[currentPersonIndex];
+
+             foreach(Perioada perioada in selectedPerson.Perioade)
+            {
+                if(inceput.CompareTo(perioada.DTInceput)>=0 && inceput.CompareTo(perioada.DTSfarsit)<=0)
+                {
+                    MessageBox.Show("Aceasta perioada este cuprinsa in alta perioada deja inregistrata.");
+                    return false;
+                }
+
+                if (sfarsit.CompareTo(perioada.DTInceput) >= 0 && sfarsit.CompareTo(perioada.DTSfarsit) <= 0)
+                {
+                    MessageBox.Show("Aceasta perioada este cuprinsa in alta perioada deja inregistrata.");
+                    return false;
+                }
+
+                
+            }
+            return true;
+        }
+
+
 
         private void timePicker_ValueChanged(object sender, EventArgs e)
         {
