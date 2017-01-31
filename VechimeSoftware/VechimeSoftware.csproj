@@ -126,11 +126,6 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BazaDataSet.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>BazaDataSet.xsd</DependentUpon>
-    </Compile>
     <Compile Include="PerioadaForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -171,17 +166,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <None Include="BazaDataSet.xsc">
-      <DependentUpon>BazaDataSet.xsd</DependentUpon>
-    </None>
-    <None Include="BazaDataSet.xsd">
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>BazaDataSet.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="BazaDataSet.xss">
-      <DependentUpon>BazaDataSet.xsd</DependentUpon>
-    </None>
     <None Include="packages.config" />
     <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
