@@ -117,18 +117,14 @@ namespace VechimeSoftware
                                 newPerioada.ID = Convert.ToInt32(reader[0]);
                                 newPerioada.DTInceput = Convert.ToDateTime(reader[2]);
                                 newPerioada.DTSfarsit = Convert.ToDateTime(reader[3]);
-                                newPerioada.CFSZile_Personal = Convert.ToInt32(reader[4]);
-                                newPerioada.CFSLuni_Personal = Convert.ToInt32(reader[5]);
-                                newPerioada.CFSAni_Personal = Convert.ToInt32(reader[6]);
-                                newPerioada.CFSZile_Studii = Convert.ToInt32(reader[7]);
-                                newPerioada.CFSLuni_Studii = Convert.ToInt32(reader[8]);
-                                newPerioada.CFSAni_Studii = Convert.ToInt32(reader[9]);
-                                newPerioada.Norma = Convert.ToString(reader[10]);
-                                newPerioada.Functie = Convert.ToString(reader[11]);
-                                newPerioada.IOM = Convert.ToString(reader[12]);
-                                newPerioada.LocMunca = Convert.ToString(reader[13]);
-                                newPerioada.Lucreaza = Convert.ToBoolean(reader[14]);
-                                newPerioada.Somaj = Convert.ToBoolean(reader[15]);
+                                newPerioada.CFS = Convert.ToBoolean(reader[4]);
+                                newPerioada.TipCFS = Convert.ToString(reader[5]);
+                                newPerioada.Norma = Convert.ToString(reader[6]);
+                                newPerioada.Functie = Convert.ToString(reader[7]);
+                                newPerioada.IOM = Convert.ToString(reader[8]);
+                                newPerioada.LocMunca = Convert.ToString(reader[9]);
+                                newPerioada.Lucreaza = Convert.ToBoolean(reader[10]);
+                                newPerioada.Somaj = Convert.ToBoolean(reader[11]);
                                 perioadaList.Add(newPerioada);
                             }
                         }
@@ -163,18 +159,14 @@ namespace VechimeSoftware
                                 int ID_Person = Convert.ToInt16(reader[1]);
                                 newPerioada.DTInceput = Convert.ToDateTime(reader[2]);
                                 newPerioada.DTSfarsit = Convert.ToDateTime(reader[3]);
-                                newPerioada.CFSZile_Personal = Convert.ToInt32(reader[4]);
-                                newPerioada.CFSLuni_Personal = Convert.ToInt32(reader[5]);
-                                newPerioada.CFSAni_Personal = Convert.ToInt32(reader[6]);
-                                newPerioada.CFSZile_Studii = Convert.ToInt32(reader[7]);
-                                newPerioada.CFSLuni_Studii = Convert.ToInt32(reader[8]);
-                                newPerioada.CFSAni_Studii = Convert.ToInt32(reader[9]);
-                                newPerioada.Norma = Convert.ToString(reader[10]);
-                                newPerioada.Functie = Convert.ToString(reader[11]);
-                                newPerioada.IOM = Convert.ToString(reader[12]);
-                                newPerioada.LocMunca = Convert.ToString(reader[13]);
-                                newPerioada.Lucreaza = Convert.ToBoolean(reader[14]);
-                                newPerioada.Somaj = Convert.ToBoolean(reader[15]);
+                                newPerioada.CFS = Convert.ToBoolean(reader[4]);
+                                newPerioada.TipCFS = Convert.ToString(reader[5]);
+                                newPerioada.Norma = Convert.ToString(reader[6]);
+                                newPerioada.Functie = Convert.ToString(reader[7]);
+                                newPerioada.IOM = Convert.ToString(reader[8]);
+                                newPerioada.LocMunca = Convert.ToString(reader[9]);
+                                newPerioada.Lucreaza = Convert.ToBoolean(reader[10]);
+                                newPerioada.Somaj = Convert.ToBoolean(reader[11]);
 
                                 if (peopleDictionary.ContainsKey(ID_Person))
                                 {
@@ -266,21 +258,15 @@ namespace VechimeSoftware
         {
             using (OleDbConnection connection = new OleDbConnection(connectionString))
             {
-                string commandString = @"INSERT INTO Perioade (Id_Persoana,Data_Inceput,Data_Sfarsit,CFS_Zile_Personal,CFS_Luni_Personal,CFS_Ani_Personal,CFS_Zile_Studii,CFS_Luni_Studii,CFS_Ani_Studii,
-                                                                Norma,Functie,InvORMunca,Loc_Munca,Lucreaza,Somaj)
-                                                VALUES (@Id_Persoana,@Data_Inceput,@Data_Sfarsit,@CFS_Zile_Personal,@CFS_Luni_Personal,@CFS_Ani_Personal,@CFS_Zile_Studii,@CFS_Luni_Studii,@CFS_Ani_Studii,
-                                                                @Norma,@Functie,@InvORMunca,@Loc_Munca,@Lucreaza,@Somaj)";
+                string commandString = @"INSERT INTO Perioade (Id_Persoana,Data_Inceput,Data_Sfarsit,CFS,TipCFS,Norma,Functie,InvORMunca,Loc_Munca,Lucreaza,Somaj)
+                                                VALUES (@Id_Persoana,@Data_Inceput,@Data_Sfarsit,@CFS,@TipCFS,@Norma,@Functie,@InvORMunca,@Loc_Munca,@Lucreaza,@Somaj)";
                 using (OleDbCommand command = new OleDbCommand(commandString, connection))
                 {
                     command.Parameters.Add("@Id_Persoana", OleDbType.Integer).Value = personID;
                     command.Parameters.Add("@Data_Inceput", OleDbType.Date).Value = currentPerioada.DTInceput;
                     command.Parameters.Add("@Data_Sfarsit", OleDbType.Date).Value = currentPerioada.DTSfarsit;
-                    command.Parameters.Add("@CFS_Zile_Personal", OleDbType.Integer).Value = currentPerioada.CFSZile_Personal;
-                    command.Parameters.Add("@CFS_Luni_Personal", OleDbType.Integer).Value = currentPerioada.CFSLuni_Personal;
-                    command.Parameters.Add("@CFS_Ani_Personal", OleDbType.Integer).Value = currentPerioada.CFSAni_Personal;
-                    command.Parameters.Add("@CFS_Zile_Studii", OleDbType.Integer).Value = currentPerioada.CFSZile_Studii;
-                    command.Parameters.Add("@CFS_Luni_Studii", OleDbType.Integer).Value = currentPerioada.CFSLuni_Studii;
-                    command.Parameters.Add("@CFS_Ani_Studii", OleDbType.Integer).Value = currentPerioada.CFSAni_Studii;
+                    command.Parameters.Add("@CFS", OleDbType.Boolean).Value = currentPerioada.CFS;
+                    command.Parameters.Add("@TipCFS", OleDbType.VarChar).Value = currentPerioada.TipCFS;
                     command.Parameters.Add("@Norma", OleDbType.VarChar).Value = currentPerioada.Norma;
                     command.Parameters.Add("@Functie", OleDbType.VarChar).Value = currentPerioada.Functie;
                     command.Parameters.Add("@InvORMunca", OleDbType.VarChar).Value = currentPerioada.IOM;
@@ -320,12 +306,8 @@ namespace VechimeSoftware
                     command.Parameters.Add("@Id_Persoana", OleDbType.Integer).Value = personID;
                     command.Parameters.Add("@Data_Inceput", OleDbType.Date).Value = currentPerioada.DTInceput;
                     command.Parameters.Add("@Data_Sfarsit", OleDbType.Date).Value = currentPerioada.DTSfarsit;
-                    command.Parameters.Add("@CFS_Zile_Personal", OleDbType.Integer).Value = currentPerioada.CFSZile_Personal;
-                    command.Parameters.Add("@CFS_Luni_Personal", OleDbType.Integer).Value = currentPerioada.CFSLuni_Personal;
-                    command.Parameters.Add("@CFS_Ani_Personal", OleDbType.Integer).Value = currentPerioada.CFSAni_Personal;
-                    command.Parameters.Add("@CFS_Zile_Studii", OleDbType.Integer).Value = currentPerioada.CFSZile_Studii;
-                    command.Parameters.Add("@CFS_Luni_Studii", OleDbType.Integer).Value = currentPerioada.CFSLuni_Studii;
-                    command.Parameters.Add("@CFS_Ani_Studii", OleDbType.Integer).Value = currentPerioada.CFSAni_Studii;
+                    command.Parameters.Add("@CFS", OleDbType.Boolean).Value = currentPerioada.CFS;
+                    command.Parameters.Add("@TipCFS", OleDbType.VarChar).Value = currentPerioada.TipCFS;
                     command.Parameters.Add("@Norma", OleDbType.VarChar).Value = currentPerioada.Norma;
                     command.Parameters.Add("@Functie", OleDbType.VarChar).Value = currentPerioada.Functie;
                     command.Parameters.Add("@InvORMunca", OleDbType.VarChar).Value = currentPerioada.IOM;
@@ -402,7 +384,7 @@ namespace VechimeSoftware
                 int count = 0;
                 foreach (Perioada perioada in selectedPerson.Perioade)
                 {
-                    DataGridViewRow newRow = new DataGridViewRow();
+                  /*  DataGridViewRow newRow = new DataGridViewRow();
                     newRow.CreateCells(dataGridView1);
                     newRow.Cells[0].Value = perioada.ID;
                     newRow.Cells[1].Value = count;
@@ -417,13 +399,11 @@ namespace VechimeSoftware
                     newRow.Cells[10].Value = perioada.LocMunca.ToUpper();
                     newRow.Cells[11].Value = perioada.Lucreaza;
                     dataGridView1.Rows.Add(newRow);
-                    count++;
+                    count++;*/
                 }
 
-                PerioadaTotal inv = selectedPerson.perioadaInv;
-                PerioadaTotal total = selectedPerson.perioadaTotal;
-                perioadaInvTB.Text = inv.ANI.ToString() + " ani " + inv.LUNI.ToString() + " luni " + inv.ZILE.ToString() + " zile";
-                perioadaTotalTB.Text = total.ANI.ToString() + " ani " + total.LUNI.ToString() + " luni " + total.ZILE.ToString() + " zile";
+                perioadaInvTB.Text = selectedPerson.PerioadaInv.Years.ToString() + " ani " + selectedPerson.PerioadaInv.Months.ToString() + " luni " + selectedPerson.PerioadaInv.Days.ToString() + " zile";
+                perioadaTotalTB.Text = selectedPerson.PerioadaMunca.Years.ToString() + " ani " + selectedPerson.PerioadaMunca.Months.ToString() + " luni " + selectedPerson.PerioadaMunca.Days.ToString() + " zile";
 
             }
             else
@@ -753,7 +733,7 @@ namespace VechimeSoftware
 
                     rowString = rowString.Insert(3, count.ToString());
 
-                    rowString = rowString.Insert(8, perioada.DTInceput.ToShortDateString());
+                  /*  rowString = rowString.Insert(8, perioada.DTInceput.ToShortDateString());
                     rowString = rowString.Insert(21, perioada.DTSfarsit.ToShortDateString());
                     rowString = rowString.Insert(36, perioada.CFSAni_Personal.ToString() + "-" + perioada.CFSLuni_Personal.ToString() + "-" + perioada.CFSZile_Personal.ToString());
                     rowString = rowString.Insert(47, perioada.Norma.ToUpper());
@@ -761,7 +741,7 @@ namespace VechimeSoftware
                     rowString = rowString.Insert(72, diff.ElapsedYears.ToString());
                     rowString = rowString.Insert(77, diff.ElapsedMonths.ToString());
                     rowString = rowString.Insert(82, diff.ElapsedDays.ToString());
-                    rowString = rowString.Insert(87, perioada.LocMunca.ToUpper());
+                    rowString = rowString.Insert(87, perioada.LocMunca.ToUpper());*/
 
                     gfx.DrawString(rowString, fontList, XBrushes.Black,
                                    new XRect(25, currentHeight, page.Width, page.Height),
@@ -787,13 +767,13 @@ namespace VechimeSoftware
                         // aplic norma,, folosesc inainte de 2002
                         if(perioada.DTInceput.CompareTo(change) <= 0)
                         if (perioada.Norma == "1/2")
-                            np = HaflTime(np);
+                            np = TimePeriod.HalfTime(np);
                         else if (perioada.Norma == "1/4")
-                            np = QuarterTime(np);
+                            np = TimePeriod.QuarterTime(np);
 
-                        ani += perioada.CFSAni_Studii;
+                      /*  ani += perioada.CFSAni_Studii;
                         luni += perioada.CFSLuni_Studii;
-                        zile += perioada.CFSZile_Studii;
+                        zile += perioada.CFSZile_Studii;*/
 
 
                         ani += np.Years;
@@ -814,8 +794,8 @@ namespace VechimeSoftware
 
                 // Clalculez timp in invatamant
                 int zileInvCalc = Convert.ToInt32(zileInv % 30);
-                int luniInvCalc = (luniInv + Convert.ToInt32(Math.Floor(zileInv / 30.4368499))) % 12;
-                int aniInvCalc = aniInv + (luniInv + Convert.ToInt32(Math.Floor(zileInv / 30.4368499))) / 12;
+                int luniInvCalc = (luniInv + Convert.ToInt32(zileInv / 30)) % 12;
+                int aniInvCalc = aniInv + (luniInv + Convert.ToInt32(zileInv / 30)) / 12;
 
                 // Adaug timp invatamant
                 gfx.DrawString("Vechime in invatamant: " + aniInvCalc + " ani, " + luniInvCalc + " luni, " + zileInvCalc + " zile. "
@@ -826,9 +806,9 @@ namespace VechimeSoftware
                 currentHeight += 15;
 
                 // Calculez timp total
-                int zileCalc = Convert.ToInt32(zile % 30.4368499);
-                int luniCalc = (luni + Convert.ToInt32(Math.Floor(zile / 30.4368499))) % 12;
-                int aniCalc = ani + (luni + Convert.ToInt32(Math.Floor(zile / 30.4368499))) / 12;
+                int zileCalc = Convert.ToInt32(zile % 30);
+                int luniCalc = (luni + Convert.ToInt32(zile / 30)) % 12;
+                int aniCalc = ani + (luni + Convert.ToInt32(zile / 30)) / 12;
 
                 // Adaug timp total
                 gfx.DrawString("Vechime total: " + aniCalc + " ani, " + luniCalc + " luni, " + zileCalc + " zile. "
@@ -917,13 +897,13 @@ namespace VechimeSoftware
                     }
                 }
 
-                zileInvCalc = Convert.ToInt32(zileInv % 30.4368499);
-                luniInvCalc = (luniInv + Convert.ToInt32(Math.Floor(zileInv / 30.4368499))) % 12;
-                aniInvCalc = aniInv + (luniInv + Convert.ToInt32(Math.Floor(zileInv / 30.4368499))) / 12;
+                zileInvCalc = Convert.ToInt32(zileInv % 30);
+                luniInvCalc = (luniInv + Convert.ToInt32(zileInv / 30)) % 12;
+                aniInvCalc = aniInv + (luniInv + Convert.ToInt32(zileInv / 30)) / 12;
 
-                zileCalc = Convert.ToInt32(zile % 30.4368499);
-                luniCalc = (luni + Convert.ToInt32(Math.Floor(zile / 30.4368499))) % 12;
-                aniCalc = ani + (luni + Convert.ToInt32(Math.Floor(zile / 30.4368499))) / 12;
+                zileCalc = Convert.ToInt32(zile % 30);
+                luniCalc = (luni + Convert.ToInt32(zile / 30)) % 12;
+                aniCalc = ani + (luni + Convert.ToInt32(zile / 30)) / 12;
 
                 ani = 0; luni = 0; zile = 0;
                 aniInv = 0; luniInv = 0; zileInv = 0;
@@ -1124,67 +1104,6 @@ namespace VechimeSoftware
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
             return new string(Enumerable.Repeat(chars, length)
               .Select(s => s[random.Next(s.Length)]).ToArray());
-        }
-
-        class TimePeriod
-        {
-            public int Years { get; set; }
-            public int Months { get; set; }
-            public int Days { get; set; }
-
-        }
-
-
-        TimePeriod HaflTime(TimePeriod time)
-        {
-
-            int addMonths = 0, addDays = 0;
-            if (time.Years % 2 == 1)
-                addMonths = 6;
-
-            time.Years /= 2;
-
-            if (time.Months % 2 == 1)
-                addDays = 15;
-
-            time.Months /= 2;
-            time.Days /= 2;
-
-            time.Months += addMonths;
-            time.Days += addDays;
-
-            return time;
-        }
-
-        TimePeriod QuarterTime(TimePeriod time)
-        {
-
-            int addMonths = 0, addDays = 0;
-            if (time.Years % 4 == 1)
-                addMonths = 3;
-            else if (time.Years % 4 == 2)
-                addMonths = 6;
-            else if (time.Years % 4 == 3)
-                addMonths = 9;
-
-
-            time.Years /= 4;
-
-            if (time.Months % 4 == 1)
-                addDays = 7;
-            else if (time.Months % 4 == 2)
-                addDays = 15;
-            else if (time.Months % 4 == 3)
-                addDays = 23;
-
-            time.Months /= 4;
-            time.Days /= 4;
-
-            time.Months += addMonths;
-            time.Days += addDays;
-
-
-            return time;
         }
         #endregion GeneratePdf
     }
