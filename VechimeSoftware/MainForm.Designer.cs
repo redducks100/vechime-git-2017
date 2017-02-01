@@ -276,10 +276,10 @@ namespace VechimeSoftware
             // 
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Minion Pro SmBd", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(4, 2);
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(4, 4);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(808, 21);
+            this.label1.Size = new System.Drawing.Size(808, 18);
             this.label1.TabIndex = 0;
             this.label1.Text = "Perioade:";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -427,19 +427,19 @@ namespace VechimeSoftware
             this.veziDetaliiModificaToolStripMenuItem1,
             this.stergeToolStripMenuItem});
             this.perioadaContextMenuStrip.Name = "perioadaContextMenuStrip";
-            this.perioadaContextMenuStrip.Size = new System.Drawing.Size(182, 48);
+            this.perioadaContextMenuStrip.Size = new System.Drawing.Size(183, 48);
             // 
             // veziDetaliiModificaToolStripMenuItem1
             // 
             this.veziDetaliiModificaToolStripMenuItem1.Name = "veziDetaliiModificaToolStripMenuItem1";
-            this.veziDetaliiModificaToolStripMenuItem1.Size = new System.Drawing.Size(181, 22);
+            this.veziDetaliiModificaToolStripMenuItem1.Size = new System.Drawing.Size(182, 22);
             this.veziDetaliiModificaToolStripMenuItem1.Text = "Vezi detalii/Modifica";
             this.veziDetaliiModificaToolStripMenuItem1.Click += new System.EventHandler(this.veziDetaliiPerioadaModificaToolStripMenuItem_Click);
             // 
             // stergeToolStripMenuItem
             // 
             this.stergeToolStripMenuItem.Name = "stergeToolStripMenuItem";
-            this.stergeToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.stergeToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
             this.stergeToolStripMenuItem.Text = "Sterge";
             this.stergeToolStripMenuItem.Click += new System.EventHandler(this.stergeToolPerioadaStripMenuItem_Click);
             // 
@@ -465,10 +465,10 @@ namespace VechimeSoftware
             // 
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Minion Pro SmBd", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(4, 2);
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(4, 3);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(226, 21);
+            this.label2.Size = new System.Drawing.Size(226, 18);
             this.label2.TabIndex = 1;
             this.label2.Text = "Persoane:";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -480,7 +480,7 @@ namespace VechimeSoftware
             this.peopleListBox.ContextMenuStrip = this.personContextMenuStrip;
             this.peopleListBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.peopleListBox.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.peopleListBox.Font = new System.Drawing.Font("Modern No. 20", 8.999999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.peopleListBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.999999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.peopleListBox.ForeColor = System.Drawing.SystemColors.WindowText;
             this.peopleListBox.FormattingEnabled = true;
             this.peopleListBox.ItemHeight = 18;
@@ -499,19 +499,19 @@ namespace VechimeSoftware
             this.stergeToolStripMenuItem2});
             this.personContextMenuStrip.Name = "contextMenuStrip1";
             this.personContextMenuStrip.ShowImageMargin = false;
-            this.personContextMenuStrip.Size = new System.Drawing.Size(157, 48);
+            this.personContextMenuStrip.Size = new System.Drawing.Size(158, 48);
             // 
             // veziDetaliiModificaToolStripMenuItem
             // 
             this.veziDetaliiModificaToolStripMenuItem.Name = "veziDetaliiModificaToolStripMenuItem";
-            this.veziDetaliiModificaToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.veziDetaliiModificaToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.veziDetaliiModificaToolStripMenuItem.Text = "Vezi detalii/Modifica";
             this.veziDetaliiModificaToolStripMenuItem.Click += new System.EventHandler(this.veziDetaliiModificaToolStripMenuItem_Click);
             // 
             // stergeToolStripMenuItem2
             // 
             this.stergeToolStripMenuItem2.Name = "stergeToolStripMenuItem2";
-            this.stergeToolStripMenuItem2.Size = new System.Drawing.Size(156, 22);
+            this.stergeToolStripMenuItem2.Size = new System.Drawing.Size(157, 22);
             this.stergeToolStripMenuItem2.Text = "Sterge";
             this.stergeToolStripMenuItem2.ToolTipText = "Sterge";
             this.stergeToolStripMenuItem2.Click += new System.EventHandler(this.stergeToolStripMenuItem_Click);

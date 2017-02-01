@@ -122,7 +122,6 @@ namespace VechimeSoftware
         {
             get
             {
-
                 TimePeriodSum total = TimePeriodSum.CalculateIndividualTime(Perioade);
                 TimePeriod period = new TimePeriod();
                 period.Days = total.DaysInv;
@@ -139,7 +138,8 @@ namespace VechimeSoftware
                 return new Transa(PerioadaMunca, Transa.TransaType.MUNCA);
             }
         }
-        public Transa CurrentTransaInv {
+        public Transa CurrentTransaInv
+        {
 
             get
             {

@@ -328,18 +328,21 @@ namespace VechimeSoftware
 
             if (!adding)
             {
+
                 foreach (Perioada perioada in selectedPerson.Perioade.Where(x => (x.DTInceput != inceput && x.DTSfarsit != sfarsit)))
                 {
-                    if (inceput.CompareTo(perioada.DTInceput) >= 0 && inceput.CompareTo(perioada.DTSfarsit) <= 0)
+                    if (inceput.CompareTo(perioada.DTInceput) > 0 && inceput.CompareTo(perioada.DTSfarsit) < 0)
                     {
-                        MessageBox.Show("Aceasta perioada este cuprinsa in alta perioada deja inregistrata.");
-                        return false;
-                    }
-
-                    if (sfarsit.CompareTo(perioada.DTInceput) >= 0 && sfarsit.CompareTo(perioada.DTSfarsit) <= 0)
-                    {
-                        MessageBox.Show("Aceasta perioada este cuprinsa in alta perioada deja inregistrata.");
-                        return false;
+                        if (inceput.CompareTo(perioada.DTInceput) >= 0 && inceput.CompareTo(perioada.DTSfarsit) <= 0)
+                        {
+                            MessageBox.Show("Aceasta perioada este cuprinsa in alta perioada deja inregistrata.");
+                            return false;
+                        }
+                        if (sfarsit.CompareTo(perioada.DTInceput) >= 0 && sfarsit.CompareTo(perioada.DTSfarsit) <= 0)
+                        {
+                            MessageBox.Show("Aceasta perioada este cuprinsa in alta perioada deja inregistrata.");
+                            return false;
+                        }
                     }
                 }
             }
@@ -347,16 +350,19 @@ namespace VechimeSoftware
             {
                 foreach (Perioada perioada in selectedPerson.Perioade)
                 {
-                    if (inceput.CompareTo(perioada.DTInceput) >= 0 && inceput.CompareTo(perioada.DTSfarsit) <= 0)
+                    if (sfarsit.CompareTo(perioada.DTInceput) > 0 && sfarsit.CompareTo(perioada.DTSfarsit) < 0)
                     {
-                        MessageBox.Show("Aceasta perioada este cuprinsa in alta perioada deja inregistrata.");
-                        return false;
-                    }
+                        if (inceput.CompareTo(perioada.DTInceput) >= 0 && inceput.CompareTo(perioada.DTSfarsit) <= 0)
+                        {
+                            MessageBox.Show("Aceasta perioada este cuprinsa in alta perioada deja inregistrata.");
+                            return false;
+                        }
 
-                    if (sfarsit.CompareTo(perioada.DTInceput) >= 0 && sfarsit.CompareTo(perioada.DTSfarsit) <= 0)
-                    {
-                        MessageBox.Show("Aceasta perioada este cuprinsa in alta perioada deja inregistrata.");
-                        return false;
+                        if (sfarsit.CompareTo(perioada.DTInceput) >= 0 && sfarsit.CompareTo(perioada.DTSfarsit) <= 0)
+                        {
+                            MessageBox.Show("Aceasta perioada este cuprinsa in alta perioada deja inregistrata.");
+                            return false;
+                        }
                     }
                 }
             }
