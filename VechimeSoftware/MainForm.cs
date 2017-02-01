@@ -31,18 +31,18 @@ namespace VechimeSoftware
             peopleDictionary = GetPeople();
             displayPeople = peopleDictionary.Values.ToList();
             UpdatePeopleInfo();
-            RunOnStartup();
+           // RunOnStartup();
         }
 
-        private void RunOnStartup()
-        {
-            RegistryKey rkApp = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+//        private void RunOnStartup()
+//        {
+//            RegistryKey rkApp = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
 
         
-            if (rkApp.GetValue("Vechime") == null)
-                rkApp.SetValue("Vechime", Application.ExecutablePath);
+//            if (rkApp.GetValue("Vechime") == null)
+//                rkApp.SetValue("Vechime", Application.ExecutablePath);
 
-}
+//}
         #region UpdateStuff
 
         private void UpdatePeople()
