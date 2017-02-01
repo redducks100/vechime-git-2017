@@ -109,6 +109,83 @@ namespace VechimeSoftware
             }
         }
 
+        private void ResetForm(bool modified = false)
+        {
+            if(!modified)
+            {
+                currentPerioada = null;
+                inceputTimePicker.Value = DateTime.Now;
+                sfarsitTimePicker.Value = DateTime.Now;
+                normaComboBox.SelectedIndex = 0;
+                iomComboBox.SelectedIndex = 0;
+                functieTextBox.Text = "";
+                locMuncaTextBox.Text = "";
+                perioadaTextBox.Text = currentPerioada.Difference.ElapsedYears.ToString() + " ani " + currentPerioada.Difference.ElapsedMonths.ToString() + " luni " + currentPerioada.Difference.ElapsedDays.ToString() + " zile";
+                lucreazaCheckBox.Checked = false;
+                concediuCheckBox.Checked = false;
+                tipConcediuComboBox.SelectedIndex = 0;
+                somerCheckBox.Checked = false;
+                editButton.Enabled = false;
+                saveButton.Enabled = false;
+                addButton.Enabled = true;
+            }
+            else
+            {
+                inceputTimePicker.Value = currentPerioada.DTInceput;
+                sfarsitTimePicker.Value = currentPerioada.DTSfarsit;
+
+                if (currentPerioada.Norma == "1/1")
+                {
+                    normaComboBox.SelectedIndex = 0;
+                }
+                else if (currentPerioada.Norma == "1/2")
+                {
+                    normaComboBox.SelectedIndex = 1;
+                }
+                else
+                {
+                    normaComboBox.SelectedIndex = 2;
+                }
+
+                if (currentPerioada.IOM.ToLower() == "invatamant")
+                {
+                    iomComboBox.SelectedIndex = 0;
+                }
+                else
+                {
+                    iomComboBox.SelectedIndex = 1;
+                }
+
+                functieTextBox.Text = currentPerioada.Functie.ToString().ToUpper();
+                locMuncaTextBox.Text = currentPerioada.LocMunca.ToString().ToUpper();
+                perioadaTextBox.Text = currentPerioada.Difference.ElapsedYears.ToString() + " ani " + currentPerioada.Difference.ElapsedMonths.ToString() + " luni " + currentPerioada.Difference.ElapsedDays.ToString() + " zile";
+                lucreazaCheckBox.Checked = currentPerioada.Lucreaza;
+
+                concediuCheckBox.Checked = (currentPerioada.TipCFS == "" ? false : true);
+
+                if (currentPerioada.TipCFS.ToLower() == "personal")
+                {
+                    tipConcediuComboBox.SelectedIndex = 0;
+                }
+                else
+                {
+                    tipConcediuComboBox.SelectedIndex = 1;
+                }
+
+                somerCheckBox.Checked = currentPerioada.Somaj;
+
+                if (currentPerioada.Somaj)
+                {
+                    iomComboBox.Items.Add("SOMAJ");
+                    iomComboBox.SelectedIndex = 2;
+                }
+
+                editButton.Enabled = true;
+                saveButton.Enabled = false;
+                addButton.Enabled = false;
+            }
+        }
+
         #endregion UI
 
         #region Handlers
@@ -118,7 +195,6 @@ namespace VechimeSoftware
             if (currentPerioada == null)
                 return;
 
-            Button button = (Button)sender;
             if (MessageBox.Show("Sunteti sigur(a) ca vreti sa modificati aceasta informatie?", "Atentie!", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 SetEnabled(this, true);
@@ -140,7 +216,7 @@ namespace VechimeSoftware
                 return;
             }
 
-            if (!VerificaData(inceputTimePicker.Value, sfarsitTimePicker.Value))
+            if (!VerificaData(inceputTimePicker.Value, sfarsitTimePicker.Value,true))
                 return;
 
             currentPerioada = new Perioada();
@@ -184,7 +260,7 @@ namespace VechimeSoftware
             AddToLocalList(currentPerioada);
 
             //TO-DO RESET FORM
-            //this.Close();
+            ResetForm();
         }
 
         private void saveButton_Click(object sender, EventArgs e)
@@ -238,27 +314,47 @@ namespace VechimeSoftware
             AddToLocalList(currentPerioada, true);
 
             //TO-DO RESET FORM
-            //this.Close();
+            ResetForm(true);
         }
 
-        private bool VerificaData(DateTime inceput, DateTime sfarsit)
+        private bool VerificaData(DateTime inceput, DateTime sfarsit,bool adding = false)
         {
             Person selectedPerson = null;
             if (parent.peopleDictionary.ContainsKey(currentPersonIndex))
                 selectedPerson = parent.peopleDictionary[currentPersonIndex];
 
-            foreach (Perioada perioada in selectedPerson.Perioade)
+            if (!adding)
             {
-                if (inceput.CompareTo(perioada.DTInceput) > 0 && inceput.CompareTo(perioada.DTSfarsit) < 0)
+                foreach (Perioada perioada in selectedPerson.Perioade.Where(x => (x.DTInceput != inceput && x.DTSfarsit != sfarsit)))
                 {
-                    MessageBox.Show("Aceasta perioada este cuprinsa in alta perioada deja inregistrata.");
-                    return false;
-                }
+                    if (inceput.CompareTo(perioada.DTInceput) >= 0 && inceput.CompareTo(perioada.DTSfarsit) <= 0)
+                    {
+                        MessageBox.Show("Aceasta perioada este cuprinsa in alta perioada deja inregistrata.");
+                        return false;
+                    }
 
-                if (sfarsit.CompareTo(perioada.DTInceput) > 0 && sfarsit.CompareTo(perioada.DTSfarsit) < 0)
+                    if (sfarsit.CompareTo(perioada.DTInceput) >= 0 && sfarsit.CompareTo(perioada.DTSfarsit) <= 0)
+                    {
+                        MessageBox.Show("Aceasta perioada este cuprinsa in alta perioada deja inregistrata.");
+                        return false;
+                    }
+                }
+            }
+            else
+            {
+                foreach (Perioada perioada in selectedPerson.Perioade)
                 {
-                    MessageBox.Show("Aceasta perioada este cuprinsa in alta perioada deja inregistrata.");
-                    return false;
+                    if (inceput.CompareTo(perioada.DTInceput) >= 0 && inceput.CompareTo(perioada.DTSfarsit) <= 0)
+                    {
+                        MessageBox.Show("Aceasta perioada este cuprinsa in alta perioada deja inregistrata.");
+                        return false;
+                    }
+
+                    if (sfarsit.CompareTo(perioada.DTInceput) >= 0 && sfarsit.CompareTo(perioada.DTSfarsit) <= 0)
+                    {
+                        MessageBox.Show("Aceasta perioada este cuprinsa in alta perioada deja inregistrata.");
+                        return false;
+                    }
                 }
             }
             return true;
@@ -367,13 +463,13 @@ namespace VechimeSoftware
         {
             if(lucreazaUCurentaCheckBox.Checked)
             {
-                functieTextBox.Enabled = false;
-                functieTextBox.Text = "GET SCHOOL INFO";
+                locMuncaTextBox.Enabled = false;
+                locMuncaTextBox.Text = parent.currentUnitate.SC.ToUpper();
             }
             else
             {
-                functieTextBox.Enabled = true;
-                functieTextBox.Text = (currentPerioada == null ? "" : currentPerioada.Functie);
+                locMuncaTextBox.Enabled = true;
+                locMuncaTextBox.Text = (currentPerioada == null ? "" : currentPerioada.LocMunca);
             }
         }
 

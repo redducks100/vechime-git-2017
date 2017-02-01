@@ -217,6 +217,7 @@ namespace VechimeSoftware
             this.unitateaCurentaToolStripMenuItem.Name = "unitateaCurentaToolStripMenuItem";
             this.unitateaCurentaToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.unitateaCurentaToolStripMenuItem.Text = "Unitatea curenta";
+            this.unitateaCurentaToolStripMenuItem.Click += new System.EventHandler(this.unitateaCurentaToolStripMenuItem_Click);
             // 
             // iesireToolStripMenuItem
             // 
@@ -704,6 +705,7 @@ namespace VechimeSoftware
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "MainForm";
             this.Text = "Vechime";
+            this.Shown += new System.EventHandler(this.MainForm_Shown);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.menuStrip1.ResumeLayout(false);

@@ -1,10 +1,9 @@
 using Itenso.TimePeriod;
-using Microsoft.Win32;
 using MigraDoc.DocumentObjectModel;
 using MigraDoc.DocumentObjectModel.Tables;
 using MigraDoc.Rendering;
 using PdfSharp.Drawing;
-using PdfSharp.Pdf; 
+using PdfSharp.Pdf;
 using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
@@ -22,7 +21,8 @@ namespace VechimeSoftware
         private string databasePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/Baza.mdb";
         private string connectionString = "";
         public Dictionary<int, Person> peopleDictionary = new Dictionary<int, Person>();
-        private List<Person> displayPeople = new List<Person>(); 
+        private List<Person> displayPeople = new List<Person>();
+        public UnitateInfo currentUnitate;
 
         public MainForm()
         {
@@ -31,18 +31,13 @@ namespace VechimeSoftware
             peopleDictionary = GetPeople();
             displayPeople = peopleDictionary.Values.ToList();
             UpdatePeopleInfo();
-           // RunOnStartup();
         }
 
-//        private void RunOnStartup()
-//        {
-//            RegistryKey rkApp = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+        private void MainForm_Shown(object sender, EventArgs e)
+        {
+            CheckUnitateInfo();
+        }
 
-        
-//            if (rkApp.GetValue("Vechime") == null)
-//                rkApp.SetValue("Vechime", Application.ExecutablePath);
-
-//}
         #region UpdateStuff
 
         private void UpdatePeople()
@@ -66,6 +61,27 @@ namespace VechimeSoftware
         {
             UpdateList();
             GetAllPerioadaList();
+        }
+
+        private void CheckUnitateInfo()
+        {
+            currentUnitate = GetCurrentUnitateInfo();
+            if (currentUnitate == null)
+            {
+                MessageBox.Show("Nu exista informatii despre unitatea curenta! Completati informatiile in urmatoarele casute!","Atentie!",MessageBoxButtons.OK,MessageBoxIcon.Exclamation);
+                using (UnitateForm unitateForm = new UnitateForm(this, null))
+                {
+                    unitateForm.ShowDialog();
+                }
+
+                foreach(Person person in peopleDictionary.Values)
+                {
+                    foreach(Perioada perioada in person.Perioade)
+                    {
+                        perioada.LucreazaUnitateaCurenta = (currentUnitate.SC.ToUpper() == perioada.LocMunca.ToUpper());
+                    }
+                }
+            }
         }
 
         #endregion UpdateStuff
@@ -151,6 +167,106 @@ namespace VechimeSoftware
 
             return perioadaList;
         } //done
+
+        public UnitateInfo GetCurrentUnitateInfo()
+        {
+            UnitateInfo newUnitate = null;
+            using (OleDbConnection connection = new OleDbConnection(connectionString))
+            {
+                using (OleDbCommand command = new OleDbCommand("SELECT * FROM Unitate", connection))
+                {
+                    connection.Open();
+
+                    using (OleDbDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                newUnitate = new UnitateInfo();
+                                newUnitate.ID = Convert.ToInt32(reader[0]);
+                                newUnitate.SC = Convert.ToString(reader[1]);
+                                newUnitate.Strada = Convert.ToString(reader[2]);
+                                newUnitate.Numar = Convert.ToString(reader[3]);
+                                newUnitate.Localitate = Convert.ToString(reader[4]);
+                                newUnitate.Judet = Convert.ToString(reader[5]);
+                                newUnitate.Telefon = Convert.ToString(reader[6]);
+                                newUnitate.Fax = Convert.ToString(reader[7]);
+                                newUnitate.CUI = Convert.ToString(reader[8]);
+                                newUnitate.NumarInregistrare = Convert.ToInt32(reader[9]);
+
+                            }
+                        }
+                    }
+                }
+            }
+
+            return newUnitate;
+        }
+
+        public void ModifyCurrentUnitate(UnitateInfo newUnitate)
+        {
+            using (OleDbConnection connection = new OleDbConnection(connectionString))
+            {
+                using (OleDbCommand command = new OleDbCommand(@"UPDATE Unitate SET SC = @SC ,Strada = @Strada,Numar = @Numar,Localitate = @Localitate,Judet = @Judet,
+                                                                Telefon=@Telefon,Fax=@Fax,CUI=@CUI,NumarInregistrare=@NumarInregistrare 
+                                                                WHERE ID = @ID", connection))
+                {
+                    command.Parameters.Add("@SC", OleDbType.VarChar).Value = newUnitate.SC;
+                    command.Parameters.Add("@Strada", OleDbType.VarChar).Value = newUnitate.Strada;
+                    command.Parameters.Add("@Numar", OleDbType.VarChar).Value = newUnitate.Numar;
+                    command.Parameters.Add("@Localitate", OleDbType.VarChar).Value = newUnitate.Localitate;
+                    command.Parameters.Add("@Judet", OleDbType.VarChar).Value = newUnitate.Judet;
+                    command.Parameters.Add("@Telefon", OleDbType.VarChar).Value = newUnitate.Telefon;
+                    command.Parameters.Add("@Fax", OleDbType.VarChar).Value = newUnitate.Fax;
+                    command.Parameters.Add("@CUI", OleDbType.VarChar).Value = newUnitate.CUI;
+                    command.Parameters.Add("@NumarInregistrare", OleDbType.Integer).Value = newUnitate.NumarInregistrare;
+                    command.Parameters.Add("@ID", OleDbType.Integer).Value = newUnitate.ID;
+
+
+                    connection.Open();
+                    try
+                    {
+                        command.ExecuteNonQuery();
+                    }
+                    catch (Exception e)
+                    {
+                        MessageBox.Show(e.ToString());
+                    }
+                }
+            }
+        }
+
+        public void AddCurrentUnitate(UnitateInfo newUnitate)
+        {
+            using (OleDbConnection connection = new OleDbConnection(connectionString))
+            {
+                using (OleDbCommand command = new OleDbCommand(@"INSERT INTO Unitate(SC,Strada,Numar,Localitate,Judet,
+                                                                Telefon,Fax,CUI,NumarInregistrare) VALUES (@SC,@Strada,@Numar,@Localitate,@Judet,
+                                                                @Telefon,@Fax,@CUI,@NumarInregistrare)", connection))
+                {
+                    command.Parameters.Add("@SC", OleDbType.VarChar).Value = newUnitate.SC;
+                    command.Parameters.Add("@Strada", OleDbType.VarChar).Value = newUnitate.Strada;
+                    command.Parameters.Add("@Numar", OleDbType.VarChar).Value = newUnitate.Numar;
+                    command.Parameters.Add("@Localitate", OleDbType.VarChar).Value = newUnitate.Localitate;
+                    command.Parameters.Add("@Judet", OleDbType.VarChar).Value = newUnitate.Judet;
+                    command.Parameters.Add("@Telefon", OleDbType.VarChar).Value = newUnitate.Telefon;
+                    command.Parameters.Add("@Fax", OleDbType.VarChar).Value = newUnitate.Fax;
+                    command.Parameters.Add("@CUI", OleDbType.VarChar).Value = newUnitate.CUI;
+                    command.Parameters.Add("@NumarInregistrare", OleDbType.Integer).Value = newUnitate.NumarInregistrare;
+
+                    connection.Open();
+                    try
+                    {
+                        command.ExecuteNonQuery();
+                    }
+                    catch (Exception e)
+                    {
+                        MessageBox.Show(e.ToString());
+                    }
+                }
+            }
+        }
 
         public void GetAllPerioadaList()
         {
@@ -401,6 +517,15 @@ namespace VechimeSoftware
                     return;
                 }
 
+               
+                    foreach (Perioada perioada in selectedPerson.Perioade)
+                    {
+                        perioada.LucreazaUnitateaCurenta = (currentUnitate.SC.ToUpper() == perioada.LocMunca.ToUpper());
+                        //if(currentUnitate.SC == perioada.LocMunca)
+                        //MessageBox.Show(currentUnitate.SC.ToUpper() + " -- " + perioada.LocMunca.ToUpper());
+                    }
+                
+
                 dataGridView1.Rows.Clear();
 
                 int count = 0;
@@ -545,6 +670,15 @@ namespace VechimeSoftware
                 }
             }
         }
+
+        private void unitateaCurentaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (UnitateForm unitateForm = new UnitateForm(this, currentUnitate))
+            {
+                unitateForm.ShowDialog();
+            }
+        }
+
 
         #endregion DetailHandlers
 
@@ -803,7 +937,7 @@ namespace VechimeSoftware
                 TimePeriodSum periodsSum = TimePeriodSum.CalculateIndividualTime(selectedPerson.Perioade);
 
                 // Adaug timp invatamant
-                gfx.DrawString("Vechime in invatamant: " + periodsSum.YearsInv + " ani, " + periodsSum.MonthsInv + " luni, " + periodsSum.DaysInv + " zile.     Transa: "+selectedPerson.CurrentTransaInv.TransaString
+                gfx.DrawString("Vechime in invatamant: " + periodsSum.YearsInv + " ani, " + periodsSum.MonthsInv + " luni, " + periodsSum.DaysInv + " zile. "
                                 , fontList, XBrushes.Black,
                                 new XRect(0, currentHeight, page.Width, page.Height),
                                 XStringFormats.TopCenter);
@@ -811,7 +945,7 @@ namespace VechimeSoftware
                 currentHeight += 15;
 
                 // Adaug timp total
-                gfx.DrawString("Vechime total: " + periodsSum.Years + " ani, " + periodsSum.Months + " luni, " + periodsSum.Days + " zile.     Transa: " + selectedPerson.CurrentTransaMunca.TransaString
+                gfx.DrawString("Vechime total: " + periodsSum.Years + " ani, " + periodsSum.Months + " luni, " + periodsSum.Days + " zile. "
                                  , fontList, XBrushes.Black,
                                  new XRect(0, currentHeight, page.Width, page.Height),
                                  XStringFormats.TopCenter);
@@ -944,13 +1078,15 @@ namespace VechimeSoftware
 
             Paragraph paragraphSchoolInfo = section.AddParagraph();
 
+            
+
             paragraphSchoolInfo.Format.Font.Size = 9;
             paragraphSchoolInfo.Format.Alignment = ParagraphAlignment.Left;
-            paragraphSchoolInfo.AddText("S.C.                    .\n" +
-                                        "Str.                            ......................................nr    ..loc      ..jud      \n" +
-                                        "Tel:.............................; Fax:           .\n" +
-                                        "CUI               ..\n\n" +
-                                        "Nr.de inregistrare      . \n Data " + DateTime.Now.ToString("dd/MM/yyyy"));
+            paragraphSchoolInfo.AddText("S.C. "+currentUnitate.SC+"\n" +
+                                        "Str. "+currentUnitate.Strada+ " , nr " + currentUnitate.Numar + ", loc " + currentUnitate.Localitate + ", jud " + currentUnitate.Judet + "\n" +
+                                        "Tel: " + currentUnitate.Telefon + ",  Fax: " + currentUnitate.Fax + ", \n" +
+                                        "CUI " + currentUnitate.CUI + ", \n\n" +
+                                        "Nr.de inregistrare      \n Data " + DateTime.Now.ToString("dd/MM/yyyy"));
 
             //Add title
 
@@ -974,14 +1110,25 @@ namespace VechimeSoftware
                 return;
             }
 
+
+            string ultimaFunctie = "";
+            foreach (Perioada perioada in selectedPerson.Perioade.OrderBy(c => c.DTSfarsit).ToList())
+            {
+                if (perioada.LucreazaUnitateaCurenta)
+                {
+
+                    ultimaFunctie = perioada.Functie;
+                }
+            }
+
             Paragraph paragraphContent1 = section.AddParagraph();
             paragraphContent1.Format.Font.Name = "Verdana";
             paragraphContent1.Format.Font.Size = 9;
             paragraphContent1.Format.Font.Italic = true;
             paragraphContent1.AddFormattedText("         " + " Prin prezenta se atesta faptul ca dl./dna " + selectedPerson.NumeIntreg +
-                                      ", posesor al BI/CI ..., seria " + selectedPerson.Serie.Substring(0, 2) + ", nr " + selectedPerson.Serie.Substring(2) + ", CNP " + selectedPerson.CNP +
+                                      ", posesor al BI/CI, seria " + selectedPerson.Serie.Substring(0, 2) + ", nr " + selectedPerson.Serie.Substring(2) + ", CNP " + selectedPerson.CNP +
                                       ", a fost angajat al unitatii               ." +
-                                      ", in functia de ........ \n" +
+                                      ", in functia de "+ultimaFunctie+" \n" +
                                       "         " + " Pe durata executarii contractului individual de munca au intervenit urmatoarele mutatii " +
                                       "( incheierea, modificarea, suspendarea si incetarea contractului individual de munca ): \n\n");
 
@@ -1034,7 +1181,7 @@ namespace VechimeSoftware
             DateTime ultimaData = new DateTime();
             foreach (Perioada perioada in selectedPerson.Perioade.OrderBy(c => c.DTSfarsit).ToList())
             {
-                if (perioada.LocMunca == "CNPR")
+                if (perioada.LucreazaUnitateaCurenta)
                 {
                     row = table.AddRow();
 
@@ -1078,23 +1225,14 @@ namespace VechimeSoftware
 
             string filename = "Adeverinta" + RandomString(4) + ".pdf";
 
-            string[] files = Directory.GetFiles(Application.StartupPath, "General_*.pdf");
-
-            foreach (string file in files)
-            {
-                try
-                {
-                    File.Delete(file);
-                }
-                catch
-                {
-                }
-            }
-
             pdfRenderer.PdfDocument.Save(filename);
 
-
             Process.Start(filename);
+
+            //Increase unitateInfo numar inregistrari
+
+            currentUnitate.NumarInregistrare++;
+            ModifyCurrentUnitate(currentUnitate);
         }
 
         // Functia care returneaza un sir random de caractere
@@ -1112,5 +1250,7 @@ namespace VechimeSoftware
         }
 
         #endregion GeneratePdf
+
+
     }
 }
