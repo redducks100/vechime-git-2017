@@ -18,9 +18,9 @@ namespace VechimeSoftware
             UpdateForm();
         }
 
-        private bool CheckCNP(string CNP)
+        private bool CheckCNP(string CNP,int count = 0)
         {
-            if (parent.peopleDictionary.Values.ToList().Where(x => x.CNP == CNP).Count() > 0)
+            if (parent.peopleDictionary.Values.ToList().Where(x => x.CNP == CNP).Count() > count)
             {
                 MessageBox.Show("Deja exista o persoana cu acest CNP: " + CNP + "!", "Eroare!");
                 return false;
@@ -90,6 +90,31 @@ namespace VechimeSoftware
             }
         }
 
+        private void ResetForm(bool modified = false)
+        {
+            if (modified)
+            {
+                cnpTextBox.Text = currentPerson.CNP;
+                serieTextBox.Text = currentPerson.Serie;
+                nameTextBox.Text = currentPerson.Nume.ToUpper();
+                prenumeTextBox.Text = currentPerson.Prenume.ToUpper();
+
+                editButton.Enabled = false;
+                addButton.Enabled = false;
+                saveButton.Enabled = true;
+            }
+            else
+            {
+                cnpTextBox.Enabled = true;
+                nameTextBox.Enabled = true;
+                serieTextBox.Enabled = true;
+                prenumeTextBox.Enabled = true;
+                addButton.Enabled = true;
+                editButton.Enabled = false;
+                saveButton.Enabled = false;
+            }
+        }
+
         #endregion UI
 
         #region Handlers
@@ -106,7 +131,7 @@ namespace VechimeSoftware
         {
             if(!ValidateCNP())
             {
-                MessageBox.Show("CNP-ul nu este valid!","Erroare!");
+                MessageBox.Show("CNP-ul nu este valid!","Eroare!");
                 return;
             }
             if (CheckCNP(cnpTextBox.Text) == false)
@@ -125,17 +150,18 @@ namespace VechimeSoftware
             currentPerson.Serie = serieTextBox.Text.ToUpper();
 
             parent.AddPerson(currentPerson);
-            this.Close();
+            MessageBox.Show("Persoana adaugata cu succes!");
+            ResetForm();
         }
 
         private void saveButton_Click(object sender, EventArgs e)
         {
             if (!ValidateCNP())
             {
-                MessageBox.Show("CNP-ul nu este valid!", "Erroare!");
+                MessageBox.Show("CNP-ul nu este valid!", "Eroare!");
                 return;
             }
-            if (CheckCNP(cnpTextBox.Text) == false)
+            if (CheckCNP(cnpTextBox.Text,1) == false)
             {
                 return;
             }
@@ -151,7 +177,8 @@ namespace VechimeSoftware
             currentPerson.Serie = serieTextBox.Text.ToUpper();
 
             parent.ModifyPerson(currentPerson);
-            this.Close();
+            MessageBox.Show("Persoana modificata cu succes!");
+            ResetForm(true);
         }
 
         private void editButton_Click(object sender, EventArgs e)

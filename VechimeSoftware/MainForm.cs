@@ -36,6 +36,7 @@ namespace VechimeSoftware
         private void MainForm_Shown(object sender, EventArgs e)
         {
             CheckUnitateInfo();
+            CheckTransaUpdates();
         }
 
         #region UpdateStuff
@@ -45,6 +46,7 @@ namespace VechimeSoftware
             peopleDictionary = GetPeople();
             displayPeople = peopleDictionary.Values.ToList();
             UpdateList();
+            GetAllPerioadaList();
         }
 
         private void UpdateList()
@@ -63,6 +65,7 @@ namespace VechimeSoftware
             GetAllPerioadaList();
         }
 
+        //verifica la pornirea aplicatiei daca exista unitate adaugata
         private void CheckUnitateInfo()
         {
             currentUnitate = GetCurrentUnitateInfo();
@@ -73,12 +76,36 @@ namespace VechimeSoftware
                 {
                     unitateForm.ShowDialog();
                 }
+            }
 
-                foreach(Person person in peopleDictionary.Values)
+            foreach (Person person in peopleDictionary.Values)
+            {
+                foreach (Perioada perioada in person.Perioade)
                 {
-                    foreach(Perioada perioada in person.Perioade)
+                    perioada.LucreazaUnitateaCurenta = (currentUnitate.SC.ToLower() == perioada.LocMunca.ToLower());
+                }
+            }
+        }
+
+        //verifica la pornirea aplicatiei, modificare/adaugarea/stergerea unei perioade
+        private void CheckTransaUpdates()
+        {
+            foreach(Person person in peopleDictionary.Values)
+            {
+                if(person.Perioade.Where(x=>x.LucreazaUnitateaCurenta==true).Count() > 0)
+                {
+                    Transa currentTransaInv = person.CurrentTransaInv;
+                    Transa currentTransaMunca = person.CurrentTransaMunca;
+
+                    if (currentTransaInv.TransaString != person.PreviousTransaInv || currentTransaMunca.TransaString != person.PreviousTransaMunca)
                     {
-                        perioada.LucreazaUnitateaCurenta = (currentUnitate.SC == perioada.LocMunca);
+                        if (!string.IsNullOrWhiteSpace(person.PreviousTransaInv) && !string.IsNullOrWhiteSpace(person.PreviousTransaMunca))
+                        {
+                            MessageBox.Show(string.Format("{0} a trecut la o transa superioara!", person.NumeIntreg), "Atentie!");
+                        }
+                        person.PreviousTransaInv = currentTransaInv.TransaString;
+                        person.PreviousTransaMunca = currentTransaMunca.TransaString;
+                        ModifyPerson(person);
                     }
                 }
             }
@@ -111,6 +138,8 @@ namespace VechimeSoftware
                                 newPerson.CNP = Convert.ToString(reader[3]);
                                 newPerson.Serie = Convert.ToString(reader[4]);
                                 newPerson.Perioade = new List<Perioada>();
+                                newPerson.PreviousTransaInv = Convert.ToString(reader[5]);
+                                newPerson.PreviousTransaMunca = Convert.ToString(reader[6]);
                                 peopleDict.Add(newPerson.ID, newPerson);
                             }
                         }
@@ -121,7 +150,6 @@ namespace VechimeSoftware
             return peopleDict;
         } //done
 
-        //TO-DO: UPDATE unitatea curenta
         public List<Perioada> GetPerioadaList(int ID)
         {
             List<Perioada> perioadaList = new List<Perioada>();
@@ -321,12 +349,14 @@ namespace VechimeSoftware
         {
             using (OleDbConnection connection = new OleDbConnection(connectionString))
             {
-                using (OleDbCommand command = new OleDbCommand("INSERT INTO Persoane (Nume,Prenume,CNP,Serie) VALUES (@nume,@prenume,@cnp,@serie)", connection))
+                using (OleDbCommand command = new OleDbCommand("INSERT INTO Persoane (Nume,Prenume,CNP,Serie,TransaInv,TransaMunca) VALUES (@nume,@prenume,@cnp,@serie,@TransaInv,@TransaMunca)", connection))
                 {
                     command.Parameters.Add("@nume", OleDbType.VarChar, 50).Value = newPerson.Nume;
                     command.Parameters.Add("@prenume", OleDbType.VarChar, 50).Value = newPerson.Prenume;
                     command.Parameters.Add("@cnp", OleDbType.VarChar, 13).Value = newPerson.CNP;
                     command.Parameters.Add("@serie", OleDbType.VarChar, 6).Value = newPerson.Serie;
+                    command.Parameters.Add("@TransaInv", OleDbType.VarChar).Value = newPerson.CurrentTransaInv.TransaString;
+                    command.Parameters.Add("@TransaMunca", OleDbType.VarChar).Value = newPerson.CurrentTransaMunca.TransaString;
                     connection.Open();
 
                     try
@@ -346,12 +376,14 @@ namespace VechimeSoftware
         {
             using (OleDbConnection connection = new OleDbConnection(connectionString))
             {
-                using (OleDbCommand command = new OleDbCommand("UPDATE Persoane SET Nume = @nume ,Prenume = @prenume,CNP = @cnp, Serie = @serie WHERE Id = @id", connection))
+                using (OleDbCommand command = new OleDbCommand("UPDATE Persoane SET Nume = @nume ,Prenume = @prenume,CNP = @cnp, Serie = @serie, TransaInv=@TransaInv, TransaMunca=@TransaMunca WHERE Id = @id", connection))
                 {
                     command.Parameters.Add("@nume", OleDbType.VarChar, 50).Value = newPerson.Nume;
                     command.Parameters.Add("@prenume", OleDbType.VarChar, 50).Value = newPerson.Prenume;
                     command.Parameters.Add("@cnp", OleDbType.VarChar, 13).Value = newPerson.CNP;
                     command.Parameters.Add("@serie", OleDbType.VarChar, 6).Value = newPerson.Serie;
+                    command.Parameters.Add("@TransaInv", OleDbType.VarChar).Value = newPerson.CurrentTransaInv.TransaString;
+                    command.Parameters.Add("@TransaMunca", OleDbType.VarChar).Value = newPerson.CurrentTransaMunca.TransaString;
                     command.Parameters.Add("@id", OleDbType.Integer).Value = newPerson.ID;
                     connection.Open();
                     try
@@ -428,6 +460,7 @@ namespace VechimeSoftware
             {
                 peopleDictionary[personID].Perioade = GetPerioadaList(personID);
                 peopleListBox.SelectedIndex = -1;
+                CheckTransaUpdates();
             }
         } //done
 
@@ -436,9 +469,8 @@ namespace VechimeSoftware
             int recordsChanged = 0;
             using (OleDbConnection connection = new OleDbConnection(connectionString))
             {
-                string commandString = "UPDATE Perioade SET Id_Persoana=@Id_Persoana,Data_Inceput=@Data_Inceput,Data_Sfarsit=@Data_Sfarsit,CFS_Zile_Personal=@CFS_Zile_Personal," +
-                                                             "CFS_Luni_Personal=@CFS_Luni_Personal,CFS_Ani_Personal=@CFS_Ani_Personal,CFS_Zile_Studii=@CFS_Zile_Studii,CFS_Luni_Studii=@CFS_Luni_Studii," +
-                                                             "CFS_Ani_Studii=@CFS_Ani_Studii,Norma=@Norma,Functie=@Functie,InvORMunca=@InvORMunca,Loc_Munca=@Loc_Munca,Lucreaza=@Lucreaza,Somaj=@Somaj WHERE Id=@Id";
+                string commandString = "UPDATE Perioade SET Id_Persoana=@Id_Persoana,Data_Inceput=@Data_Inceput,Data_Sfarsit=@Data_Sfarsit,CFS=@CFS," +
+                                                             "TipCFS=@TipCFS,Norma=@Norma,Functie=@Functie,InvORMunca=@InvORMunca,Loc_Munca=@Loc_Munca,Lucreaza=@Lucreaza,Somaj=@Somaj WHERE Id=@Id";
                 using (OleDbCommand command = new OleDbCommand(commandString, connection))
                 {
                     command.Parameters.Add("@Id_Persoana", OleDbType.Integer).Value = personID;
@@ -469,6 +501,7 @@ namespace VechimeSoftware
             if (peopleDictionary.ContainsKey(personID) && recordsChanged != 0)
             {
                 peopleDictionary[personID].Perioade = GetPerioadaList(personID);
+                CheckTransaUpdates();
             }
             peopleListBox.SelectedIndex = -1;
         } //done
@@ -496,6 +529,7 @@ namespace VechimeSoftware
             if (peopleDictionary.ContainsKey(personID) && recordsChanged != 0)
             {
                 peopleDictionary[personID].Perioade = GetPerioadaList(personID);
+                CheckTransaUpdates();
             }
             peopleListBox.SelectedIndex = -1;
         } //done
@@ -748,6 +782,7 @@ namespace VechimeSoftware
             {
                 if (MessageBox.Show("Sigur doriti sa actualizati perioadele?", "Atentie", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
+                    int index = peopleListBox.SelectedIndex;
                     for (int i = 0; i < selectedPerson.Perioade.Count; i++)
                     {
                         if (selectedPerson.Perioade[i].Lucreaza == true)
@@ -756,6 +791,8 @@ namespace VechimeSoftware
                             ModifyPerioada(selectedPerson.Perioade[i], selectedPerson.ID);
                         }
                     }
+                    peopleListBox.SelectedIndex = 0;
+                    peopleListBox.SelectedIndex = index;
                 }
             }
         }
