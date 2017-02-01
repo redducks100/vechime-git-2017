@@ -85,7 +85,8 @@ namespace VechimeSoftware
                 np.Days = diff.ElapsedDays;
 
                 // aplic norma
-                if (perioada.DTInceput.CompareTo(changeNorma) < 0 && perioada.Norma != "1/1")
+                //Somajul este calculat mereu 1/1
+                if (perioada.DTInceput.CompareTo(changeNorma) < 0 && perioada.Norma != "1/1" &&  !perioada.Somaj)
                     if (perioada.DTSfarsit.CompareTo(changeNorma) > 0)
                     {
                         diff = new DateDiff(perioada.DTInceput, changeNorma);
@@ -142,7 +143,16 @@ namespace VechimeSoftware
             // Doar timpul in invatamant
             int aniInv = 0, luniInv = 0, zileInv = 0;
 
-            for(int i=0;i<perioade.Count;i++)
+            perioade = perioade.OrderBy(c => c.DTSfarsit).ToList();
+
+
+            for (int i = 0; i < perioade.Count-1; i++)
+            {
+                if (perioade[i].DTSfarsit.CompareTo(perioade[i + 1].DTInceput) == 0)
+                    perioade[i + 1].DTInceput = perioade[i + 1].DTInceput.AddDays(1);
+            }
+
+                for (int i=0;i<perioade.Count;i++)
             {
                 DateDiff diff = new DateDiff(perioade[i].DTInceput, perioade[i].DTSfarsit);
 
@@ -168,7 +178,7 @@ namespace VechimeSoftware
                     np.Days = diff.ElapsedDays;
 
                     // aplic norma
-                    if (perioade[i].DTInceput.CompareTo(changeNorma) < 0 && perioade[i].Norma != "1/1")
+                    if (perioade[i].DTInceput.CompareTo(changeNorma) < 0 && perioade[i].Norma != "1/1" && !perioade[i].Somaj)
                         if (perioade[i].DTSfarsit.CompareTo(changeNorma) > 0)
                         {
                             diff = new DateDiff(perioade[i].DTInceput, changeNorma);
