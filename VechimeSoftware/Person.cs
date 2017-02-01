@@ -1,10 +1,9 @@
-using System.Collections.Generic;
 using Itenso.TimePeriod;
 using System;
+using System.Collections.Generic;
 
 namespace VechimeSoftware
 {
-
     public class Transa
     {
         public string TransaString = "";
@@ -42,7 +41,7 @@ namespace VechimeSoftware
 
         public static string GetCurrentTransaString(TimePeriod period, TransaType type)
         {
-            if(type == TransaType.INVATAMANT)
+            if (type == TransaType.INVATAMANT)
             {
                 if (period.Years >= 0 && period.Years < 1)
                     return TransaInvatamantStrings[0];
@@ -70,20 +69,24 @@ namespace VechimeSoftware
             else
             {
                 if (period.Years >= 0 && period.Years < 3)
-                    return TransaInvatamantStrings[0];
+                    return TransaMuncaStrings[0];
                 if (period.Years >= 3 && period.Years < 5)
-                    return TransaInvatamantStrings[1];
+                    return TransaMuncaStrings[1];
                 if (period.Years >= 5 && period.Years < 10)
-                    return TransaInvatamantStrings[2];
+                    return TransaMuncaStrings[2];
                 if (period.Years >= 10 && period.Years < 15)
-                    return TransaInvatamantStrings[3];
+                    return TransaMuncaStrings[3];
                 if (period.Years >= 15 && period.Years < 20)
-                    return TransaInvatamantStrings[4];
+                    return TransaMuncaStrings[4];
 
-                return TransaInvatamantStrings[5];
+                return TransaMuncaStrings[5];
             }
         }
 
+        public Transa(TimePeriod period, TransaType type)
+        {
+            TransaString = GetCurrentTransaString(period, type);
+        }
     }
 
     public class Person
@@ -94,6 +97,7 @@ namespace VechimeSoftware
         public string Nume { get; set; }
         public string Prenume { get; set; }
         public List<Perioada> Perioade { get; set; }
+
         public string NumeIntreg
         {
             get
@@ -102,59 +106,63 @@ namespace VechimeSoftware
             }
         }
 
-        private TimePeriod _perioadaMunca;
-        private TimePeriod _perioadaInv;
-
         public TimePeriod PerioadaMunca
         {
             get
             {
-                if (_perioadaMunca == null)
+                TimePeriod total = new TimePeriod();
+                int ani = 0, luni = 0, zile = 0;
+                for (int i = 0; i < Perioade.Count; i++)
                 {
-                    TimePeriod total = new TimePeriod();
-                    int ani = 0, luni = 0, zile = 0;
-                    for (int i = 0; i < Perioade.Count; i++)
+                    ani += Perioade[i].Difference.ElapsedYears;
+                    luni += Perioade[i].Difference.ElapsedMonths;
+                    zile += Perioade[i].Difference.ElapsedDays;
+                }
+                total.Days = Convert.ToInt32(zile % 30);
+                total.Months = (luni + Convert.ToInt32(zile / 30)) % 12;
+                total.Years = ani + (luni + Convert.ToInt32(zile / 30)) / 12;
+                return total;
+            }
+        }
+
+        public TimePeriod PerioadaInv
+        {
+            get
+            {
+
+                TimePeriod total = new TimePeriod();
+                int ani = 0, luni = 0, zile = 0;
+                for (int i = 0; i < Perioade.Count; i++)
+                {
+                    if (Perioade[i].IOM.ToUpper() == "INVATAMANT")
                     {
                         ani += Perioade[i].Difference.ElapsedYears;
                         luni += Perioade[i].Difference.ElapsedMonths;
                         zile += Perioade[i].Difference.ElapsedDays;
                     }
-                    total.Days = Convert.ToInt32(zile % 30);
-                    total.Months = (luni + Convert.ToInt32(zile / 30)) % 12;
-                    total.Years = ani + (luni + Convert.ToInt32(zile / 30)) / 12;
-                    _perioadaMunca = total;
                 }
-                return _perioadaMunca;
+
+                total.Days = Convert.ToInt32(zile % 30);
+                total.Months = (luni + Convert.ToInt32(Math.Floor(zile / 30.0))) % 12;
+                total.Years = ani + (luni + Convert.ToInt32(Math.Floor(zile / 30.0))) / 12;
+                
+                return total;
             }
         }
-        public TimePeriod PerioadaInv
+
+        public Transa CurrentTransaMunca
         {
             get
             {
-                if (_perioadaInv == null)
-                {
-                    TimePeriod total = new TimePeriod();
-                    int ani = 0, luni = 0, zile = 0;
-                    for (int i = 0; i < Perioade.Count; i++)
-                    {
-                        if (Perioade[i].IOM.ToUpper() == "INVATAMANT")
-                        {
-                            ani += Perioade[i].Difference.ElapsedYears;
-                            luni += Perioade[i].Difference.ElapsedMonths;
-                            zile += Perioade[i].Difference.ElapsedDays;
-                        }
-                    }
-
-                    total.Days = Convert.ToInt32(zile % 30);
-                    total.Months = (luni + Convert.ToInt32(zile / 30)) % 12;
-                    total.Years = ani + (luni + Convert.ToInt32(zile / 30)) / 12;
-                    _perioadaInv = total;
-                }
-                return _perioadaInv;
+                return new Transa(PerioadaMunca, Transa.TransaType.MUNCA);
             }
         }
+        public Transa CurrentTransaInv {
 
-        public Transa CurrentTransa { get; set; }
-
+            get
+            {
+                return new Transa(PerioadaInv, Transa.TransaType.INVATAMANT);
+            }
+        }
     }
 }

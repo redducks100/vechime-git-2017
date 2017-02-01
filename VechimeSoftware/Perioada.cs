@@ -1,5 +1,5 @@
-using System;
 using Itenso.TimePeriod;
+using System;
 
 namespace VechimeSoftware
 {
@@ -16,12 +16,16 @@ namespace VechimeSoftware
         public string IOM { get; set; }
         public string LocMunca { get; set; }
         public bool Lucreaza { get; set; }
+        public bool LucreazaUnitateaCurenta { get; set; }
         public bool Somaj { get; set; }
 
-        public DateDiff Difference {
+        public bool Modified { get; set; }
+
+        public DateDiff Difference
+        {
             get
             {
-                return new DateDiff(DTInceput.Subtract(new TimeSpan(1,0,0,0,0)), DTSfarsit.Subtract(new TimeSpan(1, 0, 0, 0, 0)));
+                return new DateDiff(DTInceput.Subtract(new TimeSpan(1, 0, 0, 0, 0)), DTSfarsit.Subtract(new TimeSpan(1, 0, 0, 0, 0)));
             }
         }
     }

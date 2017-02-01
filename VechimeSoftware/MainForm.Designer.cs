@@ -42,6 +42,8 @@ namespace VechimeSoftware
             this.persoanaSelectataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toatePersoaneleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.adeverintaVechimeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.setariToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.unitateaCurentaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.iesireToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
@@ -52,9 +54,8 @@ namespace VechimeSoftware
             this.placeList = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataInceput = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataSfarsit = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.csf_personal = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.csf_studii = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.perioada = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tipConcediu = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.norma = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.functie = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tip = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -80,6 +81,10 @@ namespace VechimeSoftware
             this.label4 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.perioadaInvTB = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.transaInvatamantTextBox = new System.Windows.Forms.TextBox();
+            this.transaMuncaTextBox = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -115,6 +120,7 @@ namespace VechimeSoftware
             this.persoaneToolStripMenuItem,
             this.perioadeToolStripMenuItem,
             this.raportToolStripMenuItem,
+            this.setariToolStripMenuItem,
             this.iesireToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
@@ -197,6 +203,20 @@ namespace VechimeSoftware
             this.adeverintaVechimeToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
             this.adeverintaVechimeToolStripMenuItem.Text = "Adeverinta vechime";
             this.adeverintaVechimeToolStripMenuItem.Click += new System.EventHandler(this.adeverintaVechimeGenerateToolStripMenuItem_Click);
+            // 
+            // setariToolStripMenuItem
+            // 
+            this.setariToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.unitateaCurentaToolStripMenuItem});
+            this.setariToolStripMenuItem.Name = "setariToolStripMenuItem";
+            this.setariToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
+            this.setariToolStripMenuItem.Text = "Setari";
+            // 
+            // unitateaCurentaToolStripMenuItem
+            // 
+            this.unitateaCurentaToolStripMenuItem.Name = "unitateaCurentaToolStripMenuItem";
+            this.unitateaCurentaToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.unitateaCurentaToolStripMenuItem.Text = "Unitatea curenta";
             // 
             // iesireToolStripMenuItem
             // 
@@ -287,9 +307,8 @@ namespace VechimeSoftware
             this.placeList,
             this.dataInceput,
             this.dataSfarsit,
-            this.csf_personal,
-            this.csf_studii,
             this.perioada,
+            this.tipConcediu,
             this.norma,
             this.functie,
             this.tip,
@@ -323,7 +342,7 @@ namespace VechimeSoftware
             // dataInceput
             // 
             this.dataInceput.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.dataInceput.FillWeight = 10.54441F;
+            this.dataInceput.FillWeight = 9.778422F;
             this.dataInceput.HeaderText = "Data inceput";
             this.dataInceput.Name = "dataInceput";
             this.dataInceput.ReadOnly = true;
@@ -331,42 +350,34 @@ namespace VechimeSoftware
             // dataSfarsit
             // 
             this.dataSfarsit.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.dataSfarsit.FillWeight = 10.54441F;
+            this.dataSfarsit.FillWeight = 9.778422F;
             this.dataSfarsit.HeaderText = "Data sfarsit";
             this.dataSfarsit.Name = "dataSfarsit";
             this.dataSfarsit.ReadOnly = true;
             // 
-            // csf_personal
-            // 
-            this.csf_personal.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.csf_personal.FillWeight = 17.23862F;
-            this.csf_personal.HeaderText = "Concediu Personal (aa-ll-zz)";
-            this.csf_personal.MinimumWidth = 10;
-            this.csf_personal.Name = "csf_personal";
-            this.csf_personal.ReadOnly = true;
-            // 
-            // csf_studii
-            // 
-            this.csf_studii.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.csf_studii.FillWeight = 17.23862F;
-            this.csf_studii.HeaderText = "Concediu Studii (aa-ll-zz)";
-            this.csf_studii.MinimumWidth = 10;
-            this.csf_studii.Name = "csf_studii";
-            this.csf_studii.ReadOnly = true;
-            // 
             // perioada
             // 
             this.perioada.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.perioada.FillWeight = 16.7171F;
+            this.perioada.FillWeight = 15.5027F;
             this.perioada.HeaderText = "Perioada (aa-ll-zz)";
             this.perioada.MinimumWidth = 10;
             this.perioada.Name = "perioada";
             this.perioada.ReadOnly = true;
             // 
+            // tipConcediu
+            // 
+            this.tipConcediu.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.tipConcediu.FillWeight = 10F;
+            this.tipConcediu.HeaderText = "Concediu";
+            this.tipConcediu.MinimumWidth = 20;
+            this.tipConcediu.Name = "tipConcediu";
+            this.tipConcediu.ReadOnly = true;
+            this.tipConcediu.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            // 
             // norma
             // 
             this.norma.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.norma.FillWeight = 9.372813F;
+            this.norma.FillWeight = 8.691936F;
             this.norma.HeaderText = "Norma";
             this.norma.Name = "norma";
             this.norma.ReadOnly = true;
@@ -374,7 +385,7 @@ namespace VechimeSoftware
             // functie
             // 
             this.functie.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.functie.FillWeight = 14.12784F;
+            this.functie.FillWeight = 13.10154F;
             this.functie.HeaderText = "Functie";
             this.functie.MinimumWidth = 20;
             this.functie.Name = "functie";
@@ -383,26 +394,26 @@ namespace VechimeSoftware
             // tip
             // 
             this.tip.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.tip.FillWeight = 20.92401F;
+            this.tip.FillWeight = 19.40401F;
             this.tip.HeaderText = "Invatamant/Munca";
-            this.tip.MinimumWidth = 70;
+            this.tip.MinimumWidth = 20;
             this.tip.Name = "tip";
             this.tip.ReadOnly = true;
             // 
             // locMunca
             // 
             this.locMunca.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.locMunca.FillWeight = 11.71602F;
+            this.locMunca.FillWeight = 27.82068F;
             this.locMunca.HeaderText = "Loc de munca";
-            this.locMunca.MinimumWidth = 10;
+            this.locMunca.MinimumWidth = 70;
             this.locMunca.Name = "locMunca";
             this.locMunca.ReadOnly = true;
             // 
             // lucreaza
             // 
             this.lucreaza.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.lucreaza.FillWeight = 10F;
-            this.lucreaza.HeaderText = "Inca Lucreaza/Somer";
+            this.lucreaza.FillWeight = 9.273561F;
+            this.lucreaza.HeaderText = "Inca Lucreaza";
             this.lucreaza.MinimumWidth = 10;
             this.lucreaza.Name = "lucreaza";
             this.lucreaza.ReadOnly = true;
@@ -583,13 +594,19 @@ namespace VechimeSoftware
             // tableLayoutPanel8
             // 
             this.tableLayoutPanel8.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Single;
-            this.tableLayoutPanel8.ColumnCount = 2;
-            this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 38.68613F));
-            this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 61.31387F));
+            this.tableLayoutPanel8.ColumnCount = 4;
+            this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25.2924F));
+            this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 26.02339F));
+            this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 23.53801F));
+            this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel8.Controls.Add(this.transaMuncaTextBox, 3, 1);
+            this.tableLayoutPanel8.Controls.Add(this.transaInvatamantTextBox, 3, 0);
             this.tableLayoutPanel8.Controls.Add(this.perioadaTotalTB, 1, 1);
             this.tableLayoutPanel8.Controls.Add(this.label4, 0, 0);
             this.tableLayoutPanel8.Controls.Add(this.label6, 0, 1);
             this.tableLayoutPanel8.Controls.Add(this.perioadaInvTB, 1, 0);
+            this.tableLayoutPanel8.Controls.Add(this.label8, 2, 0);
+            this.tableLayoutPanel8.Controls.Add(this.label7, 2, 1);
             this.tableLayoutPanel8.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel8.Location = new System.Drawing.Point(374, 3);
             this.tableLayoutPanel8.Name = "tableLayoutPanel8";
@@ -602,10 +619,10 @@ namespace VechimeSoftware
             // perioadaTotalTB
             // 
             this.perioadaTotalTB.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.perioadaTotalTB.Location = new System.Drawing.Point(268, 45);
+            this.perioadaTotalTB.Location = new System.Drawing.Point(177, 45);
             this.perioadaTotalTB.Name = "perioadaTotalTB";
             this.perioadaTotalTB.ReadOnly = true;
-            this.perioadaTotalTB.Size = new System.Drawing.Size(413, 20);
+            this.perioadaTotalTB.Size = new System.Drawing.Size(171, 20);
             this.perioadaTotalTB.TabIndex = 6;
             // 
             // label4
@@ -615,7 +632,7 @@ namespace VechimeSoftware
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.Location = new System.Drawing.Point(4, 10);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(257, 16);
+            this.label4.Size = new System.Drawing.Size(166, 16);
             this.label4.TabIndex = 1;
             this.label4.Text = "Perioada Invatamant:";
             // 
@@ -626,18 +643,58 @@ namespace VechimeSoftware
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label6.Location = new System.Drawing.Point(4, 47);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(257, 16);
+            this.label6.Size = new System.Drawing.Size(166, 16);
             this.label6.TabIndex = 4;
             this.label6.Text = "Perioada Munca:";
             // 
             // perioadaInvTB
             // 
             this.perioadaInvTB.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.perioadaInvTB.Location = new System.Drawing.Point(268, 8);
+            this.perioadaInvTB.Location = new System.Drawing.Point(177, 8);
             this.perioadaInvTB.Name = "perioadaInvTB";
             this.perioadaInvTB.ReadOnly = true;
-            this.perioadaInvTB.Size = new System.Drawing.Size(413, 20);
+            this.perioadaInvTB.Size = new System.Drawing.Size(171, 20);
             this.perioadaInvTB.TabIndex = 5;
+            // 
+            // label8
+            // 
+            this.label8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.label8.AutoSize = true;
+            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label8.Location = new System.Drawing.Point(355, 10);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(154, 16);
+            this.label8.TabIndex = 8;
+            this.label8.Text = "Transa:";
+            // 
+            // label7
+            // 
+            this.label7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.Location = new System.Drawing.Point(355, 47);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(154, 16);
+            this.label7.TabIndex = 9;
+            this.label7.Text = "Transa:";
+            // 
+            // transaInvatamantTextBox
+            // 
+            this.transaInvatamantTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.transaInvatamantTextBox.Location = new System.Drawing.Point(516, 8);
+            this.transaInvatamantTextBox.Name = "transaInvatamantTextBox";
+            this.transaInvatamantTextBox.ReadOnly = true;
+            this.transaInvatamantTextBox.Size = new System.Drawing.Size(165, 20);
+            this.transaInvatamantTextBox.TabIndex = 10;
+            // 
+            // transaMuncaTextBox
+            // 
+            this.transaMuncaTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.transaMuncaTextBox.Location = new System.Drawing.Point(516, 45);
+            this.transaMuncaTextBox.Name = "transaMuncaTextBox";
+            this.transaMuncaTextBox.ReadOnly = true;
+            this.transaMuncaTextBox.Size = new System.Drawing.Size(165, 20);
+            this.transaMuncaTextBox.TabIndex = 11;
             // 
             // MainForm
             // 
@@ -704,23 +761,28 @@ namespace VechimeSoftware
         private System.Windows.Forms.ContextMenuStrip perioadaContextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem veziDetaliiModificaToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem stergeToolStripMenuItem;
-        private System.Windows.Forms.DataGridViewTextBoxColumn index;
-        private System.Windows.Forms.DataGridViewTextBoxColumn placeList;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataInceput;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataSfarsit;
-        private System.Windows.Forms.DataGridViewTextBoxColumn csf_personal;
-        private System.Windows.Forms.DataGridViewTextBoxColumn csf_studii;
-        private System.Windows.Forms.DataGridViewTextBoxColumn perioada;
-        private System.Windows.Forms.DataGridViewTextBoxColumn norma;
-        private System.Windows.Forms.DataGridViewTextBoxColumn functie;
-        private System.Windows.Forms.DataGridViewTextBoxColumn tip;
-        private System.Windows.Forms.DataGridViewTextBoxColumn locMunca;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn lucreaza;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel8;
         private System.Windows.Forms.TextBox perioadaTotalTB;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox perioadaInvTB;
+        private System.Windows.Forms.DataGridViewTextBoxColumn index;
+        private System.Windows.Forms.DataGridViewTextBoxColumn placeList;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataInceput;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataSfarsit;
+        private System.Windows.Forms.DataGridViewTextBoxColumn perioada;
+        private System.Windows.Forms.DataGridViewTextBoxColumn tipConcediu;
+        private System.Windows.Forms.DataGridViewTextBoxColumn norma;
+        private System.Windows.Forms.DataGridViewTextBoxColumn functie;
+        private System.Windows.Forms.DataGridViewTextBoxColumn tip;
+        private System.Windows.Forms.DataGridViewTextBoxColumn locMunca;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn lucreaza;
+        private System.Windows.Forms.ToolStripMenuItem setariToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem unitateaCurentaToolStripMenuItem;
+        private System.Windows.Forms.TextBox transaMuncaTextBox;
+        private System.Windows.Forms.TextBox transaInvatamantTextBox;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label7;
     }
 }
 

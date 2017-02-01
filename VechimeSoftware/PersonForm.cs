@@ -17,7 +17,7 @@ namespace VechimeSoftware
             UpdateTitle();
             UpdateForm();
         }
-        
+
         private bool CheckCNP(string CNP)
         {
             if (parent.peopleDictionary.Values.ToList().Where(x => x.CNP == CNP).Count() > 0)
@@ -109,7 +109,7 @@ namespace VechimeSoftware
             //    MessageBox.Show("CNP-ul nu este valid!","Erroare!");
             //    return;
             //}
-            if(CheckCNP(cnpTextBox.Text) == false)
+            if (CheckCNP(cnpTextBox.Text) == false)
             {
                 return;
             }
@@ -126,7 +126,6 @@ namespace VechimeSoftware
 
             parent.AddPerson(currentPerson);
             this.Close();
-            
         }
 
         private void saveButton_Click(object sender, EventArgs e)
@@ -136,7 +135,7 @@ namespace VechimeSoftware
             //    MessageBox.Show("CNP-ul nu este valid!","Erroare!");
             //    return;
             //}
-            if(CheckCNP(cnpTextBox.Text) == false)
+            if (CheckCNP(cnpTextBox.Text) == false)
             {
                 return;
             }

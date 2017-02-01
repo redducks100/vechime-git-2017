@@ -1,6 +1,8 @@
 using Itenso.TimePeriod;
 
 using System;
+using System.Linq;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace VechimeSoftware
@@ -11,12 +13,17 @@ namespace VechimeSoftware
         private Perioada currentPerioada;
         private int currentPersonIndex;
 
+        private List<Perioada> currentChangedPeriods;
+
         public PerioadaForm(MainForm _parent, Perioada _currentPerioada, int _currentPersonIndex)
         {
             InitializeComponent();
             parent = _parent;
             currentPerioada = _currentPerioada;
             currentPersonIndex = _currentPersonIndex;
+
+            currentChangedPeriods = new List<Perioada>();
+
             UpdateTitle();
             UpdateForm();
         }
@@ -44,14 +51,6 @@ namespace VechimeSoftware
                 inceputTimePicker.Value = currentPerioada.DTInceput;
                 sfarsitTimePicker.Value = currentPerioada.DTSfarsit;
 
-                cfsani_personalTB.Text = currentPerioada.CFSAni_Personal.ToString();
-                cfsluni_personalTB.Text = currentPerioada.CFSLuni_Personal.ToString();
-                cfszile_personalTB.Text = currentPerioada.CFSZile_Personal.ToString();
-
-                cfsani_studiiTB.Text = currentPerioada.CFSAni_Studii.ToString();
-                cfsluni_studiiTB.Text = currentPerioada.CFSLuni_Studii.ToString();
-                cfszile_studiiTB.Text = currentPerioada.CFSZile_Studii.ToString();
-
                 if (currentPerioada.Norma == "1/1")
                 {
                     normaComboBox.SelectedIndex = 0;
@@ -73,17 +72,30 @@ namespace VechimeSoftware
                 {
                     iomComboBox.SelectedIndex = 1;
                 }
+
                 functieTextBox.Text = currentPerioada.Functie.ToString().ToUpper();
                 locMuncaTextBox.Text = currentPerioada.LocMunca.ToString().ToUpper();
-                perioadaTextBox.Text = currentPerioada.CFSAni_Studii.ToString() + " ani " + currentPerioada.CFSLuni_Studii.ToString() + " luni " + currentPerioada.CFSZile_Studii.ToString() + " zile";
+                perioadaTextBox.Text = currentPerioada.Difference.ElapsedYears.ToString() + " ani " + currentPerioada.Difference.ElapsedMonths.ToString() + " luni " + currentPerioada.Difference.ElapsedDays.ToString() + " zile";
                 lucreazaCheckBox.Checked = currentPerioada.Lucreaza;
 
-                if(currentPerioada.Somaj)
+                concediuCheckBox.Checked = (currentPerioada.TipCFS == "" ? false : true);
+
+                if(currentPerioada.TipCFS.ToLower() == "personal")
+                {
+                    tipConcediuComboBox.SelectedIndex = 0;
+                }
+                else
+                {
+                    tipConcediuComboBox.SelectedIndex = 1;
+                }
+
+                somerCheckBox.Checked = currentPerioada.Somaj;
+
+                if (currentPerioada.Somaj)
                 {
                     iomComboBox.Items.Add("SOMAJ");
                     iomComboBox.SelectedIndex = 2;
                 }
-
 
                 editButton.Enabled = true;
             }
@@ -134,29 +146,45 @@ namespace VechimeSoftware
             currentPerioada = new Perioada();
             currentPerioada.DTInceput = inceputTimePicker.Value;
             currentPerioada.DTSfarsit = sfarsitTimePicker.Value;
-            currentPerioada.CFSAni_Personal =  Convert.ToInt32(cfsani_personalTB.Text);
-            currentPerioada.CFSLuni_Personal = Convert.ToInt32(cfsluni_personalTB.Text);
-            currentPerioada.CFSZile_Personal = Convert.ToInt32(cfszile_personalTB.Text);
-            currentPerioada.CFSAni_Studii =  Convert.ToInt32(cfsani_studiiTB.Text);
-            currentPerioada.CFSLuni_Studii = Convert.ToInt32(cfsluni_studiiTB.Text);
-            currentPerioada.CFSZile_Studii = Convert.ToInt32(cfszile_studiiTB.Text);
+            currentPerioada.CFS = concediuCheckBox.Checked;
+            currentPerioada.TipCFS = (currentPerioada.CFS ? tipConcediuComboBox.SelectedItem.ToString() : "");
             currentPerioada.Norma = normaComboBox.SelectedItem.ToString();
-            if (!somajCheckBox.Checked)
-                currentPerioada.Functie = functieTextBox.Text.ToUpper();
+            if (currentPerioada.CFS)
+            {
+                currentPerioada.Functie = "CONCEDIU";
+                currentPerioada.LocMunca = "CONCEDIU";
+                currentPerioada.IOM = "CONCEDIU";
+                currentPerioada.Lucreaza = false;
+                currentPerioada.LucreazaUnitateaCurenta = false;
+            }
             else
-                currentPerioada.Functie = "SOMER";
-            if (!somajCheckBox.Checked)
-                currentPerioada.LocMunca = locMuncaTextBox.Text.ToUpper();
-            else
-                currentPerioada.LocMunca = "SOMER";
-
-            currentPerioada.IOM = iomComboBox.SelectedItem.ToString();
-            currentPerioada.Lucreaza = lucreazaCheckBox.Checked;
-            currentPerioada.Somaj = somajCheckBox.Checked;
+            {
+                if (somerCheckBox.Checked)
+                {
+                    currentPerioada.LocMunca = "SOMER";
+                    currentPerioada.Functie = "SOMER";
+                    currentPerioada.IOM = "SOMER";
+                    currentPerioada.Lucreaza = false;
+                    currentPerioada.LucreazaUnitateaCurenta = false;
+                }
+                else
+                {
+                    currentPerioada.LocMunca = locMuncaTextBox.Text.ToUpper();
+                    currentPerioada.IOM = iomComboBox.SelectedItem.ToString();
+                    currentPerioada.Lucreaza = lucreazaCheckBox.Checked;
+                    currentPerioada.LucreazaUnitateaCurenta = lucreazaUCurentaCheckBox.Checked;
+                    currentPerioada.Functie = functieTextBox.Text.ToUpper();
+                }
+            }
+        
+            currentPerioada.Somaj = somerCheckBox.Checked;
 
             parent.AddPerioada(currentPerioada, currentPersonIndex);
 
-            this.Close();
+            AddToLocalList(currentPerioada);
+
+            //TO-DO RESET FORM
+            //this.Close();
         }
 
         private void saveButton_Click(object sender, EventArgs e)
@@ -172,40 +200,56 @@ namespace VechimeSoftware
 
             currentPerioada.DTInceput = inceputTimePicker.Value;
             currentPerioada.DTSfarsit = sfarsitTimePicker.Value;
-            currentPerioada.CFSAni_Personal = Convert.ToInt32(cfsani_personalTB.Text);
-            currentPerioada.CFSLuni_Personal = Convert.ToInt32(cfsluni_personalTB.Text);
-            currentPerioada.CFSZile_Personal = Convert.ToInt32(cfszile_personalTB.Text);
-            currentPerioada.CFSAni_Studii = Convert.ToInt32(cfsani_studiiTB.Text);
-            currentPerioada.CFSLuni_Studii = Convert.ToInt32(cfsluni_studiiTB.Text);
-            currentPerioada.CFSZile_Studii = Convert.ToInt32(cfszile_studiiTB.Text);
+            currentPerioada.CFS = concediuCheckBox.Checked;
+            currentPerioada.TipCFS = (currentPerioada.CFS ? tipConcediuComboBox.SelectedItem.ToString() : "");
             currentPerioada.Norma = normaComboBox.SelectedItem.ToString();
-            if (!somajCheckBox.Checked)
-                currentPerioada.Functie = functieTextBox.Text.ToUpper();
+            if (currentPerioada.CFS)
+            {
+                currentPerioada.Functie = "CONCEDIU";
+                currentPerioada.LocMunca = "CONCEDIU";
+                currentPerioada.IOM = "CONCEDIU";
+                currentPerioada.Lucreaza = false;
+                currentPerioada.LucreazaUnitateaCurenta = false;
+            }
             else
-                currentPerioada.Functie = "SOMER";
-            if (!somajCheckBox.Checked)
-                currentPerioada.LocMunca = locMuncaTextBox.Text.ToUpper();
-            else
-                currentPerioada.LocMunca = "SOMER";
+            {
+                if (somerCheckBox.Checked)
+                {
+                    currentPerioada.LocMunca = "SOMER";
+                    currentPerioada.Functie = "SOMER";
+                    currentPerioada.IOM = "SOMER";
+                    currentPerioada.Lucreaza = false;
+                    currentPerioada.LucreazaUnitateaCurenta = false;
+                }
+                else
+                {
+                    currentPerioada.LocMunca = locMuncaTextBox.Text.ToUpper();
+                    currentPerioada.IOM = iomComboBox.SelectedItem.ToString();
+                    currentPerioada.Lucreaza = lucreazaCheckBox.Checked;
+                    currentPerioada.LucreazaUnitateaCurenta = lucreazaUCurentaCheckBox.Checked;
+                    currentPerioada.Functie = functieTextBox.Text.ToUpper();
+                }
+            }
 
-            currentPerioada.IOM = iomComboBox.SelectedItem.ToString();
-            currentPerioada.Lucreaza = lucreazaCheckBox.Checked;
-            currentPerioada.Somaj = somajCheckBox.Checked;
+            currentPerioada.Somaj = somerCheckBox.Checked;
 
             parent.ModifyPerioada(currentPerioada, currentPersonIndex);
 
-            this.Close();
+            AddToLocalList(currentPerioada, true);
+
+            //TO-DO RESET FORM
+            //this.Close();
         }
 
-        bool VerificaData(DateTime inceput, DateTime sfarsit)
+        private bool VerificaData(DateTime inceput, DateTime sfarsit)
         {
             Person selectedPerson = null;
             if (parent.peopleDictionary.ContainsKey(currentPersonIndex))
                 selectedPerson = parent.peopleDictionary[currentPersonIndex];
 
-             foreach(Perioada perioada in selectedPerson.Perioade)
+            foreach (Perioada perioada in selectedPerson.Perioade)
             {
-                if(inceput.CompareTo(perioada.DTInceput)>=0 && inceput.CompareTo(perioada.DTSfarsit)<=0)
+                if (inceput.CompareTo(perioada.DTInceput) >= 0 && inceput.CompareTo(perioada.DTSfarsit) <= 0)
                 {
                     MessageBox.Show("Aceasta perioada este cuprinsa in alta perioada deja inregistrata.");
                     return false;
@@ -216,33 +260,21 @@ namespace VechimeSoftware
                     MessageBox.Show("Aceasta perioada este cuprinsa in alta perioada deja inregistrata.");
                     return false;
                 }
-
-                
             }
             return true;
         }
-
-
 
         private void timePicker_ValueChanged(object sender, EventArgs e)
         {
             DateTime firstDate = inceputTimePicker.Value;
             DateTime secondDate = sfarsitTimePicker.Value;
-            DateDiff span = new DateDiff(firstDate, secondDate);
+            DateDiff span = new DateDiff(firstDate.Subtract(new TimeSpan(1, 0, 0, 0, 0)), secondDate.Subtract(new TimeSpan(1, 0, 0, 0, 0)));
             perioadaTextBox.Text = span.ElapsedYears + " ani " + span.ElapsedMonths + " luni " + span.ElapsedDays + " zile";
-        }
-
-        private void cfsTB_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!char.IsNumber(e.KeyChar) && !char.IsControl(e.KeyChar))
-            {
-                e.Handled = true;
-            }
         }
 
         private void somajCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            if (somajCheckBox.Checked)
+            if (somerCheckBox.Checked)
             {
                 iomComboBox.Items.Add("SOMER");
                 iomComboBox.SelectedIndex = 2;
@@ -253,25 +285,134 @@ namespace VechimeSoftware
 
                 locMuncaTextBox.Text = "SOMER";
                 locMuncaTextBox.Enabled = false;
-                lucreazaLabel.Text = "Inca Somer:";
+
+                lucreazaCheckBox.Enabled = false;
+                lucreazaUCurentaCheckBox.Enabled = false;
+
+                normaComboBox.Enabled = false;
             }
             else
             {
                 iomComboBox.Items.Remove("SOMER");
-                iomComboBox.SelectedIndex = 0;
-                iomComboBox.Enabled = true;
 
-                functieTextBox.Text = currentPerioada != null?currentPerioada.Functie.ToUpper():"";
+
+                if (currentPerioada != null)
+                {
+                    if (currentPerioada.IOM.ToLower() == "invatamant")
+                    {
+                        iomComboBox.SelectedIndex = 0;
+                    }
+                    else
+                    {
+                        iomComboBox.SelectedIndex = 1;
+                    }
+                }
+                else
+                {
+                    iomComboBox.SelectedIndex = 0;
+                    iomComboBox.Enabled = true;
+                }
+
+                functieTextBox.Text = currentPerioada != null ? currentPerioada.Functie.ToUpper() : "";
                 functieTextBox.Enabled = true;
 
-                locMuncaTextBox.Text = currentPerioada != null?currentPerioada.LocMunca.ToUpper():"";
+                locMuncaTextBox.Text = currentPerioada != null ? currentPerioada.LocMunca.ToUpper() : "";
                 locMuncaTextBox.Enabled = true;
 
-                lucreazaLabel.Text = "Inca Lucreaza:";
+                lucreazaCheckBox.Enabled = true;
+                lucreazaUCurentaCheckBox.Enabled = true;
+
+                normaComboBox.Enabled = true;
+            }
+        }
+
+        private void concediuCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if(concediuCheckBox.Checked)
+            {
+                tipConcediuComboBox.Enabled = true;
+                somerCheckBox.Enabled = false;
+                lucreazaCheckBox.Enabled = false;
+                functieTextBox.Text = "CONCEDIU";
+                iomComboBox.Enabled = false;
+                lucreazaUCurentaCheckBox.Enabled = false;
+                lucreazaCheckBox.Enabled = false;
+                locMuncaTextBox.Text = "CONCEDIU";
+                normaComboBox.Enabled = false;
+            }
+            else
+            {
+                tipConcediuComboBox.Enabled = false;
+                somerCheckBox.Enabled = true;
+                lucreazaCheckBox.Enabled = true;
+                iomComboBox.Enabled = true;
+                lucreazaUCurentaCheckBox.Enabled = true;
+                lucreazaCheckBox.Enabled = true;
+                normaComboBox.Enabled = true;
+
+                if (currentPerioada != null)
+                {
+                    locMuncaTextBox.Text = currentPerioada.LocMunca;
+                    functieTextBox.Text = currentPerioada.Functie;
+                }
+                else
+                {
+                    locMuncaTextBox.Text = "";
+                    functieTextBox.Text = "";
+                }
+            }
+        }
+
+        private void lucreazaUCurentaCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if(lucreazaUCurentaCheckBox.Checked)
+            {
+                functieTextBox.Enabled = false;
+                functieTextBox.Text = "GET SCHOOL INFO";
+            }
+            else
+            {
+                functieTextBox.Enabled = true;
+                functieTextBox.Text = (currentPerioada == null ? "" : currentPerioada.Functie);
             }
         }
 
         #endregion Handlers
+
+        private void AddToLocalList(Perioada perioada,bool modified = false)
+        {
+            //check for the same element in the list
+            if(currentChangedPeriods.Where(x=> x==perioada).Count() > 0)
+            {
+                return;
+            }
+
+            perioada.Modified = modified;
+
+            currentChangedPeriods.Add(perioada);
+
+            UpdateDataGridView();
+        }
+
+        private void UpdateDataGridView()
+        {
+            dataGridView1.Rows.Clear();
+
+            int count = 0;
+            foreach (Perioada perioada in currentChangedPeriods.OrderBy(c => c.DTSfarsit))
+            {
+                DataGridViewRow newRow = new DataGridViewRow();
+                newRow.CreateCells(dataGridView1);
+                newRow.Cells[0].Value = perioada.ID;
+                newRow.Cells[1].Value = count;
+                newRow.Cells[2].Value = perioada.DTInceput.ToShortDateString();
+                newRow.Cells[3].Value = perioada.DTSfarsit.ToShortDateString();
+                newRow.Cells[4].Value = perioada.Difference.ElapsedYears + "-" + perioada.Difference.ElapsedMonths + "-" + perioada.Difference.ElapsedDays;
+                newRow.Cells[5].Value = (perioada.Modified == true ? "MODIFICAT" : "ADAUGAT");
+                dataGridView1.Rows.Add(newRow);
+                count++;
+            }
+        }
 
         #region Utils
 
@@ -283,6 +424,7 @@ namespace VechimeSoftware
                 SetEnabled(child, enabled);
             }
         }
-        #endregion
+
+        #endregion Utils
     }
 }

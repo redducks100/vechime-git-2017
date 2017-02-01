@@ -13,7 +13,6 @@ namespace VechimeSoftware
         public int Months { get; set; }
         public int Days { get; set; }
 
-
         public static TimePeriod HalfTime(TimePeriod time)
         {
             int addMonths = 0, addDays = 0;
@@ -36,7 +35,6 @@ namespace VechimeSoftware
 
         public static TimePeriod QuarterTime(TimePeriod time)
         {
-
             int addMonths = 0, addDays = 0;
             if (time.Years % 4 == 1)
                 addMonths = 3;
@@ -44,7 +42,6 @@ namespace VechimeSoftware
                 addMonths = 6;
             else if (time.Years % 4 == 3)
                 addMonths = 9;
-
 
             time.Years /= 4;
 
@@ -61,27 +58,18 @@ namespace VechimeSoftware
             time.Months += addMonths;
             time.Days += addDays;
 
-
             return time;
         }
 
         public static TimePeriod CalculatePeriodTime(Perioada perioada)
         {
-
-
-
             // Suma timpului
             int ani = 0, luni = 0, zile = 0;
 
             // Doar timpul in invatamant
             int aniInv = 0, luniInv = 0, zileInv = 0;
 
-
-
-
             DateDiff diff = new DateDiff(perioada.DTInceput, perioada.DTSfarsit);
-
-
 
             DateTime changeSomaj = new DateTime(2002, 03, 01);
 
@@ -89,10 +77,8 @@ namespace VechimeSoftware
 
             if (!perioada.Somaj || perioada.DTInceput.CompareTo(changeSomaj) < 0)
             {
-
                 if (perioada.DTSfarsit.CompareTo(changeSomaj) > 0 && perioada.Somaj)
                     diff = new DateDiff(perioada.DTInceput, changeSomaj);
-
 
                 TimePeriod np = new TimePeriod();
                 np.Years = diff.ElapsedYears;
@@ -119,7 +105,6 @@ namespace VechimeSoftware
                         np.Years += diff.ElapsedYears;
                         np.Months += diff.ElapsedMonths;
                         np.Days += diff.ElapsedDays;
-
                     }
                     else
                     {
@@ -129,14 +114,9 @@ namespace VechimeSoftware
                             np = QuarterTime(np);
                     }
 
-
-
                 ani += np.Years;
                 luni += np.Months;
                 zile += np.Days;
-
-
-
             }
 
             TimePeriod periodSum = new TimePeriod();
@@ -145,50 +125,38 @@ namespace VechimeSoftware
             periodSum.Months = (luni + Convert.ToInt32(Math.Floor(zile / 30.0))) % 12;
             periodSum.Years = ani + (luni + Convert.ToInt32(Math.Floor(zile / 30.0))) / 12;
 
-
             return periodSum;
-
         }
     }
 
     public class TimePeriodSum : TimePeriod
     {
-
         public int YearsInv { get; set; }
         public int MonthsInv { get; set; }
         public int DaysInv { get; set; }
 
         public static TimePeriodSum CalculateIndividualTime(List<Perioada> perioade)
         {
-
-
-
             // Suma timpului
             int ani = 0, luni = 0, zile = 0;
 
             // Doar timpul in invatamant
             int aniInv = 0, luniInv = 0, zileInv = 0;
 
-
-            foreach (Perioada perioada in perioade)
+            for(int i=0;i<perioade.Count;i++)
             {
-
-                DateDiff diff = new DateDiff(perioada.DTInceput, perioada.DTSfarsit);
-
-
+                DateDiff diff = new DateDiff(perioade[i].DTInceput, perioade[i].DTSfarsit);
 
                 DateTime changeSomaj = new DateTime(2002, 03, 01);
 
                 DateTime changeNorma = new DateTime(2006, 09, 18);
 
-                if (!perioada.Somaj || perioada.DTInceput.CompareTo(changeSomaj) < 0)
+                if (!perioade[i].Somaj || perioade[i].DTInceput.CompareTo(changeSomaj) < 0)
                 {
-
-                    if (perioada.DTSfarsit.CompareTo(changeSomaj) > 0 && perioada.Somaj)
-                        diff = new DateDiff(perioada.DTInceput, changeSomaj);
+                    if (perioade[i].DTSfarsit.CompareTo(changeSomaj) > 0 && perioade[i].Somaj)
+                        diff = new DateDiff(perioade[i].DTInceput, changeSomaj);
 
                     TimePeriod np = new TimePeriod();
-
 
                     //Mi se pare inutil daca separam cfs de restul
 
@@ -196,38 +164,36 @@ namespace VechimeSoftware
                     //np.Months = diff.ElapsedMonths - perioada.CFSLuni_Personal;
                     //np.Days = diff.ElapsedDays - perioada.CFSZile_Personal;
 
-
                     np.Years = diff.ElapsedYears;
                     np.Months = diff.ElapsedMonths;
                     np.Days = diff.ElapsedDays;
 
                     // aplic norma
-                    if (perioada.DTInceput.CompareTo(changeNorma) < 0 && perioada.Norma != "1/1")
-                        if (perioada.DTSfarsit.CompareTo(changeNorma) > 0)
+                    if (perioade[i].DTInceput.CompareTo(changeNorma) < 0 && perioade[i].Norma != "1/1")
+                        if (perioade[i].DTSfarsit.CompareTo(changeNorma) > 0)
                         {
-                            diff = new DateDiff(perioada.DTInceput, changeNorma);
+                            diff = new DateDiff(perioade[i].DTInceput, changeNorma);
 
                             np.Years = diff.ElapsedYears;
                             np.Months = diff.ElapsedMonths;
                             np.Days = diff.ElapsedDays;
 
-                            if (perioada.Norma == "1/2")
+                            if (perioade[i].Norma == "1/2")
                                 np = HalfTime(np);
-                            else if (perioada.Norma == "1/4")
+                            else if (perioade[i].Norma == "1/4")
                                 np = QuarterTime(np);
 
-                            diff = new DateDiff(changeNorma, perioada.DTSfarsit);
+                            diff = new DateDiff(changeNorma, perioade[i].DTSfarsit);
 
                             np.Years += diff.ElapsedYears;
                             np.Months += diff.ElapsedMonths;
                             np.Days += diff.ElapsedDays;
-
                         }
                         else
                         {
-                            if (perioada.Norma == "1/2")
+                            if (perioade[i].Norma == "1/2")
                                 np = HalfTime(np);
-                            else if (perioada.Norma == "1/4")
+                            else if (perioade[i].Norma == "1/4")
                                 np = QuarterTime(np);
                         }
 
@@ -237,12 +203,11 @@ namespace VechimeSoftware
                     //luni += perioada.CFSLuni_Studii;
                     //zile += perioada.CFSZile_Studii;
 
-
                     ani += np.Years;
                     luni += np.Months;
                     zile += np.Days;
 
-                    if (perioada.IOM.ToUpper() == "INVATAMANT")
+                    if (perioade[i].IOM.ToUpper() == "INVATAMANT")
                     {
                         aniInv += np.Years;
                         luniInv += np.Months;
@@ -251,17 +216,12 @@ namespace VechimeSoftware
                 }
             }
 
-
-
             TimePeriodSum periodsSum = new TimePeriodSum();
-
 
             // Clalculez timp in invatamant
             periodsSum.DaysInv = Convert.ToInt32(zileInv % 30);
             periodsSum.MonthsInv = (luniInv + Convert.ToInt32(Math.Floor(zileInv / 30.0))) % 12;
             periodsSum.YearsInv = aniInv + (luniInv + Convert.ToInt32(Math.Floor(zileInv / 30.0))) / 12;
-
-
 
             // Calculez timp total
             periodsSum.Days = Convert.ToInt32(zile % 30.0);
@@ -269,9 +229,6 @@ namespace VechimeSoftware
             periodsSum.Years = ani + (luni + Convert.ToInt32(Math.Floor(zile / 30.0))) / 12;
 
             return periodsSum;
-
         }
     }
-
-
 }

@@ -94,6 +94,7 @@ namespace VechimeSoftware
             return peopleDict;
         } //done
 
+        //TO-DO: UPDATE unitatea curenta
         public List<Perioada> GetPerioadaList(int ID)
         {
             List<Perioada> perioadaList = new List<Perioada>();
@@ -118,7 +119,12 @@ namespace VechimeSoftware
                                 newPerioada.DTInceput = Convert.ToDateTime(reader[2]);
                                 newPerioada.DTSfarsit = Convert.ToDateTime(reader[3]);
                                 newPerioada.CFS = Convert.ToBoolean(reader[4]);
-                                newPerioada.TipCFS = Convert.ToString(reader[5]);
+
+                                if (!reader.IsDBNull(reader.GetOrdinal("TipCFS")))
+                                    newPerioada.TipCFS = Convert.ToString(reader[5]);
+                                else
+                                    newPerioada.TipCFS = "";
+
                                 newPerioada.Norma = Convert.ToString(reader[6]);
                                 newPerioada.Functie = Convert.ToString(reader[7]);
                                 newPerioada.IOM = Convert.ToString(reader[8]);
@@ -160,7 +166,12 @@ namespace VechimeSoftware
                                 newPerioada.DTInceput = Convert.ToDateTime(reader[2]);
                                 newPerioada.DTSfarsit = Convert.ToDateTime(reader[3]);
                                 newPerioada.CFS = Convert.ToBoolean(reader[4]);
-                                newPerioada.TipCFS = Convert.ToString(reader[5]);
+
+                                if (!reader.IsDBNull(reader.GetOrdinal("TipCFS")))
+                                    newPerioada.TipCFS = Convert.ToString(reader[5]);
+                                else
+                                    newPerioada.TipCFS = "";
+
                                 newPerioada.Norma = Convert.ToString(reader[6]);
                                 newPerioada.Functie = Convert.ToString(reader[7]);
                                 newPerioada.IOM = Convert.ToString(reader[8]);
@@ -382,38 +393,40 @@ namespace VechimeSoftware
                 dataGridView1.Rows.Clear();
 
                 int count = 0;
-                foreach (Perioada perioada in selectedPerson.Perioade.OrderBy(c=>c.DTSfarsit))
+                foreach (Perioada perioada in selectedPerson.Perioade.OrderBy(c => c.DTSfarsit))
                 {
-                  /*  DataGridViewRow newRow = new DataGridViewRow();
+                    DataGridViewRow newRow = new DataGridViewRow();
                     newRow.CreateCells(dataGridView1);
                     newRow.Cells[0].Value = perioada.ID;
                     newRow.Cells[1].Value = count;
                     newRow.Cells[2].Value = perioada.DTInceput.ToShortDateString();
                     newRow.Cells[3].Value = perioada.DTSfarsit.ToShortDateString();
-                    newRow.Cells[4].Value = perioada.CFSAni_Personal.ToString() + "-" + perioada.CFSLuni_Personal.ToString() + "-" + perioada.CFSZile_Personal.ToString();
-                    newRow.Cells[5].Value = perioada.CFSAni_Studii.ToString() + "-" + perioada.CFSLuni_Studii.ToString() + "-" + perioada.CFSZile_Studii.ToString();
-                    newRow.Cells[6].Value = perioada.Difference.ElapsedYears + "-" + perioada.Difference.ElapsedMonths + "-" + perioada.Difference.ElapsedDays;
+                    newRow.Cells[4].Value = perioada.Difference.ElapsedYears + "-" + perioada.Difference.ElapsedMonths + "-" + perioada.Difference.ElapsedDays;
+                    newRow.Cells[5].Value = (string.IsNullOrWhiteSpace(perioada.TipCFS)==true?"Nu":perioada.TipCFS.ToUpper());
 
-                    // Am specificat daca se aplica norma de 1/1 
+                    // Am specificat daca se aplica norma de 1/1
                     DateTime changeNorma = new DateTime(2006, 09, 18);
                     string normaSpecification = "";
                     if (perioada.Norma.ToUpper() != "1/1" && perioada.DTSfarsit.CompareTo(changeNorma) > 0)
                     {
                         normaSpecification = " (1/1)";
-                        newRow.Cells[7].ToolTipText = "De la data de  18/09/2006 se aplica norma 1/1.";
+                        newRow.Cells[6].ToolTipText = "De la data de  18/09/2006 se aplica norma 1/1.";
                     }
+                    newRow.Cells[6].Value = perioada.Norma.ToUpper() + normaSpecification;
 
-                    newRow.Cells[7].Value = perioada.Norma.ToUpper() + normaSpecification;
-                    newRow.Cells[8].Value = perioada.Functie.ToUpper();
-                    newRow.Cells[9].Value = perioada.IOM.ToUpper();
-                    newRow.Cells[10].Value = perioada.LocMunca.ToUpper();
-                    newRow.Cells[11].Value = perioada.Lucreaza;
+                    newRow.Cells[7].Value = perioada.Functie.ToUpper();
+                    newRow.Cells[8].Value = perioada.IOM.ToUpper();
+                    newRow.Cells[9].Value = perioada.LocMunca.ToUpper();
+                    newRow.Cells[10].Value = perioada.Lucreaza;
                     dataGridView1.Rows.Add(newRow);
-                    count++;*/
+                    count++;
                 }
 
                 perioadaInvTB.Text = selectedPerson.PerioadaInv.Years.ToString() + " ani " + selectedPerson.PerioadaInv.Months.ToString() + " luni " + selectedPerson.PerioadaInv.Days.ToString() + " zile";
                 perioadaTotalTB.Text = selectedPerson.PerioadaMunca.Years.ToString() + " ani " + selectedPerson.PerioadaMunca.Months.ToString() + " luni " + selectedPerson.PerioadaMunca.Days.ToString() + " zile";
+
+                transaInvatamantTextBox.Text = selectedPerson.CurrentTransaInv.TransaString;
+                transaMuncaTextBox.Text = selectedPerson.CurrentTransaMunca.TransaString;
 
             }
             else
@@ -421,6 +434,8 @@ namespace VechimeSoftware
                 dataGridView1.Rows.Clear();
                 perioadaInvTB.Text = "";
                 perioadaTotalTB.Text = "";
+                transaInvatamantTextBox.Text = "";
+                transaMuncaTextBox.Text = "";
             }
         } //done
 
@@ -607,12 +622,11 @@ namespace VechimeSoftware
                     }
                 }
             }
-
         }
 
-        #endregion
+        #endregion UpdateHandlers
 
-        #endregion
+        #endregion Menu Strip Handlers
 
         #region DrawHandlers
 
@@ -685,7 +699,6 @@ namespace VechimeSoftware
                 // Adaug informatii despre persoana
                 XFont font = new XFont("Verdana", 11);
 
-
                 gfx.DrawString("Persoana: " + selectedPerson.NumeIntreg
                               , font, XBrushes.Black,
                                new XRect(45, 70, page.Width, page.Height),
@@ -720,9 +733,6 @@ namespace VechimeSoftware
 
                 int count = 0;
 
-
-
-
                 // Pastreaza inaltimea la care am ajuns in pagina
                 int currentHeight = 148;
 
@@ -734,11 +744,9 @@ namespace VechimeSoftware
 
                     if (currentHeight + 50 > page.Height)
                     {
-                        
-
                         page = document.AddPage();
 
-                         gfx = XGraphics.FromPdfPage(page);
+                        gfx = XGraphics.FromPdfPage(page);
 
                         currentHeight = 30;
                     }
@@ -765,26 +773,23 @@ namespace VechimeSoftware
                     gfx.DrawString(rowString, fontList, XBrushes.Black,
                                    new XRect(25, currentHeight, page.Width, page.Height),
                                    XStringFormats.TopLeft);
-
                 }
-
 
                 // Adaug spatiu dupa enumerarea perioadelor
                 currentHeight += 40;
 
                 if (currentHeight + 40 > page.Height)
                 {
-                     page = document.AddPage();
+                    page = document.AddPage();
 
                     gfx = XGraphics.FromPdfPage(page);
 
                     currentHeight = 30;
                 }
 
-                // Clalculez timp 
+                // Clalculez timp
 
                 TimePeriodSum periodsSum = TimePeriodSum.CalculateIndividualTime(selectedPerson.Perioade);
-
 
                 // Adaug timp invatamant
                 gfx.DrawString("Vechime in invatamant: " + periodsSum.YearsInv + " ani, " + periodsSum.MonthsInv + " luni, " + periodsSum.DaysInv + " zile. "
@@ -793,8 +798,6 @@ namespace VechimeSoftware
                                 XStringFormats.TopCenter);
 
                 currentHeight += 15;
-
-
 
                 // Adaug timp total
                 gfx.DrawString("Vechime total: " + periodsSum.Years + " ani, " + periodsSum.Months + " luni, " + periodsSum.Days + " zile. "
@@ -825,9 +828,6 @@ namespace VechimeSoftware
             }
             else MessageBox.Show("Selectati mai intai o persoana!");
         }
-
-
-
 
         // Generez pdf pentru raport general
         private void toatePersoaneleGenerateToolStripMenuItem_Click(object sender, EventArgs e)
@@ -860,9 +860,7 @@ namespace VechimeSoftware
 
             XFont fontList = new XFont("Verdana", 8);
 
-
             int currentHeight = 100, count = 0;
-
 
             foreach (Person person in peopleDictionary.Values)
             {
@@ -871,9 +869,6 @@ namespace VechimeSoftware
 
                 if (currentHeight + 50 > page.Height)
                 {
-
-
-
                     page = document.AddPage();
 
                     gfx = XGraphics.FromPdfPage(page);
@@ -956,7 +951,6 @@ namespace VechimeSoftware
             paragraphTitle.Format.Alignment = ParagraphAlignment.Center;
             paragraphTitle.AddText("\nAdeverinta\n\n");
 
-
             if (peopleListBox.SelectedIndex < 0)
                 return;
 
@@ -989,7 +983,7 @@ namespace VechimeSoftware
             Column column = table.AddColumn("1.5cm");
             column.Borders.Color = Colors.Black;
             column.Format.Alignment = ParagraphAlignment.Center;
-          
+
             column = table.AddColumn("4cm");
             column.Borders.Color = Colors.Black;
             column.Format.Alignment = ParagraphAlignment.Right;
@@ -1008,39 +1002,33 @@ namespace VechimeSoftware
 
             Row row = table.AddRow();
 
-            
-
             row.Cells[0].AddParagraph("Nr. crt");
             row.Cells[0].Format.Font.Bold = false;
             row.Cells[0].Format.Alignment = ParagraphAlignment.Left;
             // row.Cells[0].VerticalAlignment = VerticalAlignment.Bottom;
-            
 
             row.Cells[1].AddParagraph("Mutatia / interventia");
             row.Cells[1].Format.Alignment = ParagraphAlignment.Left;
-            
 
             row.Cells[2].AddParagraph("Data inceput");
             row.Cells[2].Format.Alignment = ParagraphAlignment.Left;
 
             row.Cells[3].AddParagraph("Data sfarsit");
             row.Cells[3].Format.Alignment = ParagraphAlignment.Left;
-            
 
             row.Cells[4].AddParagraph("Functia");
             row.Cells[4].Format.Alignment = ParagraphAlignment.Left;
 
-
             int count = 1;
             DateTime ultimaData = new DateTime();
-            foreach(Perioada perioada in selectedPerson.Perioade.OrderBy(c=>c.DTSfarsit).ToList())
+            foreach (Perioada perioada in selectedPerson.Perioade.OrderBy(c => c.DTSfarsit).ToList())
             {
-                if(perioada.LocMunca == "CNPR")
+                if (perioada.LocMunca == "CNPR")
                 {
-                     row = table.AddRow();
+                    row = table.AddRow();
 
-                    for(int i=0;i<5;i++)
-                    row.Cells[i].Format.Font.Size = 9;
+                    for (int i = 0; i < 5; i++)
+                        row.Cells[i].Format.Font.Size = 9;
 
                     row.Cells[0].AddParagraph(count.ToString());
                     row.Cells[0].Format.Font.Bold = false;
@@ -1051,13 +1039,11 @@ namespace VechimeSoftware
                     row.Cells[1].AddParagraph("");
                     row.Cells[1].Format.Alignment = ParagraphAlignment.Left;
 
-
                     row.Cells[2].AddParagraph(perioada.DTInceput.ToString("dd/MM/yyyy"));
                     row.Cells[2].Format.Alignment = ParagraphAlignment.Left;
 
                     row.Cells[3].AddParagraph(perioada.DTSfarsit.ToString("dd/MM/yyyy"));
                     row.Cells[3].Format.Alignment = ParagraphAlignment.Left;
-
 
                     row.Cells[4].AddParagraph(perioada.Functie);
                     row.Cells[4].Format.Alignment = ParagraphAlignment.Left;
@@ -1099,6 +1085,7 @@ namespace VechimeSoftware
             return new string(Enumerable.Repeat(chars, length)
               .Select(s => s[random.Next(s.Length)]).ToArray());
         }
+
         #endregion GeneratePdf
     }
 }
