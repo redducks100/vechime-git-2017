@@ -78,7 +78,7 @@ namespace VechimeSoftware
                 {
                     foreach(Perioada perioada in person.Perioade)
                     {
-                        perioada.LucreazaUnitateaCurenta = (currentUnitate.SC == perioada.LocMunca);
+                        perioada.LucreazaUnitateaCurenta = (currentUnitate.SC.ToUpper() == perioada.LocMunca.ToUpper());
                     }
                 }
             }
@@ -516,6 +516,15 @@ namespace VechimeSoftware
                     MessageBox.Show("Person doesn't exist!", "Error!");
                     return;
                 }
+
+               
+                    foreach (Perioada perioada in selectedPerson.Perioade)
+                    {
+                        perioada.LucreazaUnitateaCurenta = (currentUnitate.SC.ToUpper() == perioada.LocMunca.ToUpper());
+                        //if(currentUnitate.SC == perioada.LocMunca)
+                        //MessageBox.Show(currentUnitate.SC.ToUpper() + " -- " + perioada.LocMunca.ToUpper());
+                    }
+                
 
                 dataGridView1.Rows.Clear();
 
@@ -1069,13 +1078,15 @@ namespace VechimeSoftware
 
             Paragraph paragraphSchoolInfo = section.AddParagraph();
 
+            
+
             paragraphSchoolInfo.Format.Font.Size = 9;
             paragraphSchoolInfo.Format.Alignment = ParagraphAlignment.Left;
-            paragraphSchoolInfo.AddText("S.C.                    .\n" +
-                                        "Str.                            ......................................nr    ..loc      ..jud      \n" +
-                                        "Tel:.............................; Fax:           .\n" +
-                                        "CUI               ..\n\n" +
-                                        "Nr.de inregistrare      . \n Data " + DateTime.Now.ToString("dd/MM/yyyy"));
+            paragraphSchoolInfo.AddText("S.C. "+currentUnitate.SC+"\n" +
+                                        "Str. "+currentUnitate.Strada+ " , nr " + currentUnitate.Numar + ", loc " + currentUnitate.Localitate + ", jud " + currentUnitate.Judet + "\n" +
+                                        "Tel: " + currentUnitate.Telefon + ",  Fax: " + currentUnitate.Fax + ", \n" +
+                                        "CUI " + currentUnitate.CUI + ", \n\n" +
+                                        "Nr.de inregistrare      \n Data " + DateTime.Now.ToString("dd/MM/yyyy"));
 
             //Add title
 
@@ -1099,14 +1110,25 @@ namespace VechimeSoftware
                 return;
             }
 
+
+            string ultimaFunctie = "";
+            foreach (Perioada perioada in selectedPerson.Perioade.OrderBy(c => c.DTSfarsit).ToList())
+            {
+                if (perioada.LucreazaUnitateaCurenta)
+                {
+
+                    ultimaFunctie = perioada.Functie;
+                }
+            }
+
             Paragraph paragraphContent1 = section.AddParagraph();
             paragraphContent1.Format.Font.Name = "Verdana";
             paragraphContent1.Format.Font.Size = 9;
             paragraphContent1.Format.Font.Italic = true;
             paragraphContent1.AddFormattedText("         " + " Prin prezenta se atesta faptul ca dl./dna " + selectedPerson.NumeIntreg +
-                                      ", posesor al BI/CI ..., seria " + selectedPerson.Serie.Substring(0, 2) + ", nr " + selectedPerson.Serie.Substring(2) + ", CNP " + selectedPerson.CNP +
+                                      ", posesor al BI/CI, seria " + selectedPerson.Serie.Substring(0, 2) + ", nr " + selectedPerson.Serie.Substring(2) + ", CNP " + selectedPerson.CNP +
                                       ", a fost angajat al unitatii               ." +
-                                      ", in functia de ........ \n" +
+                                      ", in functia de "+ultimaFunctie+" \n" +
                                       "         " + " Pe durata executarii contractului individual de munca au intervenit urmatoarele mutatii " +
                                       "( incheierea, modificarea, suspendarea si incetarea contractului individual de munca ): \n\n");
 
@@ -1159,7 +1181,7 @@ namespace VechimeSoftware
             DateTime ultimaData = new DateTime();
             foreach (Perioada perioada in selectedPerson.Perioade.OrderBy(c => c.DTSfarsit).ToList())
             {
-                if (perioada.LocMunca == "CNPR")
+                if (perioada.LucreazaUnitateaCurenta)
                 {
                     row = table.AddRow();
 
