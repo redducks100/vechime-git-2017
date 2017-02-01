@@ -110,17 +110,15 @@ namespace VechimeSoftware
         {
             get
             {
+                TimePeriodSum periodSum = TimePeriodSum.CalculateIndividualTime(Perioade);
+
                 TimePeriod total = new TimePeriod();
-                int ani = 0, luni = 0, zile = 0;
-                for (int i = 0; i < Perioade.Count; i++)
-                {
-                    ani += Perioade[i].Difference.ElapsedYears;
-                    luni += Perioade[i].Difference.ElapsedMonths;
-                    zile += Perioade[i].Difference.ElapsedDays;
-                }
-                total.Days = Convert.ToInt32(zile % 30);
-                total.Months = (luni + Convert.ToInt32(zile / 30)) % 12;
-                total.Years = ani + (luni + Convert.ToInt32(zile / 30)) / 12;
+
+                total.Days = periodSum.Days;
+                total.Months = periodSum.Months;
+                total.Years = periodSum.Years;
+
+
                 return total;
             }
         }
@@ -129,23 +127,15 @@ namespace VechimeSoftware
         {
             get
             {
+                TimePeriodSum periodSum = TimePeriodSum.CalculateIndividualTime(Perioade);
 
                 TimePeriod total = new TimePeriod();
-                int ani = 0, luni = 0, zile = 0;
-                for (int i = 0; i < Perioade.Count; i++)
-                {
-                    if (Perioade[i].IOM.ToUpper() == "INVATAMANT")
-                    {
-                        ani += Perioade[i].Difference.ElapsedYears;
-                        luni += Perioade[i].Difference.ElapsedMonths;
-                        zile += Perioade[i].Difference.ElapsedDays;
-                    }
-                }
 
-                total.Days = Convert.ToInt32(zile % 30);
-                total.Months = (luni + Convert.ToInt32(Math.Floor(zile / 30.0))) % 12;
-                total.Years = ani + (luni + Convert.ToInt32(Math.Floor(zile / 30.0))) / 12;
-                
+                total.Days = periodSum.DaysInv;
+                total.Months = periodSum.MonthsInv;
+                total.Years = periodSum.YearsInv;
+
+
                 return total;
             }
         }
@@ -157,7 +147,8 @@ namespace VechimeSoftware
                 return new Transa(PerioadaMunca, Transa.TransaType.MUNCA);
             }
         }
-        public Transa CurrentTransaInv {
+        public Transa CurrentTransaInv
+        {
 
             get
             {

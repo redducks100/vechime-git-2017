@@ -29,7 +29,7 @@ namespace VechimeSoftware
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.persoaneToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -77,14 +77,14 @@ namespace VechimeSoftware
             this.label3 = new System.Windows.Forms.Label();
             this.searchTextBox = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel8 = new System.Windows.Forms.TableLayoutPanel();
+            this.transaMuncaTextBox = new System.Windows.Forms.TextBox();
+            this.transaInvatamantTextBox = new System.Windows.Forms.TextBox();
             this.perioadaTotalTB = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.perioadaInvTB = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
-            this.transaInvatamantTextBox = new System.Windows.Forms.TextBox();
-            this.transaMuncaTextBox = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -275,10 +275,10 @@ namespace VechimeSoftware
             // 
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Minion Pro SmBd", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(4, 2);
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(4, 4);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(808, 21);
+            this.label1.Size = new System.Drawing.Size(808, 18);
             this.label1.TabIndex = 0;
             this.label1.Text = "Perioade:";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -292,15 +292,15 @@ namespace VechimeSoftware
             this.dataGridView1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dataGridView1.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
             this.dataGridView1.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.Padding = new System.Windows.Forms.Padding(1);
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle2.Padding = new System.Windows.Forms.Padding(1);
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.index,
@@ -426,19 +426,19 @@ namespace VechimeSoftware
             this.veziDetaliiModificaToolStripMenuItem1,
             this.stergeToolStripMenuItem});
             this.perioadaContextMenuStrip.Name = "perioadaContextMenuStrip";
-            this.perioadaContextMenuStrip.Size = new System.Drawing.Size(182, 48);
+            this.perioadaContextMenuStrip.Size = new System.Drawing.Size(183, 48);
             // 
             // veziDetaliiModificaToolStripMenuItem1
             // 
             this.veziDetaliiModificaToolStripMenuItem1.Name = "veziDetaliiModificaToolStripMenuItem1";
-            this.veziDetaliiModificaToolStripMenuItem1.Size = new System.Drawing.Size(181, 22);
+            this.veziDetaliiModificaToolStripMenuItem1.Size = new System.Drawing.Size(182, 22);
             this.veziDetaliiModificaToolStripMenuItem1.Text = "Vezi detalii/Modifica";
             this.veziDetaliiModificaToolStripMenuItem1.Click += new System.EventHandler(this.veziDetaliiPerioadaModificaToolStripMenuItem_Click);
             // 
             // stergeToolStripMenuItem
             // 
             this.stergeToolStripMenuItem.Name = "stergeToolStripMenuItem";
-            this.stergeToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.stergeToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
             this.stergeToolStripMenuItem.Text = "Sterge";
             this.stergeToolStripMenuItem.Click += new System.EventHandler(this.stergeToolPerioadaStripMenuItem_Click);
             // 
@@ -464,10 +464,10 @@ namespace VechimeSoftware
             // 
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Minion Pro SmBd", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(4, 2);
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(4, 3);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(226, 21);
+            this.label2.Size = new System.Drawing.Size(226, 18);
             this.label2.TabIndex = 1;
             this.label2.Text = "Persoane:";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -479,7 +479,7 @@ namespace VechimeSoftware
             this.peopleListBox.ContextMenuStrip = this.personContextMenuStrip;
             this.peopleListBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.peopleListBox.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.peopleListBox.Font = new System.Drawing.Font("Modern No. 20", 8.999999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.peopleListBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.999999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.peopleListBox.ForeColor = System.Drawing.SystemColors.WindowText;
             this.peopleListBox.FormattingEnabled = true;
             this.peopleListBox.ItemHeight = 18;
@@ -498,19 +498,19 @@ namespace VechimeSoftware
             this.stergeToolStripMenuItem2});
             this.personContextMenuStrip.Name = "contextMenuStrip1";
             this.personContextMenuStrip.ShowImageMargin = false;
-            this.personContextMenuStrip.Size = new System.Drawing.Size(157, 48);
+            this.personContextMenuStrip.Size = new System.Drawing.Size(158, 48);
             // 
             // veziDetaliiModificaToolStripMenuItem
             // 
             this.veziDetaliiModificaToolStripMenuItem.Name = "veziDetaliiModificaToolStripMenuItem";
-            this.veziDetaliiModificaToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.veziDetaliiModificaToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.veziDetaliiModificaToolStripMenuItem.Text = "Vezi detalii/Modifica";
             this.veziDetaliiModificaToolStripMenuItem.Click += new System.EventHandler(this.veziDetaliiModificaToolStripMenuItem_Click);
             // 
             // stergeToolStripMenuItem2
             // 
             this.stergeToolStripMenuItem2.Name = "stergeToolStripMenuItem2";
-            this.stergeToolStripMenuItem2.Size = new System.Drawing.Size(156, 22);
+            this.stergeToolStripMenuItem2.Size = new System.Drawing.Size(157, 22);
             this.stergeToolStripMenuItem2.Text = "Sterge";
             this.stergeToolStripMenuItem2.ToolTipText = "Sterge";
             this.stergeToolStripMenuItem2.Click += new System.EventHandler(this.stergeToolStripMenuItem_Click);
@@ -616,6 +616,24 @@ namespace VechimeSoftware
             this.tableLayoutPanel8.Size = new System.Drawing.Size(685, 74);
             this.tableLayoutPanel8.TabIndex = 1;
             // 
+            // transaMuncaTextBox
+            // 
+            this.transaMuncaTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.transaMuncaTextBox.Location = new System.Drawing.Point(516, 45);
+            this.transaMuncaTextBox.Name = "transaMuncaTextBox";
+            this.transaMuncaTextBox.ReadOnly = true;
+            this.transaMuncaTextBox.Size = new System.Drawing.Size(165, 20);
+            this.transaMuncaTextBox.TabIndex = 11;
+            // 
+            // transaInvatamantTextBox
+            // 
+            this.transaInvatamantTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.transaInvatamantTextBox.Location = new System.Drawing.Point(516, 8);
+            this.transaInvatamantTextBox.Name = "transaInvatamantTextBox";
+            this.transaInvatamantTextBox.ReadOnly = true;
+            this.transaInvatamantTextBox.Size = new System.Drawing.Size(165, 20);
+            this.transaInvatamantTextBox.TabIndex = 10;
+            // 
             // perioadaTotalTB
             // 
             this.perioadaTotalTB.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
@@ -677,24 +695,6 @@ namespace VechimeSoftware
             this.label7.Size = new System.Drawing.Size(154, 16);
             this.label7.TabIndex = 9;
             this.label7.Text = "Transa:";
-            // 
-            // transaInvatamantTextBox
-            // 
-            this.transaInvatamantTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.transaInvatamantTextBox.Location = new System.Drawing.Point(516, 8);
-            this.transaInvatamantTextBox.Name = "transaInvatamantTextBox";
-            this.transaInvatamantTextBox.ReadOnly = true;
-            this.transaInvatamantTextBox.Size = new System.Drawing.Size(165, 20);
-            this.transaInvatamantTextBox.TabIndex = 10;
-            // 
-            // transaMuncaTextBox
-            // 
-            this.transaMuncaTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.transaMuncaTextBox.Location = new System.Drawing.Point(516, 45);
-            this.transaMuncaTextBox.Name = "transaMuncaTextBox";
-            this.transaMuncaTextBox.ReadOnly = true;
-            this.transaMuncaTextBox.Size = new System.Drawing.Size(165, 20);
-            this.transaMuncaTextBox.TabIndex = 11;
             // 
             // MainForm
             // 

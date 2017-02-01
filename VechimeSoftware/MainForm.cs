@@ -1,4 +1,5 @@
 using Itenso.TimePeriod;
+using Microsoft.Win32;
 using MigraDoc.DocumentObjectModel;
 using MigraDoc.DocumentObjectModel.Tables;
 using MigraDoc.Rendering;
@@ -30,8 +31,18 @@ namespace VechimeSoftware
             peopleDictionary = GetPeople();
             displayPeople = peopleDictionary.Values.ToList();
             UpdatePeopleInfo();
+            RunOnStartup();
         }
 
+        private void RunOnStartup()
+        {
+            RegistryKey rkApp = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+
+        
+            if (rkApp.GetValue("Vechime") == null)
+                rkApp.SetValue("Vechime", Application.ExecutablePath);
+
+}
         #region UpdateStuff
 
         private void UpdatePeople()
@@ -792,7 +803,7 @@ namespace VechimeSoftware
                 TimePeriodSum periodsSum = TimePeriodSum.CalculateIndividualTime(selectedPerson.Perioade);
 
                 // Adaug timp invatamant
-                gfx.DrawString("Vechime in invatamant: " + periodsSum.YearsInv + " ani, " + periodsSum.MonthsInv + " luni, " + periodsSum.DaysInv + " zile. "
+                gfx.DrawString("Vechime in invatamant: " + periodsSum.YearsInv + " ani, " + periodsSum.MonthsInv + " luni, " + periodsSum.DaysInv + " zile.     Transa: "+selectedPerson.CurrentTransaInv.TransaString
                                 , fontList, XBrushes.Black,
                                 new XRect(0, currentHeight, page.Width, page.Height),
                                 XStringFormats.TopCenter);
@@ -800,7 +811,7 @@ namespace VechimeSoftware
                 currentHeight += 15;
 
                 // Adaug timp total
-                gfx.DrawString("Vechime total: " + periodsSum.Years + " ani, " + periodsSum.Months + " luni, " + periodsSum.Days + " zile. "
+                gfx.DrawString("Vechime total: " + periodsSum.Years + " ani, " + periodsSum.Months + " luni, " + periodsSum.Days + " zile.     Transa: " + selectedPerson.CurrentTransaMunca.TransaString
                                  , fontList, XBrushes.Black,
                                  new XRect(0, currentHeight, page.Width, page.Height),
                                  XStringFormats.TopCenter);
@@ -1067,7 +1078,21 @@ namespace VechimeSoftware
 
             string filename = "Adeverinta" + RandomString(4) + ".pdf";
 
+            string[] files = Directory.GetFiles(Application.StartupPath, "General_*.pdf");
+
+            foreach (string file in files)
+            {
+                try
+                {
+                    File.Delete(file);
+                }
+                catch
+                {
+                }
+            }
+
             pdfRenderer.PdfDocument.Save(filename);
+
 
             Process.Start(filename);
         }

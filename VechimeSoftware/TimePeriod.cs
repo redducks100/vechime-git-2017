@@ -144,7 +144,16 @@ namespace VechimeSoftware
             // Doar timpul in invatamant
             int aniInv = 0, luniInv = 0, zileInv = 0;
 
-            for(int i=0;i<perioade.Count;i++)
+            perioade = perioade.OrderBy(c => c.DTSfarsit).ToList();
+
+
+            for (int i = 0; i < perioade.Count-1; i++)
+            {
+                if (perioade[i].DTSfarsit.CompareTo(perioade[i + 1].DTInceput) == 0)
+                    perioade[i + 1].DTInceput = perioade[i + 1].DTInceput.AddDays(1);
+            }
+
+                for (int i=0;i<perioade.Count;i++)
             {
                 DateDiff diff = new DateDiff(perioade[i].DTInceput, perioade[i].DTSfarsit);
 
