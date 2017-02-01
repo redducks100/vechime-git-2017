@@ -104,11 +104,11 @@ namespace VechimeSoftware
 
         private void addButton_Click(object sender, EventArgs e)
         {
-            //if(!ValidateCNP())
-            //{
-            //    MessageBox.Show("CNP-ul nu este valid!","Erroare!");
-            //    return;
-            //}
+            if(!ValidateCNP())
+            {
+                MessageBox.Show("CNP-ul nu este valid!","Erroare!");
+                return;
+            }
             if (CheckCNP(cnpTextBox.Text) == false)
             {
                 return;
@@ -130,11 +130,11 @@ namespace VechimeSoftware
 
         private void saveButton_Click(object sender, EventArgs e)
         {
-            //if(!ValidateCNP())
-            //{
-            //    MessageBox.Show("CNP-ul nu este valid!","Erroare!");
-            //    return;
-            //}
+            if (!ValidateCNP())
+            {
+                MessageBox.Show("CNP-ul nu este valid!", "Erroare!");
+                return;
+            }
             if (CheckCNP(cnpTextBox.Text) == false)
             {
                 return;
@@ -159,7 +159,6 @@ namespace VechimeSoftware
             if (currentPerson == null)
                 return;
 
-            Button button = (Button)sender;
             if (MessageBox.Show("Sunteti sigur(a) ca vreti sa modificati aceasta informatie?", "Atentie!", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 cnpTextBox.Enabled = true;

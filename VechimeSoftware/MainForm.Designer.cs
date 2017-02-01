@@ -29,7 +29,7 @@ namespace VechimeSoftware
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.persoaneToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -77,14 +77,14 @@ namespace VechimeSoftware
             this.label3 = new System.Windows.Forms.Label();
             this.searchTextBox = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel8 = new System.Windows.Forms.TableLayoutPanel();
+            this.transaMuncaTextBox = new System.Windows.Forms.TextBox();
+            this.transaInvatamantTextBox = new System.Windows.Forms.TextBox();
             this.perioadaTotalTB = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.perioadaInvTB = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
-            this.transaInvatamantTextBox = new System.Windows.Forms.TextBox();
-            this.transaMuncaTextBox = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -217,6 +217,7 @@ namespace VechimeSoftware
             this.unitateaCurentaToolStripMenuItem.Name = "unitateaCurentaToolStripMenuItem";
             this.unitateaCurentaToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.unitateaCurentaToolStripMenuItem.Text = "Unitatea curenta";
+            this.unitateaCurentaToolStripMenuItem.Click += new System.EventHandler(this.unitateaCurentaToolStripMenuItem_Click);
             // 
             // iesireToolStripMenuItem
             // 
@@ -292,15 +293,15 @@ namespace VechimeSoftware
             this.dataGridView1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dataGridView1.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
             this.dataGridView1.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.Padding = new System.Windows.Forms.Padding(1);
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle2.Padding = new System.Windows.Forms.Padding(1);
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.index,
@@ -616,6 +617,24 @@ namespace VechimeSoftware
             this.tableLayoutPanel8.Size = new System.Drawing.Size(685, 74);
             this.tableLayoutPanel8.TabIndex = 1;
             // 
+            // transaMuncaTextBox
+            // 
+            this.transaMuncaTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.transaMuncaTextBox.Location = new System.Drawing.Point(516, 45);
+            this.transaMuncaTextBox.Name = "transaMuncaTextBox";
+            this.transaMuncaTextBox.ReadOnly = true;
+            this.transaMuncaTextBox.Size = new System.Drawing.Size(165, 20);
+            this.transaMuncaTextBox.TabIndex = 11;
+            // 
+            // transaInvatamantTextBox
+            // 
+            this.transaInvatamantTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.transaInvatamantTextBox.Location = new System.Drawing.Point(516, 8);
+            this.transaInvatamantTextBox.Name = "transaInvatamantTextBox";
+            this.transaInvatamantTextBox.ReadOnly = true;
+            this.transaInvatamantTextBox.Size = new System.Drawing.Size(165, 20);
+            this.transaInvatamantTextBox.TabIndex = 10;
+            // 
             // perioadaTotalTB
             // 
             this.perioadaTotalTB.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
@@ -678,24 +697,6 @@ namespace VechimeSoftware
             this.label7.TabIndex = 9;
             this.label7.Text = "Transa:";
             // 
-            // transaInvatamantTextBox
-            // 
-            this.transaInvatamantTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.transaInvatamantTextBox.Location = new System.Drawing.Point(516, 8);
-            this.transaInvatamantTextBox.Name = "transaInvatamantTextBox";
-            this.transaInvatamantTextBox.ReadOnly = true;
-            this.transaInvatamantTextBox.Size = new System.Drawing.Size(165, 20);
-            this.transaInvatamantTextBox.TabIndex = 10;
-            // 
-            // transaMuncaTextBox
-            // 
-            this.transaMuncaTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.transaMuncaTextBox.Location = new System.Drawing.Point(516, 45);
-            this.transaMuncaTextBox.Name = "transaMuncaTextBox";
-            this.transaMuncaTextBox.ReadOnly = true;
-            this.transaMuncaTextBox.Size = new System.Drawing.Size(165, 20);
-            this.transaMuncaTextBox.TabIndex = 11;
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -704,6 +705,7 @@ namespace VechimeSoftware
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "MainForm";
             this.Text = "Vechime";
+            this.Shown += new System.EventHandler(this.MainForm_Shown);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.menuStrip1.ResumeLayout(false);

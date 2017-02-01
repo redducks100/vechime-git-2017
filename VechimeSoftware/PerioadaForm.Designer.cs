@@ -33,6 +33,13 @@ namespace VechimeSoftware
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.index = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.placeList = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataInceput = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataSfarsit = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.perioada = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Tip = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tableLayoutPanel21 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel22 = new System.Windows.Forms.TableLayoutPanel();
             this.normaComboBox = new System.Windows.Forms.ComboBox();
@@ -80,17 +87,11 @@ namespace VechimeSoftware
             this.editButton = new System.Windows.Forms.Button();
             this.saveButton = new System.Windows.Forms.Button();
             this.addButton = new System.Windows.Forms.Button();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.index = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.placeList = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataInceput = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataSfarsit = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.perioada = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Tip = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.tableLayoutPanel21.SuspendLayout();
             this.tableLayoutPanel22.SuspendLayout();
             this.tableLayoutPanel23.SuspendLayout();
@@ -110,7 +111,6 @@ namespace VechimeSoftware
             this.tableLayoutPanel7.SuspendLayout();
             this.tableLayoutPanel8.SuspendLayout();
             this.tableLayoutPanel5.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -184,6 +184,87 @@ namespace VechimeSoftware
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 38.56857F));
             this.tableLayoutPanel4.Size = new System.Drawing.Size(522, 523);
             this.tableLayoutPanel4.TabIndex = 0;
+            // 
+            // dataGridView1
+            // 
+            this.dataGridView1.AllowUserToAddRows = false;
+            this.dataGridView1.AllowUserToDeleteRows = false;
+            this.dataGridView1.AllowUserToOrderColumns = true;
+            this.dataGridView1.BackgroundColor = System.Drawing.SystemColors.ButtonFace;
+            this.dataGridView1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.dataGridView1.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
+            this.dataGridView1.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.Padding = new System.Windows.Forms.Padding(1);
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.index,
+            this.placeList,
+            this.dataInceput,
+            this.dataSfarsit,
+            this.perioada,
+            this.Tip});
+            this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridView1.Location = new System.Drawing.Point(4, 322);
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.ReadOnly = true;
+            this.dataGridView1.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+            this.dataGridView1.RowHeadersVisible = false;
+            this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dataGridView1.Size = new System.Drawing.Size(514, 197);
+            this.dataGridView1.TabIndex = 7;
+            // 
+            // index
+            // 
+            this.index.HeaderText = "Index";
+            this.index.Name = "index";
+            this.index.ReadOnly = true;
+            this.index.Visible = false;
+            // 
+            // placeList
+            // 
+            this.placeList.HeaderText = "Place in list";
+            this.placeList.Name = "placeList";
+            this.placeList.ReadOnly = true;
+            this.placeList.Visible = false;
+            // 
+            // dataInceput
+            // 
+            this.dataInceput.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.dataInceput.FillWeight = 10.54441F;
+            this.dataInceput.HeaderText = "Data inceput";
+            this.dataInceput.Name = "dataInceput";
+            this.dataInceput.ReadOnly = true;
+            // 
+            // dataSfarsit
+            // 
+            this.dataSfarsit.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.dataSfarsit.FillWeight = 10.54441F;
+            this.dataSfarsit.HeaderText = "Data sfarsit";
+            this.dataSfarsit.Name = "dataSfarsit";
+            this.dataSfarsit.ReadOnly = true;
+            // 
+            // perioada
+            // 
+            this.perioada.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.perioada.FillWeight = 16.7171F;
+            this.perioada.HeaderText = "Perioada (aa-ll-zz)";
+            this.perioada.MinimumWidth = 10;
+            this.perioada.Name = "perioada";
+            this.perioada.ReadOnly = true;
+            // 
+            // Tip
+            // 
+            this.Tip.HeaderText = "Tip";
+            this.Tip.Name = "Tip";
+            this.Tip.ReadOnly = true;
             // 
             // tableLayoutPanel21
             // 
@@ -803,87 +884,6 @@ namespace VechimeSoftware
             this.addButton.UseVisualStyleBackColor = true;
             this.addButton.Click += new System.EventHandler(this.addButton_Click);
             // 
-            // dataGridView1
-            // 
-            this.dataGridView1.AllowUserToAddRows = false;
-            this.dataGridView1.AllowUserToDeleteRows = false;
-            this.dataGridView1.AllowUserToOrderColumns = true;
-            this.dataGridView1.BackgroundColor = System.Drawing.SystemColors.ButtonFace;
-            this.dataGridView1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.dataGridView1.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
-            this.dataGridView1.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.Padding = new System.Windows.Forms.Padding(1);
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.index,
-            this.placeList,
-            this.dataInceput,
-            this.dataSfarsit,
-            this.perioada,
-            this.Tip});
-            this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridView1.Location = new System.Drawing.Point(4, 322);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.ReadOnly = true;
-            this.dataGridView1.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            this.dataGridView1.RowHeadersVisible = false;
-            this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView1.Size = new System.Drawing.Size(514, 197);
-            this.dataGridView1.TabIndex = 7;
-            // 
-            // index
-            // 
-            this.index.HeaderText = "Index";
-            this.index.Name = "index";
-            this.index.ReadOnly = true;
-            this.index.Visible = false;
-            // 
-            // placeList
-            // 
-            this.placeList.HeaderText = "Place in list";
-            this.placeList.Name = "placeList";
-            this.placeList.ReadOnly = true;
-            this.placeList.Visible = false;
-            // 
-            // dataInceput
-            // 
-            this.dataInceput.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.dataInceput.FillWeight = 10.54441F;
-            this.dataInceput.HeaderText = "Data inceput";
-            this.dataInceput.Name = "dataInceput";
-            this.dataInceput.ReadOnly = true;
-            // 
-            // dataSfarsit
-            // 
-            this.dataSfarsit.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.dataSfarsit.FillWeight = 10.54441F;
-            this.dataSfarsit.HeaderText = "Data sfarsit";
-            this.dataSfarsit.Name = "dataSfarsit";
-            this.dataSfarsit.ReadOnly = true;
-            // 
-            // perioada
-            // 
-            this.perioada.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.perioada.FillWeight = 16.7171F;
-            this.perioada.HeaderText = "Perioada (aa-ll-zz)";
-            this.perioada.MinimumWidth = 10;
-            this.perioada.Name = "perioada";
-            this.perioada.ReadOnly = true;
-            // 
-            // Tip
-            // 
-            this.Tip.HeaderText = "Tip";
-            this.Tip.Name = "Tip";
-            this.Tip.ReadOnly = true;
-            // 
             // PerioadaForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -891,7 +891,6 @@ namespace VechimeSoftware
             this.ClientSize = new System.Drawing.Size(673, 658);
             this.Controls.Add(this.tableLayoutPanel1);
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(689, 697);
             this.MinimumSize = new System.Drawing.Size(689, 697);
             this.Name = "PerioadaForm";
             this.ShowIcon = false;
@@ -901,6 +900,7 @@ namespace VechimeSoftware
             this.tableLayoutPanel2.PerformLayout();
             this.tableLayoutPanel3.ResumeLayout(false);
             this.tableLayoutPanel4.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.tableLayoutPanel21.ResumeLayout(false);
             this.tableLayoutPanel22.ResumeLayout(false);
             this.tableLayoutPanel22.PerformLayout();
@@ -932,7 +932,6 @@ namespace VechimeSoftware
             this.tableLayoutPanel8.ResumeLayout(false);
             this.tableLayoutPanel8.PerformLayout();
             this.tableLayoutPanel5.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
 
         }
