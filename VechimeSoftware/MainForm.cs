@@ -22,7 +22,7 @@ namespace VechimeSoftware
         private string databasePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/Baza.mdb";
         private string connectionString = "";
         public Dictionary<int, Person> peopleDictionary = new Dictionary<int, Person>();
-        private List<Person> displayPeople = new List<Person>();
+        private List<Person> displayPeople = new List<Person>(); 
 
         public MainForm()
         {
