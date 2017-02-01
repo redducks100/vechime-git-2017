@@ -86,7 +86,8 @@ namespace VechimeSoftware
                 np.Days = diff.ElapsedDays;
 
                 // aplic norma
-                if (perioada.DTInceput.CompareTo(changeNorma) < 0 && perioada.Norma != "1/1")
+                //Somajul este calculat mereu 1/1
+                if (perioada.DTInceput.CompareTo(changeNorma) < 0 && perioada.Norma != "1/1" &&  !perioada.Somaj)
                     if (perioada.DTSfarsit.CompareTo(changeNorma) > 0)
                     {
                         diff = new DateDiff(perioada.DTInceput, changeNorma);
@@ -169,7 +170,7 @@ namespace VechimeSoftware
                     np.Days = diff.ElapsedDays;
 
                     // aplic norma
-                    if (perioade[i].DTInceput.CompareTo(changeNorma) < 0 && perioade[i].Norma != "1/1")
+                    if (perioade[i].DTInceput.CompareTo(changeNorma) < 0 && perioade[i].Norma != "1/1" && !perioade[i].Somaj)
                         if (perioade[i].DTSfarsit.CompareTo(changeNorma) > 0)
                         {
                             diff = new DateDiff(perioade[i].DTInceput, changeNorma);
