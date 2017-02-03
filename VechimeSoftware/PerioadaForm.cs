@@ -74,7 +74,18 @@ namespace VechimeSoftware
 
                 functieTextBox.Text = currentPerioada.Functie.ToString().ToUpper();
                 locMuncaTextBox.Text = currentPerioada.LocMunca.ToString().ToUpper();
-                perioadaTextBox.Text = currentPerioada.Difference.ElapsedYears.ToString() + " ani " + currentPerioada.Difference.ElapsedMonths.ToString() + " luni " + currentPerioada.Difference.ElapsedDays.ToString() + " zile";
+
+
+                Perioada temporaryPerioada = new Perioada();
+                temporaryPerioada.DTInceput = inceputTimePicker.Value;
+                temporaryPerioada.DTSfarsit = sfarsitTimePicker.Value;
+                temporaryPerioada.Norma = normaComboBox.Text;
+               
+                TimePeriod periodCalc = TimePeriod.CalculatePeriodTime(temporaryPerioada);
+
+                perioadaTextBox.Text = periodCalc.Years + " ani " + periodCalc.Months + " luni " + periodCalc.Days + " zile";
+
+
                 lucreazaCheckBox.Checked = currentPerioada.Lucreaza;
 
                 concediuCheckBox.Checked = (currentPerioada.TipCFS == "" ? false : true);
@@ -157,8 +168,17 @@ namespace VechimeSoftware
 
                 functieTextBox.Text = currentPerioada.Functie.ToString().ToUpper();
                 locMuncaTextBox.Text = currentPerioada.LocMunca.ToString().ToUpper();
-                perioadaTextBox.Text = currentPerioada.Difference.ElapsedYears.ToString() + " ani " + currentPerioada.Difference.ElapsedMonths.ToString() + " luni " + currentPerioada.Difference.ElapsedDays.ToString() + " zile";
-                lucreazaCheckBox.Checked = currentPerioada.Lucreaza;
+
+                Perioada temporaryPerioada = new Perioada();
+                temporaryPerioada.DTInceput = inceputTimePicker.Value;
+                temporaryPerioada.DTSfarsit = sfarsitTimePicker.Value;
+                temporaryPerioada.Norma = normaComboBox.Text;
+                
+                TimePeriod periodCalc = TimePeriod.CalculatePeriodTime(temporaryPerioada);
+
+                perioadaTextBox.Text = periodCalc.Years + " ani " + periodCalc.Months + " luni " + periodCalc.Days + " zile";
+
+                 lucreazaCheckBox.Checked = currentPerioada.Lucreaza;
 
                 concediuCheckBox.Checked = (currentPerioada.TipCFS == "" ? false : true);
 
@@ -362,10 +382,39 @@ namespace VechimeSoftware
 
         private void timePicker_ValueChanged(object sender, EventArgs e)
         {
+            SendKeys.Send("{Right}");
+
             DateTime firstDate = inceputTimePicker.Value;
             DateTime secondDate = sfarsitTimePicker.Value;
-            DateDiff span = new DateDiff(firstDate.Subtract(new TimeSpan(1, 0, 0, 0, 0)), secondDate.Subtract(new TimeSpan(1, 0, 0, 0, 0)));
-            perioadaTextBox.Text = span.ElapsedYears + " ani " + span.ElapsedMonths + " luni " + span.ElapsedDays + " zile";
+           // DateDiff span = new DateDiff(firstDate.Subtract(new TimeSpan(1, 0, 0, 0, 0)), secondDate.Subtract(new TimeSpan(1, 0, 0, 0, 0)));
+
+            Perioada temporaryPerioada = new Perioada();
+            temporaryPerioada.DTInceput = firstDate;
+            temporaryPerioada.DTSfarsit = secondDate;
+            temporaryPerioada.Norma = normaComboBox.Text;
+            TimePeriod periodCalc = TimePeriod.CalculatePeriodTime(temporaryPerioada);
+
+            perioadaTextBox.Text = periodCalc.Years + " ani " + periodCalc.Months + " luni " + periodCalc.Days + " zile";
+        }
+
+
+        private void PerioadaForm_KeyPress(object sender, KeyPressEventArgs e)
+        {
+           
+            if (e.KeyChar == (char)13)
+                SendKeys.Send("{Tab}");
+        }
+
+        private void normaComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            
+            Perioada temporaryPerioada = new Perioada();
+            temporaryPerioada.DTInceput = inceputTimePicker.Value;
+            temporaryPerioada.DTSfarsit = sfarsitTimePicker.Value;
+            temporaryPerioada.Norma = normaComboBox.Text;
+            TimePeriod periodCalc = TimePeriod.CalculatePeriodTime(temporaryPerioada);
+
+            perioadaTextBox.Text = periodCalc.Years + " ani " + periodCalc.Months + " luni " + periodCalc.Days + " zile";
         }
 
         private void somajCheckBox_CheckedChanged(object sender, EventArgs e)
@@ -477,10 +526,13 @@ namespace VechimeSoftware
             }
         }
 
+      
+
         #endregion Handlers
 
         private void AddToLocalList(Perioada perioada, bool modified = false)
         {
+            UpdateDataGridView();
             //check for the same element in the list
             if (currentChangedPeriods.Where(x => x == perioada).Count() > 0)
             {
@@ -501,13 +553,16 @@ namespace VechimeSoftware
             int count = 0;
             foreach (Perioada perioada in currentChangedPeriods.OrderBy(c => c.DTSfarsit))
             {
+
+                TimePeriod periodCalc = TimePeriod.CalculatePeriodTime(perioada);
+
                 DataGridViewRow newRow = new DataGridViewRow();
                 newRow.CreateCells(dataGridView1);
                 newRow.Cells[0].Value = perioada.ID;
                 newRow.Cells[1].Value = count;
                 newRow.Cells[2].Value = perioada.DTInceput.ToShortDateString();
                 newRow.Cells[3].Value = perioada.DTSfarsit.ToShortDateString();
-                newRow.Cells[4].Value = perioada.Difference.ElapsedYears + "-" + perioada.Difference.ElapsedMonths + "-" + perioada.Difference.ElapsedDays;
+                newRow.Cells[4].Value = periodCalc.Years + "-" + periodCalc.Months + "-" + periodCalc.Days;
                 newRow.Cells[5].Value = (perioada.Modified == true ? "MODIFICAT" : "ADAUGAT");
                 dataGridView1.Rows.Add(newRow);
                 count++;
@@ -525,6 +580,10 @@ namespace VechimeSoftware
             }
         }
 
+
+
         #endregion Utils
+
+       
     }
 }

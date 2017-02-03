@@ -309,6 +309,7 @@ namespace VechimeSoftware
             this.normaComboBox.Name = "normaComboBox";
             this.normaComboBox.Size = new System.Drawing.Size(120, 21);
             this.normaComboBox.TabIndex = 7;
+            this.normaComboBox.SelectedIndexChanged += new System.EventHandler(this.normaComboBox_SelectedIndexChanged);
             // 
             // label12
             // 
@@ -774,7 +775,6 @@ namespace VechimeSoftware
             // inceputTimePicker
             // 
             this.inceputTimePicker.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.inceputTimePicker.CustomFormat = "";
             this.inceputTimePicker.Enabled = false;
             this.inceputTimePicker.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.inceputTimePicker.Location = new System.Drawing.Point(123, 10);
@@ -801,7 +801,6 @@ namespace VechimeSoftware
             // sfarsitTimePicker
             // 
             this.sfarsitTimePicker.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.sfarsitTimePicker.CustomFormat = "";
             this.sfarsitTimePicker.Enabled = false;
             this.sfarsitTimePicker.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.sfarsitTimePicker.Location = new System.Drawing.Point(128, 10);
@@ -894,11 +893,13 @@ namespace VechimeSoftware
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(673, 658);
             this.Controls.Add(this.tableLayoutPanel1);
+            this.KeyPreview = true;
             this.MaximizeBox = false;
             this.MinimumSize = new System.Drawing.Size(689, 697);
             this.Name = "PerioadaForm";
             this.ShowIcon = false;
             this.Text = "Adauga";
+            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.PerioadaForm_KeyPress);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tableLayoutPanel2.PerformLayout();

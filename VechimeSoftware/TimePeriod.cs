@@ -138,7 +138,7 @@ namespace VechimeSoftware
         public static TimePeriodSum CalculateIndividualTime(List<Perioada> perioade)
         {
             // Suma timpului
-            int ani = 0, luni = 0, zile = 0;
+            int ani = 0, luni = 0, zile = 0; 
 
             // Doar timpul in invatamant
             int aniInv = 0, luniInv = 0, zileInv = 0;
