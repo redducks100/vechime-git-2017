@@ -110,33 +110,24 @@ namespace VechimeSoftware
         {
             get
             {
-                TimePeriodSum periodSum = TimePeriodSum.CalculateIndividualTime(Perioade);
-
-                TimePeriod total = new TimePeriod();
-
-                total.Days = periodSum.Days;
-                total.Months = periodSum.Months;
-                total.Years = periodSum.Years;
-
-
-                return total;
+                TimePeriodSum total = TimePeriodSum.CalculateIndividualTime(Perioade);
+                TimePeriod period = new TimePeriod();
+                period.Days = total.Days;
+                period.Months = total.Months;
+                period.Years = total.Years;
+                return period;
             }
         }
-
         public TimePeriod PerioadaInv
         {
             get
             {
-                TimePeriodSum periodSum = TimePeriodSum.CalculateIndividualTime(Perioade);
-
-                TimePeriod total = new TimePeriod();
-
-                total.Days = periodSum.DaysInv;
-                total.Months = periodSum.MonthsInv;
-                total.Years = periodSum.YearsInv;
-
-
-                return total;
+                TimePeriodSum total = TimePeriodSum.CalculateIndividualTime(Perioade);
+                TimePeriod period = new TimePeriod();
+                period.Days = total.DaysInv;
+                period.Months = total.MonthsInv;
+                period.Years = total.YearsInv;
+                return period;
             }
         }
 
@@ -155,5 +146,8 @@ namespace VechimeSoftware
                 return new Transa(PerioadaInv, Transa.TransaType.INVATAMANT);
             }
         }
+
+        public string PreviousTransaMunca { get; set; }
+        public string PreviousTransaInv { get; set; }
     }
 }

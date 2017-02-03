@@ -120,7 +120,7 @@ namespace VechimeSoftware
                 iomComboBox.SelectedIndex = 0;
                 functieTextBox.Text = "";
                 locMuncaTextBox.Text = "";
-                perioadaTextBox.Text = currentPerioada.Difference.ElapsedYears.ToString() + " ani " + currentPerioada.Difference.ElapsedMonths.ToString() + " luni " + currentPerioada.Difference.ElapsedDays.ToString() + " zile";
+                perioadaTextBox.Text = "0 ani 0 luni 0 zile";
                 lucreazaCheckBox.Checked = false;
                 concediuCheckBox.Checked = false;
                 tipConcediuComboBox.SelectedIndex = 0;
@@ -210,7 +210,7 @@ namespace VechimeSoftware
 
         private void addButton_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(locMuncaTextBox.Text) || string.IsNullOrWhiteSpace(perioadaTextBox.Text))
+            if (string.IsNullOrWhiteSpace(locMuncaTextBox.Text))
             {
                 MessageBox.Show("Toate casutele trebuie completate!", "Atentie!");
                 return;
@@ -224,7 +224,6 @@ namespace VechimeSoftware
             currentPerioada.DTSfarsit = sfarsitTimePicker.Value;
             currentPerioada.CFS = concediuCheckBox.Checked;
             currentPerioada.TipCFS = (currentPerioada.CFS ? tipConcediuComboBox.SelectedItem.ToString() : "");
-            currentPerioada.Norma = normaComboBox.SelectedItem.ToString();
             if (currentPerioada.CFS)
             {
                 currentPerioada.Functie = "CONCEDIU";
@@ -232,6 +231,7 @@ namespace VechimeSoftware
                 currentPerioada.IOM = "CONCEDIU";
                 currentPerioada.Lucreaza = false;
                 currentPerioada.LucreazaUnitateaCurenta = false;
+                currentPerioada.Norma = "1/1";
             }
             else
             {
@@ -242,11 +242,13 @@ namespace VechimeSoftware
                     currentPerioada.IOM = "SOMER";
                     currentPerioada.Lucreaza = false;
                     currentPerioada.LucreazaUnitateaCurenta = false;
+                    currentPerioada.Norma = "1/1";
                 }
                 else
                 {
                     currentPerioada.LocMunca = locMuncaTextBox.Text.ToUpper();
                     currentPerioada.IOM = iomComboBox.SelectedItem.ToString();
+                    currentPerioada.Norma = normaComboBox.SelectedItem.ToString();
                     currentPerioada.Lucreaza = lucreazaCheckBox.Checked;
                     currentPerioada.LucreazaUnitateaCurenta = lucreazaUCurentaCheckBox.Checked;
                     currentPerioada.Functie = functieTextBox.Text.ToUpper();
@@ -278,7 +280,6 @@ namespace VechimeSoftware
             currentPerioada.DTSfarsit = sfarsitTimePicker.Value;
             currentPerioada.CFS = concediuCheckBox.Checked;
             currentPerioada.TipCFS = (currentPerioada.CFS ? tipConcediuComboBox.SelectedItem.ToString() : "");
-            currentPerioada.Norma = normaComboBox.SelectedItem.ToString();
             if (currentPerioada.CFS)
             {
                 currentPerioada.Functie = "CONCEDIU";
@@ -286,6 +287,7 @@ namespace VechimeSoftware
                 currentPerioada.IOM = "CONCEDIU";
                 currentPerioada.Lucreaza = false;
                 currentPerioada.LucreazaUnitateaCurenta = false;
+                currentPerioada.Norma = "1/1";
             }
             else
             {
@@ -296,17 +298,18 @@ namespace VechimeSoftware
                     currentPerioada.IOM = "SOMER";
                     currentPerioada.Lucreaza = false;
                     currentPerioada.LucreazaUnitateaCurenta = false;
+                    currentPerioada.Norma = "1/1";
                 }
                 else
                 {
                     currentPerioada.LocMunca = locMuncaTextBox.Text.ToUpper();
                     currentPerioada.IOM = iomComboBox.SelectedItem.ToString();
+                    currentPerioada.Norma = normaComboBox.SelectedItem.ToString();
                     currentPerioada.Lucreaza = lucreazaCheckBox.Checked;
                     currentPerioada.LucreazaUnitateaCurenta = lucreazaUCurentaCheckBox.Checked;
                     currentPerioada.Functie = functieTextBox.Text.ToUpper();
                 }
             }
-
             currentPerioada.Somaj = somerCheckBox.Checked;
 
             parent.ModifyPerioada(currentPerioada, currentPersonIndex);
@@ -325,18 +328,21 @@ namespace VechimeSoftware
 
             if (!adding)
             {
+
                 foreach (Perioada perioada in selectedPerson.Perioade.Where(x => (x.DTInceput != inceput && x.DTSfarsit != sfarsit)))
                 {
-                    if (inceput.CompareTo(perioada.DTInceput) >= 0 && inceput.CompareTo(perioada.DTSfarsit) <= 0)
+                    if (inceput.CompareTo(perioada.DTInceput) > 0 && inceput.CompareTo(perioada.DTSfarsit) < 0)
                     {
-                        MessageBox.Show("Aceasta perioada este cuprinsa in alta perioada deja inregistrata.");
-                        return false;
-                    }
-
-                    if (sfarsit.CompareTo(perioada.DTInceput) >= 0 && sfarsit.CompareTo(perioada.DTSfarsit) <= 0)
-                    {
-                        MessageBox.Show("Aceasta perioada este cuprinsa in alta perioada deja inregistrata.");
-                        return false;
+                        if (inceput.CompareTo(perioada.DTInceput) >= 0 && inceput.CompareTo(perioada.DTSfarsit) <= 0)
+                        {
+                            MessageBox.Show("Aceasta perioada este cuprinsa in alta perioada deja inregistrata.");
+                            return false;
+                        }
+                        if (sfarsit.CompareTo(perioada.DTInceput) >= 0 && sfarsit.CompareTo(perioada.DTSfarsit) <= 0)
+                        {
+                            MessageBox.Show("Aceasta perioada este cuprinsa in alta perioada deja inregistrata.");
+                            return false;
+                        }
                     }
                 }
             }
@@ -344,16 +350,19 @@ namespace VechimeSoftware
             {
                 foreach (Perioada perioada in selectedPerson.Perioade)
                 {
-                    if (inceput.CompareTo(perioada.DTInceput) >= 0 && inceput.CompareTo(perioada.DTSfarsit) <= 0)
+                    if (sfarsit.CompareTo(perioada.DTInceput) > 0 && sfarsit.CompareTo(perioada.DTSfarsit) < 0)
                     {
-                        MessageBox.Show("Aceasta perioada este cuprinsa in alta perioada deja inregistrata.");
-                        return false;
-                    }
+                        if (inceput.CompareTo(perioada.DTInceput) >= 0 && inceput.CompareTo(perioada.DTSfarsit) <= 0)
+                        {
+                            MessageBox.Show("Aceasta perioada este cuprinsa in alta perioada deja inregistrata.");
+                            return false;
+                        }
 
-                    if (sfarsit.CompareTo(perioada.DTInceput) >= 0 && sfarsit.CompareTo(perioada.DTSfarsit) <= 0)
-                    {
-                        MessageBox.Show("Aceasta perioada este cuprinsa in alta perioada deja inregistrata.");
-                        return false;
+                        if (sfarsit.CompareTo(perioada.DTInceput) >= 0 && sfarsit.CompareTo(perioada.DTSfarsit) <= 0)
+                        {
+                            MessageBox.Show("Aceasta perioada este cuprinsa in alta perioada deja inregistrata.");
+                            return false;
+                        }
                     }
                 }
             }
@@ -385,6 +394,7 @@ namespace VechimeSoftware
                 lucreazaCheckBox.Enabled = false;
                 lucreazaUCurentaCheckBox.Enabled = false;
 
+                normaComboBox.SelectedItem = "1/1";
                 normaComboBox.Enabled = false;
             }
             else
@@ -430,10 +440,12 @@ namespace VechimeSoftware
                 somerCheckBox.Enabled = false;
                 lucreazaCheckBox.Enabled = false;
                 functieTextBox.Text = "CONCEDIU";
+                functieTextBox.Enabled = false;
                 iomComboBox.Enabled = false;
                 lucreazaUCurentaCheckBox.Enabled = false;
                 lucreazaCheckBox.Enabled = false;
                 locMuncaTextBox.Text = "CONCEDIU";
+                locMuncaTextBox.Enabled = false;
                 normaComboBox.Enabled = false;
             }
             else
@@ -441,6 +453,8 @@ namespace VechimeSoftware
                 tipConcediuComboBox.Enabled = false;
                 somerCheckBox.Enabled = true;
                 lucreazaCheckBox.Enabled = true;
+                functieTextBox.Enabled = true;
+                locMuncaTextBox.Enabled = true;
                 iomComboBox.Enabled = true;
                 lucreazaUCurentaCheckBox.Enabled = true;
                 lucreazaCheckBox.Enabled = true;
