@@ -118,6 +118,7 @@ namespace VechimeSoftware
                 return period;
             }
         }
+
         public TimePeriod PerioadaInv
         {
             get
@@ -138,9 +139,9 @@ namespace VechimeSoftware
                 return new Transa(PerioadaMunca, Transa.TransaType.MUNCA);
             }
         }
+
         public Transa CurrentTransaInv
         {
-
             get
             {
                 return new Transa(PerioadaInv, Transa.TransaType.INVATAMANT);

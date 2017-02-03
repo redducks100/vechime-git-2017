@@ -1,8 +1,7 @@
 using Itenso.TimePeriod;
-
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace VechimeSoftware
@@ -91,7 +90,7 @@ namespace VechimeSoftware
 
                 concediuCheckBox.Checked = (currentPerioada.TipCFS == "" ? false : true);
 
-                if(currentPerioada.TipCFS.ToLower() == "personal")
+                if (currentPerioada.TipCFS.ToLower() == "personal")
                 {
                     tipConcediuComboBox.SelectedIndex = 0;
                 }
@@ -122,7 +121,7 @@ namespace VechimeSoftware
 
         private void ResetForm(bool modified = false)
         {
-            if(!modified)
+            if (!modified)
             {
                 currentPerioada = null;
                 inceputTimePicker.Value = DateTime.Now;
@@ -236,7 +235,7 @@ namespace VechimeSoftware
                 return;
             }
 
-            if (!VerificaData(inceputTimePicker.Value, sfarsitTimePicker.Value,true))
+            if (!VerificaData(inceputTimePicker.Value, sfarsitTimePicker.Value, true))
                 return;
 
             currentPerioada = new Perioada();
@@ -274,7 +273,7 @@ namespace VechimeSoftware
                     currentPerioada.Functie = functieTextBox.Text.ToUpper();
                 }
             }
-        
+
             currentPerioada.Somaj = somerCheckBox.Checked;
 
             parent.AddPerioada(currentPerioada, currentPersonIndex);
@@ -340,7 +339,7 @@ namespace VechimeSoftware
             ResetForm(true);
         }
 
-        private bool VerificaData(DateTime inceput, DateTime sfarsit,bool adding = false)
+        private bool VerificaData(DateTime inceput, DateTime sfarsit, bool adding = false)
         {
             Person selectedPerson = null;
             if (parent.peopleDictionary.ContainsKey(currentPersonIndex))
@@ -348,42 +347,34 @@ namespace VechimeSoftware
 
             if (!adding)
             {
-
-                // foreach (Perioada perioada in selectedPerson.Perioade.Where(x => (x.DTInceput != inceput && x.DTSfarsit != sfarsit)))
-            foreach (Perioada perioada in selectedPerson.Perioade.Where(x => x.ID != currentPerioada.ID))
+                foreach (Perioada perioada in selectedPerson.Perioade.Where(x => (x.DTInceput != inceput && x.DTSfarsit != sfarsit)))
                 {
-
-                   
-                        if (inceput.CompareTo(perioada.DTInceput) > 0 && inceput.CompareTo(perioada.DTSfarsit) < 0)
-                        {
-                            MessageBox.Show("Aceasta perioada este cuprinsa in alta perioada deja inregistrata.");
-                            return false;
-                        }
-                        if (sfarsit.CompareTo(perioada.DTInceput) > 0 && sfarsit.CompareTo(perioada.DTSfarsit) < 0)
-                        {
-                            MessageBox.Show("Aceasta perioada este cuprinsa in alta perioada deja inregistrata.");
-                            return false;
-                        }
-                    
+                    if (inceput.CompareTo(perioada.DTInceput) > 0 && inceput.CompareTo(perioada.DTSfarsit) < 0)
+                    {
+                        MessageBox.Show("Aceasta perioada este cuprinsa in alta perioada deja inregistrata.");
+                        return false;
+                    }
+                    if (sfarsit.CompareTo(perioada.DTInceput) > 0 && sfarsit.CompareTo(perioada.DTSfarsit) < 0)
+                    {
+                        MessageBox.Show("Aceasta perioada este cuprinsa in alta perioada deja inregistrata.");
+                        return false;
+                    }
                 }
             }
             else
             {
                 foreach (Perioada perioada in selectedPerson.Perioade)
                 {
-                    
-                        if (inceput.CompareTo(perioada.DTInceput) > 0 && inceput.CompareTo(perioada.DTSfarsit) < 0)
-                        {
-                            MessageBox.Show("Aceasta perioada este cuprinsa in alta perioada deja inregistrata.");
-                            return false;
-                        }
-
-                        if (sfarsit.CompareTo(perioada.DTInceput) > 0 && sfarsit.CompareTo(perioada.DTSfarsit) < 0)
-                        {
-                            MessageBox.Show("Aceasta perioada este cuprinsa in alta perioada deja inregistrata.");
-                            return false;
-                        }
-                    
+                    if (inceput.CompareTo(perioada.DTInceput) > 0 && inceput.CompareTo(perioada.DTSfarsit) < 0)
+                    {
+                        MessageBox.Show("Aceasta perioada este cuprinsa in alta perioada deja inregistrata.");
+                        return false;
+                    }
+                    if (sfarsit.CompareTo(perioada.DTInceput) > 0 && sfarsit.CompareTo(perioada.DTSfarsit) < 0)
+                    {
+                        MessageBox.Show("Aceasta perioada este cuprinsa in alta perioada deja inregistrata.");
+                        return false;
+                    }
                 }
             }
             return true;
@@ -450,7 +441,6 @@ namespace VechimeSoftware
             {
                 iomComboBox.Items.Remove("SOMER");
 
-
                 if (currentPerioada != null)
                 {
                     if (currentPerioada.IOM.ToLower() == "invatamant")
@@ -483,7 +473,7 @@ namespace VechimeSoftware
 
         private void concediuCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            if(concediuCheckBox.Checked)
+            if (concediuCheckBox.Checked)
             {
                 tipConcediuComboBox.Enabled = true;
                 somerCheckBox.Enabled = false;
@@ -524,7 +514,7 @@ namespace VechimeSoftware
 
         private void lucreazaUCurentaCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            if(lucreazaUCurentaCheckBox.Checked)
+            if (lucreazaUCurentaCheckBox.Checked)
             {
                 locMuncaTextBox.Enabled = false;
                 locMuncaTextBox.Text = parent.currentUnitate.SC.ToUpper();
@@ -540,11 +530,11 @@ namespace VechimeSoftware
 
         #endregion Handlers
 
-        private void AddToLocalList(Perioada perioada,bool modified = false)
+        private void AddToLocalList(Perioada perioada, bool modified = false)
         {
             UpdateDataGridView();
             //check for the same element in the list
-            if (currentChangedPeriods.Where(x=> x==perioada).Count() > 0)
+            if (currentChangedPeriods.Where(x => x == perioada).Count() > 0)
             {
                 return;
             }
