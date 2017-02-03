@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VechimeSoftware", "VechimeSoftware\VechimeSoftware.csproj", "{58A3B4E0-84C4-4507-9FF8-7D8EC523D437}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "SetupWizard\Setup\Setup.vdproj", "{00B58D8E-4662-46BE-820B-BB589BB8A375}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{58A3B4E0-84C4-4507-9FF8-7D8EC523D437}.Release|Any CPU.Build.0 = Release|Any CPU
 		{58A3B4E0-84C4-4507-9FF8-7D8EC523D437}.Release|x86.ActiveCfg = Release|x86
 		{58A3B4E0-84C4-4507-9FF8-7D8EC523D437}.Release|x86.Build.0 = Release|x86
+		{00B58D8E-4662-46BE-820B-BB589BB8A375}.Debug|Any CPU.ActiveCfg = Debug
+		{00B58D8E-4662-46BE-820B-BB589BB8A375}.Debug|x86.ActiveCfg = Debug
+		{00B58D8E-4662-46BE-820B-BB589BB8A375}.Release|Any CPU.ActiveCfg = Release
+		{00B58D8E-4662-46BE-820B-BB589BB8A375}.Release|x86.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

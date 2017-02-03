@@ -4,7 +4,7 @@ using MigraDoc.DocumentObjectModel;
 using MigraDoc.DocumentObjectModel.Tables;
 using MigraDoc.Rendering;
 using PdfSharp.Drawing;
-using PdfSharp.Pdf; 
+using PdfSharp.Pdf;
 using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
@@ -24,7 +24,6 @@ namespace VechimeSoftware
         public Dictionary<int, Person> peopleDictionary = new Dictionary<int, Person>();
         private List<Person> displayPeople = new List<Person>();
         public UnitateInfo currentUnitate;
-
 
         public MainForm()
         {
@@ -46,16 +45,15 @@ namespace VechimeSoftware
         {
             RegistryKey rkApp = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
 
+            //if (rkApp.GetValue("Vechime") == null)
+            //{
+            //    rkApp.SetValue("Vechime", Application.ExecutablePath);
+            //}
 
-            /*if (rkApp.GetValue("Vechime") == null)
-            {
-                rkApp.SetValue("Vechime", Application.ExecutablePath);
-            }*/
-
-            if(rkApp.GetValue("Vechime")!=null)
-            {
-                rkApp.DeleteValue("Vechime");
-            }
+            //if (rkApp.GetValue("Vechime") != null)
+            //{
+            //    rkApp.DeleteValue("Vechime");
+            //}
         }
 
         #region UpdateStuff
@@ -90,7 +88,7 @@ namespace VechimeSoftware
             currentUnitate = GetCurrentUnitateInfo();
             if (currentUnitate == null)
             {
-                MessageBox.Show("Nu exista informatii despre unitatea curenta! Completati informatiile in urmatoarele casute!","Atentie!",MessageBoxButtons.OK,MessageBoxIcon.Exclamation);
+                MessageBox.Show("Nu exista informatii despre unitatea curenta! Completati informatiile in urmatoarele casute!", "Atentie!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 using (UnitateForm unitateForm = new UnitateForm(this, null))
                 {
                     unitateForm.ShowDialog();
@@ -114,9 +112,9 @@ namespace VechimeSoftware
         //verifica la pornirea aplicatiei, modificare/adaugarea/stergerea unei perioade
         private void CheckTransaUpdates()
         {
-            foreach(Person person in peopleDictionary.Values)
+            foreach (Person person in peopleDictionary.Values)
             {
-                if(person.Perioade.Where(x=>x.LucreazaUnitateaCurenta==true).Count() > 0)
+                if (person.Perioade.Where(x => x.LucreazaUnitateaCurenta == true).Count() > 0)
                 {
                     Transa currentTransaInv = person.CurrentTransaInv;
                     Transa currentTransaMunca = person.CurrentTransaMunca;
@@ -246,7 +244,6 @@ namespace VechimeSoftware
                                 newUnitate.Fax = Convert.ToString(reader[7]);
                                 newUnitate.CUI = Convert.ToString(reader[8]);
                                 newUnitate.NumarInregistrare = Convert.ToInt32(reader[9]);
-
                             }
                         }
                     }
@@ -261,7 +258,7 @@ namespace VechimeSoftware
             using (OleDbConnection connection = new OleDbConnection(connectionString))
             {
                 using (OleDbCommand command = new OleDbCommand(@"UPDATE Unitate SET SC = @SC ,Strada = @Strada,Numar = @Numar,Localitate = @Localitate,Judet = @Judet,
-                                                                Telefon=@Telefon,Fax=@Fax,CUI=@CUI,NumarInregistrare=@NumarInregistrare 
+                                                                Telefon=@Telefon,Fax=@Fax,CUI=@CUI,NumarInregistrare=@NumarInregistrare
                                                                 WHERE ID = @ID", connection))
                 {
                     command.Parameters.Add("@SC", OleDbType.VarChar).Value = newUnitate.SC;
@@ -274,7 +271,6 @@ namespace VechimeSoftware
                     command.Parameters.Add("@CUI", OleDbType.VarChar).Value = newUnitate.CUI;
                     command.Parameters.Add("@NumarInregistrare", OleDbType.Integer).Value = newUnitate.NumarInregistrare;
                     command.Parameters.Add("@ID", OleDbType.Integer).Value = newUnitate.ID;
-
 
                     connection.Open();
                     try
@@ -379,8 +375,9 @@ namespace VechimeSoftware
                     command.Parameters.Add("@prenume", OleDbType.VarChar, 50).Value = newPerson.Prenume;
                     command.Parameters.Add("@cnp", OleDbType.VarChar, 13).Value = newPerson.CNP;
                     command.Parameters.Add("@serie", OleDbType.VarChar, 6).Value = newPerson.Serie;
-                    command.Parameters.Add("@TransaInv", OleDbType.VarChar).Value = newPerson.CurrentTransaInv.TransaString;
-                    command.Parameters.Add("@TransaMunca", OleDbType.VarChar).Value = newPerson.CurrentTransaMunca.TransaString;
+                    //Nu adauga transa pt o persoana noua pt ca nu are perioade!
+                    command.Parameters.Add("@TransaInv", OleDbType.VarChar).Value = "";//newPerson.CurrentTransaInv.TransaString;
+                    command.Parameters.Add("@TransaMunca", OleDbType.VarChar).Value = "";//newPerson.CurrentTransaMunca.TransaString;
                     connection.Open();
 
                     try
@@ -587,7 +584,7 @@ namespace VechimeSoftware
                     newRow.Cells[2].Value = perioada.DTInceput.ToShortDateString();
                     newRow.Cells[3].Value = perioada.DTSfarsit.ToShortDateString();
                     newRow.Cells[4].Value = perioada.Difference.ElapsedYears + "-" + perioada.Difference.ElapsedMonths + "-" + perioada.Difference.ElapsedDays;
-                    newRow.Cells[5].Value = (string.IsNullOrWhiteSpace(perioada.TipCFS)==true?"Nu":perioada.TipCFS.ToUpper());
+                    newRow.Cells[5].Value = (string.IsNullOrWhiteSpace(perioada.TipCFS) == true ? "Nu" : perioada.TipCFS.ToUpper());
 
                     // Am specificat daca se aplica norma de 1/1
                     DateTime changeNorma = new DateTime(2006, 09, 18);
@@ -612,7 +609,6 @@ namespace VechimeSoftware
 
                 transaInvatamantTextBox.Text = selectedPerson.CurrentTransaInv.TransaString;
                 transaMuncaTextBox.Text = selectedPerson.CurrentTransaMunca.TransaString;
-
             }
             else
             {
@@ -727,7 +723,6 @@ namespace VechimeSoftware
                 unitateForm.ShowDialog();
             }
         }
-
 
         #endregion DetailHandlers
 
@@ -918,7 +913,7 @@ namespace VechimeSoftware
 
                 XFont fontTableHead = new XFont("Verdana", 10);
 
-                gfx.DrawString("Nr.crt.  Data inceput  Data sfarsit  CFST(aa-ll-zz)  Norma  Invatamant/Munca  Ani  Luni  Zile  Locul de munca"
+                gfx.DrawString("Nr.crt.  Data inceput  Data sfarsit  Norma  Invatamant/Munca  Ani  Luni  Zile  Locul de munca"
                               , fontTableHead, XBrushes.Black,
                               new XRect(25, 128, page.Width, page.Height),
                               XStringFormats.TopLeft);
@@ -958,14 +953,16 @@ namespace VechimeSoftware
 
                     rowString = rowString.Insert(8, perioada.DTInceput.ToShortDateString());
                     rowString = rowString.Insert(21, perioada.DTSfarsit.ToShortDateString());
-                    //rowString = rowString.Insert(36, perioada.CFSAni_Personal.ToString() + "-" + perioada.CFSLuni_Personal.ToString() + "-" + perioada.CFSZile_Personal.ToString());
-                    //nu cred ca mai ai nevoie
-                    rowString = rowString.Insert(47, perioada.Norma.ToUpper());
-                    rowString = rowString.Insert(55, perioada.IOM.ToUpper());
-                    rowString = rowString.Insert(72, periodCalc.Years.ToString());
-                    rowString = rowString.Insert(77, periodCalc.Months.ToString());
-                    rowString = rowString.Insert(82, periodCalc.Days.ToString());
-                    rowString = rowString.Insert(87, perioada.LocMunca.ToUpper());
+                    rowString = rowString.Insert(33, perioada.Norma.ToUpper());
+                    rowString = rowString.Insert(41, perioada.IOM.ToUpper());
+                    rowString = rowString.Insert(58, periodCalc.Years.ToString());
+                    rowString = rowString.Insert(63, periodCalc.Months.ToString());
+                    rowString = rowString.Insert(68, periodCalc.Days.ToString());
+
+                    if (perioada.LocMunca.ToUpper() == "CONCEDIU")
+                        rowString = rowString.Insert(76, perioada.LocMunca.ToUpper() + " " + perioada.TipCFS);
+                    else
+                        rowString = rowString.Insert(76, perioada.LocMunca.ToUpper());
 
                     gfx.DrawString(rowString, fontList, XBrushes.Black,
                                    new XRect(25, currentHeight, page.Width, page.Height),
@@ -1120,7 +1117,7 @@ namespace VechimeSoftware
         // Generez pdf pentru adeverinta
         private void adeverintaVechimeGenerateToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            
+
 
             Document document = new Document();
 
@@ -1164,9 +1161,9 @@ namespace VechimeSoftware
                 return;
             }
 
-            if(selectedPerson.Perioade.Where(x=>x.LucreazaUnitateaCurenta==true).Count()<=0)
+            if (selectedPerson.Perioade.Where(x => x.LucreazaUnitateaCurenta == true).Count() <= 0)
             {
-                MessageBox.Show(string.Format("{0} nu lucreaza la unitatea curenta!",selectedPerson.NumeIntreg),"Atentie!");
+                MessageBox.Show(string.Format("{0} nu lucreaza la unitatea curenta!", selectedPerson.NumeIntreg), "Atentie!");
                 return;
             }
 
@@ -1324,6 +1321,5 @@ namespace VechimeSoftware
         }
 
         #endregion GeneratePdf
-
     }
 }

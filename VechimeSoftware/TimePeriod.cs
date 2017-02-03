@@ -86,7 +86,7 @@ namespace VechimeSoftware
 
                 // aplic norma
                 //Somajul este calculat mereu 1/1
-                if (perioada.DTInceput.CompareTo(changeNorma) < 0 && perioada.Norma != "1/1" &&  !perioada.Somaj)
+                if (perioada.DTInceput.CompareTo(changeNorma) < 0 && perioada.Norma != "1/1" && !perioada.Somaj)
                     if (perioada.DTSfarsit.CompareTo(changeNorma) > 0)
                     {
                         diff = new DateDiff(perioada.DTInceput, changeNorma);
@@ -145,14 +145,13 @@ namespace VechimeSoftware
 
             perioade = perioade.OrderBy(c => c.DTSfarsit).ToList();
 
-
-            for (int i = 0; i < perioade.Count-1; i++)
+            for (int i = 0; i < perioade.Count - 1; i++)
             {
                 if (perioade[i].DTSfarsit.CompareTo(perioade[i + 1].DTInceput) == 0)
                     perioade[i + 1].DTInceput = perioade[i + 1].DTInceput.AddDays(1);
             }
 
-                for (int i=0;i<perioade.Count;i++)
+            for (int i = 0; i < perioade.Count; i++)
             {
                 DateDiff diff = new DateDiff(perioade[i].DTInceput, perioade[i].DTSfarsit);
 
@@ -160,7 +159,7 @@ namespace VechimeSoftware
 
                 DateTime changeNorma = new DateTime(2006, 09, 18);
 
-                if (!perioade[i].Somaj || perioade[i].DTInceput.CompareTo(changeSomaj) < 0)
+                if ((!perioade[i].Somaj || perioade[i].DTInceput.CompareTo(changeSomaj) < 0) && perioade[i].TipCFS != "PERSONAL")
                 {
                     if (perioade[i].DTSfarsit.CompareTo(changeSomaj) > 0 && perioade[i].Somaj)
                         diff = new DateDiff(perioade[i].DTInceput, changeSomaj);
@@ -216,7 +215,7 @@ namespace VechimeSoftware
                     luni += np.Months;
                     zile += np.Days;
 
-                    if (perioade[i].IOM.ToUpper() == "INVATAMANT")
+                    if (perioade[i].IOM.ToUpper() == "INVATAMANT" || perioade[i].TipCFS.ToUpper() == "STUDII")
                     {
                         aniInv += np.Years;
                         luniInv += np.Months;
