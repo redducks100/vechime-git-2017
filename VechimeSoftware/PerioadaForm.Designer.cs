@@ -84,9 +84,9 @@ namespace VechimeSoftware
             this.label2 = new System.Windows.Forms.Label();
             this.titleLabel = new System.Windows.Forms.Label();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
-            this.editButton = new System.Windows.Forms.Button();
             this.saveButton = new System.Windows.Forms.Button();
             this.addButton = new System.Windows.Forms.Button();
+            this.editButton = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
@@ -782,6 +782,8 @@ namespace VechimeSoftware
             this.inceputTimePicker.Size = new System.Drawing.Size(125, 20);
             this.inceputTimePicker.TabIndex = 3;
             this.inceputTimePicker.ValueChanged += new System.EventHandler(this.timePicker_ValueChanged);
+          
+            
             // 
             // tableLayoutPanel8
             // 
@@ -808,6 +810,7 @@ namespace VechimeSoftware
             this.sfarsitTimePicker.Size = new System.Drawing.Size(120, 20);
             this.sfarsitTimePicker.TabIndex = 4;
             this.sfarsitTimePicker.ValueChanged += new System.EventHandler(this.timePicker_ValueChanged);
+            
             // 
             // label2
             // 
@@ -837,12 +840,12 @@ namespace VechimeSoftware
             // 
             this.tableLayoutPanel5.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Single;
             this.tableLayoutPanel5.ColumnCount = 3;
+            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 27.62763F));
+            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 38.88889F));
             this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tableLayoutPanel5.Controls.Add(this.editButton, 0, 0);
             this.tableLayoutPanel5.Controls.Add(this.saveButton, 2, 0);
             this.tableLayoutPanel5.Controls.Add(this.addButton, 1, 0);
+            this.tableLayoutPanel5.Controls.Add(this.editButton, 0, 0);
             this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel5.Location = new System.Drawing.Point(3, 595);
             this.tableLayoutPanel5.Name = "tableLayoutPanel5";
@@ -851,25 +854,13 @@ namespace VechimeSoftware
             this.tableLayoutPanel5.Size = new System.Drawing.Size(667, 60);
             this.tableLayoutPanel5.TabIndex = 1;
             // 
-            // editButton
-            // 
-            this.editButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.editButton.Enabled = false;
-            this.editButton.Location = new System.Drawing.Point(4, 19);
-            this.editButton.Name = "editButton";
-            this.editButton.Size = new System.Drawing.Size(215, 22);
-            this.editButton.TabIndex = 7;
-            this.editButton.Text = "Modifica";
-            this.editButton.UseVisualStyleBackColor = true;
-            this.editButton.Click += new System.EventHandler(this.editButton_Click);
-            // 
             // saveButton
             // 
             this.saveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.saveButton.Enabled = false;
-            this.saveButton.Location = new System.Drawing.Point(448, 19);
+            this.saveButton.Location = new System.Drawing.Point(447, 19);
             this.saveButton.Name = "saveButton";
-            this.saveButton.Size = new System.Drawing.Size(215, 22);
+            this.saveButton.Size = new System.Drawing.Size(216, 22);
             this.saveButton.TabIndex = 6;
             this.saveButton.Text = "Salveaza";
             this.saveButton.UseVisualStyleBackColor = true;
@@ -879,13 +870,25 @@ namespace VechimeSoftware
             // 
             this.addButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.addButton.Enabled = false;
-            this.addButton.Location = new System.Drawing.Point(226, 19);
+            this.addButton.Location = new System.Drawing.Point(188, 19);
             this.addButton.Name = "addButton";
-            this.addButton.Size = new System.Drawing.Size(215, 22);
+            this.addButton.Size = new System.Drawing.Size(252, 22);
             this.addButton.TabIndex = 5;
             this.addButton.Text = "Adauga";
             this.addButton.UseVisualStyleBackColor = true;
             this.addButton.Click += new System.EventHandler(this.addButton_Click);
+            // 
+            // editButton
+            // 
+            this.editButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.editButton.Enabled = false;
+            this.editButton.Location = new System.Drawing.Point(4, 19);
+            this.editButton.Name = "editButton";
+            this.editButton.Size = new System.Drawing.Size(177, 22);
+            this.editButton.TabIndex = 7;
+            this.editButton.Text = "Modifica";
+            this.editButton.UseVisualStyleBackColor = true;
+            this.editButton.Click += new System.EventHandler(this.editButton_Click);
             // 
             // PerioadaForm
             // 
