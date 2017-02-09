@@ -16,7 +16,5 @@ namespace VechimeSoftware
         public string Telefon { get; set; }
         public string Fax { get; set; }
         public string CUI { get; set; }
-
-        public int NumarInregistrare { get; set; }
     }
 }

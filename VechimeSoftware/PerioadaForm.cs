@@ -12,6 +12,8 @@ namespace VechimeSoftware
         private Perioada currentPerioada;
         private int currentPersonIndex;
 
+        private bool modifyMode = false;
+
         private List<Perioada> currentChangedPeriods;
 
         public PerioadaForm(MainForm _parent, Perioada _currentPerioada, int _currentPersonIndex)
@@ -20,6 +22,8 @@ namespace VechimeSoftware
             parent = _parent;
             currentPerioada = _currentPerioada;
             currentPersonIndex = _currentPersonIndex;
+
+            modifyMode = currentPerioada == null;
 
             currentChangedPeriods = new List<Perioada>();
 
@@ -50,30 +54,13 @@ namespace VechimeSoftware
                 inceputTimePicker.Value = currentPerioada.DTInceput;
                 sfarsitTimePicker.Value = currentPerioada.DTSfarsit;
 
-                if (currentPerioada.Norma == "1/1")
-                {
-                    normaComboBox.SelectedIndex = 0;
-                }
-                else if (currentPerioada.Norma == "1/2")
-                {
-                    normaComboBox.SelectedIndex = 1;
-                }
-                else
-                {
-                    normaComboBox.SelectedIndex = 2;
-                }
+                normaComboBox.SelectedItem = currentPerioada.Norma.ToUpper();
 
-                if (currentPerioada.IOM.ToLower() == "invatamant")
-                {
-                    iomComboBox.SelectedIndex = 0;
-                }
-                else
-                {
-                    iomComboBox.SelectedIndex = 1;
-                }
+                iomComboBox.SelectedItem = currentPerioada.IOM.ToUpper();
 
-                functieTextBox.Text = currentPerioada.Functie.ToString().ToUpper();
-                locMuncaTextBox.Text = currentPerioada.LocMunca.ToString().ToUpper();
+
+                functieComboBox.SelectedItem = currentPerioada.Functie.ToUpper();
+                locMuncaTextBox.Text = currentPerioada.LocMunca.ToUpper();
 
 
                 Perioada temporaryPerioada = new Perioada();
@@ -90,14 +77,7 @@ namespace VechimeSoftware
 
                 concediuCheckBox.Checked = (currentPerioada.TipCFS == "" ? false : true);
 
-                if (currentPerioada.TipCFS.ToLower() == "personal")
-                {
-                    tipConcediuComboBox.SelectedIndex = 0;
-                }
-                else
-                {
-                    tipConcediuComboBox.SelectedIndex = 1;
-                }
+                tipConcediuComboBox.SelectedItem = currentPerioada.TipCFS.ToUpper();
 
                 somerCheckBox.Checked = currentPerioada.Somaj;
 
@@ -128,7 +108,7 @@ namespace VechimeSoftware
                 sfarsitTimePicker.Value = DateTime.Now;
                 normaComboBox.SelectedIndex = 0;
                 iomComboBox.SelectedIndex = 0;
-                functieTextBox.Text = "";
+                functieComboBox.SelectedItem = "";
                 locMuncaTextBox.Text = "";
                 perioadaTextBox.Text = "0 ani 0 luni 0 zile";
                 lucreazaCheckBox.Checked = false;
@@ -166,7 +146,7 @@ namespace VechimeSoftware
                     iomComboBox.SelectedIndex = 1;
                 }
 
-                functieTextBox.Text = currentPerioada.Functie.ToString().ToUpper();
+                functieComboBox.SelectedItem = currentPerioada.Functie.ToString().ToUpper();
                 locMuncaTextBox.Text = currentPerioada.LocMunca.ToString().ToUpper();
 
                 Perioada temporaryPerioada = new Perioada();
@@ -182,14 +162,8 @@ namespace VechimeSoftware
 
                 concediuCheckBox.Checked = (currentPerioada.TipCFS == "" ? false : true);
 
-                if (currentPerioada.TipCFS.ToLower() == "personal")
-                {
-                    tipConcediuComboBox.SelectedIndex = 0;
-                }
-                else
-                {
-                    tipConcediuComboBox.SelectedIndex = 1;
-                }
+                tipConcediuComboBox.SelectedItem = currentPerioada.TipCFS.ToUpper();
+
 
                 somerCheckBox.Checked = currentPerioada.Somaj;
 
@@ -217,6 +191,8 @@ namespace VechimeSoftware
             if (MessageBox.Show("Sunteti sigur(a) ca vreti sa modificati aceasta informatie?", "Atentie!", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 SetEnabled(this, true);
+
+                modifyMode = true;
 
                 if (currentPerioada.Somaj == true)
                     iomComboBox.Enabled = false;
@@ -270,7 +246,7 @@ namespace VechimeSoftware
                     currentPerioada.Norma = normaComboBox.SelectedItem.ToString();
                     currentPerioada.Lucreaza = lucreazaCheckBox.Checked;
                     currentPerioada.LucreazaUnitateaCurenta = lucreazaUCurentaCheckBox.Checked;
-                    currentPerioada.Functie = functieTextBox.Text.ToUpper();
+                    currentPerioada.Functie = functieComboBox.SelectedItem.ToString().ToUpper();
                 }
             }
 
@@ -326,7 +302,7 @@ namespace VechimeSoftware
                     currentPerioada.Norma = normaComboBox.SelectedItem.ToString();
                     currentPerioada.Lucreaza = lucreazaCheckBox.Checked;
                     currentPerioada.LucreazaUnitateaCurenta = lucreazaUCurentaCheckBox.Checked;
-                    currentPerioada.Functie = functieTextBox.Text.ToUpper();
+                    currentPerioada.Functie = functieComboBox.SelectedItem.ToString().ToUpper();
                 }
             }
             currentPerioada.Somaj = somerCheckBox.Checked;
@@ -382,7 +358,7 @@ namespace VechimeSoftware
 
         private void timePicker_ValueChanged(object sender, EventArgs e)
         {
-            SendKeys.Send("{Right}");
+            SendKeys.Send("{.}");
 
             DateTime firstDate = inceputTimePicker.Value;
             DateTime secondDate = sfarsitTimePicker.Value;
@@ -425,8 +401,8 @@ namespace VechimeSoftware
                 iomComboBox.SelectedIndex = 2;
                 iomComboBox.Enabled = false;
 
-                functieTextBox.Text = "SOMER";
-                functieTextBox.Enabled = false;
+                functieComboBox.SelectedItem = "SOMER";
+                functieComboBox.Enabled = false;
 
                 locMuncaTextBox.Text = "SOMER";
                 locMuncaTextBox.Enabled = false;
@@ -458,8 +434,8 @@ namespace VechimeSoftware
                     iomComboBox.Enabled = true;
                 }
 
-                functieTextBox.Text = currentPerioada != null ? currentPerioada.Functie.ToUpper() : "";
-                functieTextBox.Enabled = true;
+                functieComboBox.SelectedItem = currentPerioada != null ? currentPerioada.Functie.ToUpper() : "";
+                functieComboBox.Enabled = true;
 
                 locMuncaTextBox.Text = currentPerioada != null ? currentPerioada.LocMunca.ToUpper() : "";
                 locMuncaTextBox.Enabled = true;
@@ -475,11 +451,12 @@ namespace VechimeSoftware
         {
             if (concediuCheckBox.Checked)
             {
-                tipConcediuComboBox.Enabled = true;
+
+                tipConcediuComboBox.Enabled = modifyMode == true;
                 somerCheckBox.Enabled = false;
                 lucreazaCheckBox.Enabled = false;
-                functieTextBox.Text = "CONCEDIU";
-                functieTextBox.Enabled = false;
+                functieComboBox.SelectedItem = "CONCEDIU";
+                functieComboBox.Enabled = false;
                 iomComboBox.Enabled = false;
                 lucreazaUCurentaCheckBox.Enabled = false;
                 lucreazaCheckBox.Enabled = false;
@@ -492,7 +469,7 @@ namespace VechimeSoftware
                 tipConcediuComboBox.Enabled = false;
                 somerCheckBox.Enabled = true;
                 lucreazaCheckBox.Enabled = true;
-                functieTextBox.Enabled = true;
+                functieComboBox.Enabled = true;
                 locMuncaTextBox.Enabled = true;
                 iomComboBox.Enabled = true;
                 lucreazaUCurentaCheckBox.Enabled = true;
@@ -502,12 +479,12 @@ namespace VechimeSoftware
                 if (currentPerioada != null)
                 {
                     locMuncaTextBox.Text = currentPerioada.LocMunca;
-                    functieTextBox.Text = currentPerioada.Functie;
+                    functieComboBox.SelectedItem = currentPerioada.Functie;
                 }
                 else
                 {
                     locMuncaTextBox.Text = "";
-                    functieTextBox.Text = "";
+                    functieComboBox.SelectedItem = "";
                 }
             }
         }

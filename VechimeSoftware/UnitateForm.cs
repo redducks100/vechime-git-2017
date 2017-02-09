@@ -99,12 +99,10 @@ namespace VechimeSoftware
             if (currentUnitate != null)
             {
                 newUnitateInfo.ID = currentUnitate.ID;
-                newUnitateInfo.NumarInregistrare = currentUnitate.NumarInregistrare;
                 parent.ModifyCurrentUnitate(newUnitateInfo);
             }
             else
             {
-                newUnitateInfo.NumarInregistrare = 0;
                 parent.AddCurrentUnitate(newUnitateInfo);
             }
 
