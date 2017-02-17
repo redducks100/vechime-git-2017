@@ -179,7 +179,7 @@ namespace VechimeSoftware
         public List<Perioada> GetPerioadaList(int ID)
         {
             List<Perioada> perioadaList = new List<Perioada>();
-             
+              
             using (OleDbConnection connection = new OleDbConnection(connectionString))
             {
                 using (OleDbCommand command = new OleDbCommand("SELECT * FROM Perioade WHERE Id_Persoana=@id", connection))
