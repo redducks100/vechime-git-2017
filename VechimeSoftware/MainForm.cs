@@ -560,7 +560,7 @@ namespace VechimeSoftware
             peopleListBox.SelectedIndex = -1;
         } //done
 
-        #endregion SQL-Methods
+        #endregion SQL-Methods 
 
         #region PeopleList Handlers
 
