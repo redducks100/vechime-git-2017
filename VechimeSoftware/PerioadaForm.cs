@@ -380,7 +380,7 @@ namespace VechimeSoftware
 
                         if (sfarsit.CompareTo(perioada.DTInceput) > 0 && sfarsit.CompareTo(perioada.DTSfarsit) < 0)
                         {
-                            MessageBox.Show("Aceasta perioada este cuprinsa in alta perioada deja inregistrata."); 
+                            MessageBox.Show("Aceasta perioada este cuprinsa in alta perioada deja inregistrata.");
                             return false;
                         }
                     
@@ -388,15 +388,15 @@ namespace VechimeSoftware
             }
             return true;
         }
-       
+
         private void timePicker_ValueChanged(object sender, EventArgs e)
         {
-
-            SendKeys.Send("{.}");
+            SendKeys.Send("{Right}");
 
             DateTime firstDate = inceputTimePicker.Value;
             DateTime secondDate = sfarsitTimePicker.Value;
-           
+           // DateDiff span = new DateDiff(firstDate.Subtract(new TimeSpan(1, 0, 0, 0, 0)), secondDate.Subtract(new TimeSpan(1, 0, 0, 0, 0)));
+
             Perioada temporaryPerioada = new Perioada();
             temporaryPerioada.DTInceput = firstDate;
             temporaryPerioada.DTSfarsit = secondDate;
@@ -406,11 +406,10 @@ namespace VechimeSoftware
             perioadaTextBox.Text = periodCalc.Years + " ani " + periodCalc.Months + " luni " + periodCalc.Days + " zile";
         }
 
-       
 
         private void PerioadaForm_KeyPress(object sender, KeyPressEventArgs e)
         {
-          
+           
             if (e.KeyChar == (char)13)
                 SendKeys.Send("{Tab}");
         }
@@ -593,10 +592,8 @@ namespace VechimeSoftware
 
 
 
-
-
         #endregion Utils
 
-      
+       
     }
 }
