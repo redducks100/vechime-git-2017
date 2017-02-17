@@ -28,7 +28,7 @@ namespace VechimeSoftware
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
@@ -56,8 +56,8 @@ namespace VechimeSoftware
             this.label10 = new System.Windows.Forms.Label();
             this.tableLayoutPanel15 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel16 = new System.Windows.Forms.TableLayoutPanel();
+            this.functieComboBox = new System.Windows.Forms.ComboBox();
             this.label7 = new System.Windows.Forms.Label();
-            this.functieTextBox = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel17 = new System.Windows.Forms.TableLayoutPanel();
             this.iomComboBox = new System.Windows.Forms.ComboBox();
             this.label8 = new System.Windows.Forms.Label();
@@ -194,15 +194,15 @@ namespace VechimeSoftware
             this.dataGridView1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dataGridView1.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
             this.dataGridView1.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle2.Padding = new System.Windows.Forms.Padding(1);
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.Padding = new System.Windows.Forms.Padding(1);
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.index,
@@ -299,6 +299,7 @@ namespace VechimeSoftware
             // normaComboBox
             // 
             this.normaComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.normaComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.normaComboBox.Enabled = false;
             this.normaComboBox.FormattingEnabled = true;
             this.normaComboBox.Items.AddRange(new object[] {
@@ -470,8 +471,8 @@ namespace VechimeSoftware
             this.tableLayoutPanel16.ColumnCount = 2;
             this.tableLayoutPanel16.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel16.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel16.Controls.Add(this.functieComboBox, 0, 0);
             this.tableLayoutPanel16.Controls.Add(this.label7, 0, 0);
-            this.tableLayoutPanel16.Controls.Add(this.functieTextBox, 1, 0);
             this.tableLayoutPanel16.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel16.Location = new System.Drawing.Point(3, 3);
             this.tableLayoutPanel16.Name = "tableLayoutPanel16";
@@ -479,6 +480,34 @@ namespace VechimeSoftware
             this.tableLayoutPanel16.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel16.Size = new System.Drawing.Size(251, 46);
             this.tableLayoutPanel16.TabIndex = 0;
+            // 
+            // functieComboBox
+            // 
+            this.functieComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.functieComboBox.Enabled = false;
+            this.functieComboBox.FormattingEnabled = true;
+            this.functieComboBox.Items.AddRange(new object[] {
+            "PROFESOR",
+            "INVATATOR",
+            "EDUCATOR",
+            "MAISTRU INSTRUCTOR",
+            "INSTITUTOR",
+            "PEDAGOG",
+            "SECRETAR",
+            "CONTABIL",
+            "MUNCITOR",
+            "INGRIJITOR",
+            "SUPRAVEGHETOR DE NOAPTE",
+            "INFORMATICIAN",
+            "BIBLIOTECAR",
+            "ADMINISTRATOR",
+            "LABORANT",
+            "PAZNIC",
+            "CONCEDIU"});
+            this.functieComboBox.Location = new System.Drawing.Point(128, 12);
+            this.functieComboBox.Name = "functieComboBox";
+            this.functieComboBox.Size = new System.Drawing.Size(120, 21);
+            this.functieComboBox.TabIndex = 7;
             // 
             // label7
             // 
@@ -491,15 +520,6 @@ namespace VechimeSoftware
             this.label7.TabIndex = 3;
             this.label7.Text = "Functie:";
             this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // functieTextBox
-            // 
-            this.functieTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.functieTextBox.Enabled = false;
-            this.functieTextBox.Location = new System.Drawing.Point(128, 13);
-            this.functieTextBox.Name = "functieTextBox";
-            this.functieTextBox.Size = new System.Drawing.Size(120, 20);
-            this.functieTextBox.TabIndex = 4;
             // 
             // tableLayoutPanel17
             // 
@@ -519,11 +539,13 @@ namespace VechimeSoftware
             // iomComboBox
             // 
             this.iomComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.iomComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.iomComboBox.Enabled = false;
             this.iomComboBox.FormattingEnabled = true;
             this.iomComboBox.Items.AddRange(new object[] {
             "INVATAMANT",
-            "MUNCA"});
+            "MUNCA",
+            "CONCEDIU"});
             this.iomComboBox.Location = new System.Drawing.Point(128, 12);
             this.iomComboBox.Name = "iomComboBox";
             this.iomComboBox.Size = new System.Drawing.Size(120, 21);
@@ -720,11 +742,12 @@ namespace VechimeSoftware
             // tipConcediuComboBox
             // 
             this.tipConcediuComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.tipConcediuComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.tipConcediuComboBox.Enabled = false;
             this.tipConcediuComboBox.FormattingEnabled = true;
             this.tipConcediuComboBox.Items.AddRange(new object[] {
-            "PERSONAL",
-            "STUDII"});
+            "PT NEVOI PERSONALE",
+            "PT STUDII"});
             this.tipConcediuComboBox.Location = new System.Drawing.Point(128, 9);
             this.tipConcediuComboBox.Name = "tipConcediuComboBox";
             this.tipConcediuComboBox.Size = new System.Drawing.Size(120, 21);
@@ -981,7 +1004,6 @@ namespace VechimeSoftware
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.CheckBox lucreazaUCurentaCheckBox;
         private System.Windows.Forms.TextBox locMuncaTextBox;
-        private System.Windows.Forms.TextBox functieTextBox;
         private System.Windows.Forms.ComboBox iomComboBox;
         private System.Windows.Forms.CheckBox somerCheckBox;
         private System.Windows.Forms.CheckBox lucreazaCheckBox;
@@ -1001,5 +1023,6 @@ namespace VechimeSoftware
         private System.Windows.Forms.DataGridViewTextBoxColumn dataSfarsit;
         private System.Windows.Forms.DataGridViewTextBoxColumn perioada;
         private System.Windows.Forms.DataGridViewTextBoxColumn Tip;
+        private System.Windows.Forms.ComboBox functieComboBox;
     }
 }

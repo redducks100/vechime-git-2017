@@ -30,12 +30,15 @@ namespace VechimeSoftware
         {
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.persoaneToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.adaugaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.stergeToolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
             this.perioadeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.adaugaToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.modificareToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stergeToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.actualizareToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.raportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -44,6 +47,7 @@ namespace VechimeSoftware
             this.adeverintaVechimeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setariToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.unitateaCurentaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.optiuniToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.iesireToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
@@ -85,7 +89,6 @@ namespace VechimeSoftware
             this.perioadaInvTB = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
-            this.modificareToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanel1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -132,7 +135,8 @@ namespace VechimeSoftware
             // persoaneToolStripMenuItem
             // 
             this.persoaneToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.adaugaToolStripMenuItem});
+            this.adaugaToolStripMenuItem,
+            this.stergeToolStripMenuItem3});
             this.persoaneToolStripMenuItem.Name = "persoaneToolStripMenuItem";
             this.persoaneToolStripMenuItem.Size = new System.Drawing.Size(67, 20);
             this.persoaneToolStripMenuItem.Text = "Persoane";
@@ -143,6 +147,13 @@ namespace VechimeSoftware
             this.adaugaToolStripMenuItem.Size = new System.Drawing.Size(115, 22);
             this.adaugaToolStripMenuItem.Text = "Adauga";
             this.adaugaToolStripMenuItem.Click += new System.EventHandler(this.adaugaToolStripMenuItem_Click);
+            // 
+            // stergeToolStripMenuItem3
+            // 
+            this.stergeToolStripMenuItem3.Name = "stergeToolStripMenuItem3";
+            this.stergeToolStripMenuItem3.Size = new System.Drawing.Size(115, 22);
+            this.stergeToolStripMenuItem3.Text = "Sterge";
+            this.stergeToolStripMenuItem3.Click += new System.EventHandler(this.stergeToolStripMenuItem3_Click);
             // 
             // perioadeToolStripMenuItem
             // 
@@ -158,20 +169,28 @@ namespace VechimeSoftware
             // adaugaToolStripMenuItem1
             // 
             this.adaugaToolStripMenuItem1.Name = "adaugaToolStripMenuItem1";
-            this.adaugaToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.adaugaToolStripMenuItem1.Size = new System.Drawing.Size(132, 22);
             this.adaugaToolStripMenuItem1.Text = "Adauga";
             this.adaugaToolStripMenuItem1.Click += new System.EventHandler(this.adaugaToolPerioadaStripMenuItem_Click);
+            // 
+            // modificareToolStripMenuItem
+            // 
+            this.modificareToolStripMenuItem.Name = "modificareToolStripMenuItem";
+            this.modificareToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
+            this.modificareToolStripMenuItem.Text = "Modificare";
+            this.modificareToolStripMenuItem.Click += new System.EventHandler(this.modificareToolStripMenuItem_Click);
             // 
             // stergeToolStripMenuItem1
             // 
             this.stergeToolStripMenuItem1.Name = "stergeToolStripMenuItem1";
-            this.stergeToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.stergeToolStripMenuItem1.Size = new System.Drawing.Size(132, 22);
             this.stergeToolStripMenuItem1.Text = "Sterge";
+            this.stergeToolStripMenuItem1.Click += new System.EventHandler(this.stergeToolStripMenuItem1_Click);
             // 
             // actualizareToolStripMenuItem
             // 
             this.actualizareToolStripMenuItem.Name = "actualizareToolStripMenuItem";
-            this.actualizareToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.actualizareToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
             this.actualizareToolStripMenuItem.Text = "Actualizare";
             this.actualizareToolStripMenuItem.Click += new System.EventHandler(this.actualizareToolStripMenuItem_Click);
             // 
@@ -209,7 +228,8 @@ namespace VechimeSoftware
             // setariToolStripMenuItem
             // 
             this.setariToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.unitateaCurentaToolStripMenuItem});
+            this.unitateaCurentaToolStripMenuItem,
+            this.optiuniToolStripMenuItem});
             this.setariToolStripMenuItem.Name = "setariToolStripMenuItem";
             this.setariToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.setariToolStripMenuItem.Text = "Setari";
@@ -220,6 +240,13 @@ namespace VechimeSoftware
             this.unitateaCurentaToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.unitateaCurentaToolStripMenuItem.Text = "Unitatea curenta";
             this.unitateaCurentaToolStripMenuItem.Click += new System.EventHandler(this.unitateaCurentaToolStripMenuItem_Click);
+            // 
+            // optiuniToolStripMenuItem
+            // 
+            this.optiuniToolStripMenuItem.Name = "optiuniToolStripMenuItem";
+            this.optiuniToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.optiuniToolStripMenuItem.Text = "Optiuni";
+            this.optiuniToolStripMenuItem.Click += new System.EventHandler(this.optiuniToolStripMenuItem_Click);
             // 
             // iesireToolStripMenuItem
             // 
@@ -327,12 +354,14 @@ namespace VechimeSoftware
             this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridView1.Size = new System.Drawing.Size(808, 316);
             this.dataGridView1.TabIndex = 1;
+            this.dataGridView1.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridView1_CellMouseDown);
             // 
             // index
             // 
             this.index.HeaderText = "Index";
             this.index.Name = "index";
             this.index.ReadOnly = true;
+            this.index.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             this.index.Visible = false;
             // 
             // placeList
@@ -340,6 +369,7 @@ namespace VechimeSoftware
             this.placeList.HeaderText = "Place in list";
             this.placeList.Name = "placeList";
             this.placeList.ReadOnly = true;
+            this.placeList.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             this.placeList.Visible = false;
             // 
             // dataInceput
@@ -349,6 +379,7 @@ namespace VechimeSoftware
             this.dataInceput.HeaderText = "Data inceput";
             this.dataInceput.Name = "dataInceput";
             this.dataInceput.ReadOnly = true;
+            this.dataInceput.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // dataSfarsit
             // 
@@ -357,6 +388,7 @@ namespace VechimeSoftware
             this.dataSfarsit.HeaderText = "Data sfarsit";
             this.dataSfarsit.Name = "dataSfarsit";
             this.dataSfarsit.ReadOnly = true;
+            this.dataSfarsit.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // perioada
             // 
@@ -366,6 +398,7 @@ namespace VechimeSoftware
             this.perioada.MinimumWidth = 10;
             this.perioada.Name = "perioada";
             this.perioada.ReadOnly = true;
+            this.perioada.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // tipConcediu
             // 
@@ -376,6 +409,7 @@ namespace VechimeSoftware
             this.tipConcediu.Name = "tipConcediu";
             this.tipConcediu.ReadOnly = true;
             this.tipConcediu.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.tipConcediu.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // norma
             // 
@@ -384,6 +418,7 @@ namespace VechimeSoftware
             this.norma.HeaderText = "Norma";
             this.norma.Name = "norma";
             this.norma.ReadOnly = true;
+            this.norma.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // functie
             // 
@@ -393,6 +428,7 @@ namespace VechimeSoftware
             this.functie.MinimumWidth = 20;
             this.functie.Name = "functie";
             this.functie.ReadOnly = true;
+            this.functie.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // tip
             // 
@@ -402,6 +438,7 @@ namespace VechimeSoftware
             this.tip.MinimumWidth = 20;
             this.tip.Name = "tip";
             this.tip.ReadOnly = true;
+            this.tip.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // locMunca
             // 
@@ -411,6 +448,7 @@ namespace VechimeSoftware
             this.locMunca.MinimumWidth = 70;
             this.locMunca.Name = "locMunca";
             this.locMunca.ReadOnly = true;
+            this.locMunca.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // lucreaza
             // 
@@ -421,7 +459,6 @@ namespace VechimeSoftware
             this.lucreaza.Name = "lucreaza";
             this.lucreaza.ReadOnly = true;
             this.lucreaza.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.lucreaza.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
             // 
             // perioadaContextMenuStrip
             // 
@@ -493,6 +530,7 @@ namespace VechimeSoftware
             this.peopleListBox.TabIndex = 2;
             this.peopleListBox.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.peopleListBox_DrawItem);
             this.peopleListBox.SelectedIndexChanged += new System.EventHandler(this.selectedIndexChanged);
+            this.peopleListBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.peopleListBox_MouseDown);
             // 
             // personContextMenuStrip
             // 
@@ -699,21 +737,17 @@ namespace VechimeSoftware
             this.label7.TabIndex = 9;
             this.label7.Text = "Transa:";
             // 
-            // modificareToolStripMenuItem
-            // 
-            this.modificareToolStripMenuItem.Name = "modificareToolStripMenuItem";
-            this.modificareToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.modificareToolStripMenuItem.Text = "Modificare";
-            this.modificareToolStripMenuItem.Click += new System.EventHandler(this.modificareToolStripMenuItem_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1074, 478);
             this.Controls.Add(this.tableLayoutPanel1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainForm";
-            this.Text = "Vechime";
+            this.Text = "Vechime Manager";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainForm_FormClosed);
+           
             this.Shown += new System.EventHandler(this.MainForm_Shown);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
@@ -777,6 +811,13 @@ namespace VechimeSoftware
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox perioadaInvTB;
+        private System.Windows.Forms.ToolStripMenuItem setariToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem unitateaCurentaToolStripMenuItem;
+        private System.Windows.Forms.TextBox transaMuncaTextBox;
+        private System.Windows.Forms.TextBox transaInvatamantTextBox;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.ToolStripMenuItem modificareToolStripMenuItem;
         private System.Windows.Forms.DataGridViewTextBoxColumn index;
         private System.Windows.Forms.DataGridViewTextBoxColumn placeList;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataInceput;
@@ -788,13 +829,8 @@ namespace VechimeSoftware
         private System.Windows.Forms.DataGridViewTextBoxColumn tip;
         private System.Windows.Forms.DataGridViewTextBoxColumn locMunca;
         private System.Windows.Forms.DataGridViewCheckBoxColumn lucreaza;
-        private System.Windows.Forms.ToolStripMenuItem setariToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem unitateaCurentaToolStripMenuItem;
-        private System.Windows.Forms.TextBox transaMuncaTextBox;
-        private System.Windows.Forms.TextBox transaInvatamantTextBox;
-        private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.ToolStripMenuItem modificareToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem stergeToolStripMenuItem3;
+        private System.Windows.Forms.ToolStripMenuItem optiuniToolStripMenuItem;
     }
 }
 

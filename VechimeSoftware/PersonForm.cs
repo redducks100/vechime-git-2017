@@ -18,7 +18,7 @@ namespace VechimeSoftware
             UpdateForm();
         }
 
-        private bool CheckCNP(string CNP,int count = 0)
+        private bool CheckCNP(string CNP, int count = 0)
         {
             if (parent.peopleDictionary.Values.ToList().Where(x => x.CNP == CNP).Count() > count)
             {
@@ -129,9 +129,9 @@ namespace VechimeSoftware
 
         private void addButton_Click(object sender, EventArgs e)
         {
-            if(!ValidateCNP())
+            if (!ValidateCNP())
             {
-                MessageBox.Show("CNP-ul nu este valid!","Eroare!");
+                MessageBox.Show("CNP-ul nu este valid!", "Eroare!");
                 return;
             }
             if (CheckCNP(cnpTextBox.Text) == false)
@@ -161,7 +161,7 @@ namespace VechimeSoftware
                 MessageBox.Show("CNP-ul nu este valid!", "Eroare!");
                 return;
             }
-            if (CheckCNP(cnpTextBox.Text,1) == false)
+            if (CheckCNP(cnpTextBox.Text, 1) == false)
             {
                 return;
             }

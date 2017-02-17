@@ -24,16 +24,16 @@ namespace VechimeSoftware
 
         private void UpdateForm()
         {
-            if(currentUnitate != null)
+            if (currentUnitate != null)
             {
-                scTextBox.Text =             currentUnitate.SC;
-                stradaTextBox.Text =         currentUnitate.Strada;
-                numarTextBox.Text =          currentUnitate.Numar;
-                localitateTextBox.Text =     currentUnitate.Localitate;
+                scTextBox.Text = currentUnitate.SC;
+                stradaTextBox.Text = currentUnitate.Strada;
+                numarTextBox.Text = currentUnitate.Numar;
+                localitateTextBox.Text = currentUnitate.Localitate;
                 judetComboBox.SelectedItem = currentUnitate.Judet;
-                telefonTextBox.Text =        currentUnitate.Telefon;
-                faxTextBox.Text =            currentUnitate.Fax;
-                cuiTextBox.Text =            currentUnitate.CUI;
+                telefonTextBox.Text = currentUnitate.Telefon;
+                faxTextBox.Text = currentUnitate.Fax;
+                cuiTextBox.Text = currentUnitate.CUI;
                 editButton.Enabled = true;
             }
             else
@@ -73,15 +73,15 @@ namespace VechimeSoftware
 
         private void saveButton_Click(object sender, EventArgs e)
         {
-            if(string.IsNullOrWhiteSpace(scTextBox.Text)||
-               string.IsNullOrWhiteSpace(stradaTextBox.Text)||
-               string.IsNullOrWhiteSpace(numarTextBox.Text)||
-               string.IsNullOrWhiteSpace(localitateTextBox.Text)||
-               string.IsNullOrWhiteSpace(telefonTextBox.Text)||
-               string.IsNullOrWhiteSpace(faxTextBox.Text )||
-               string.IsNullOrWhiteSpace(cuiTextBox.Text ))
+            if (string.IsNullOrWhiteSpace(scTextBox.Text) ||
+               string.IsNullOrWhiteSpace(stradaTextBox.Text) ||
+               string.IsNullOrWhiteSpace(numarTextBox.Text) ||
+               string.IsNullOrWhiteSpace(localitateTextBox.Text) ||
+               string.IsNullOrWhiteSpace(telefonTextBox.Text) ||
+               string.IsNullOrWhiteSpace(faxTextBox.Text) ||
+               string.IsNullOrWhiteSpace(cuiTextBox.Text))
             {
-                MessageBox.Show("Toate casutele trebuie completate!","Atentie!");
+                MessageBox.Show("Toate casutele trebuie completate!", "Atentie!");
                 return;
             }
 
@@ -99,12 +99,10 @@ namespace VechimeSoftware
             if (currentUnitate != null)
             {
                 newUnitateInfo.ID = currentUnitate.ID;
-                newUnitateInfo.NumarInregistrare = currentUnitate.NumarInregistrare;
                 parent.ModifyCurrentUnitate(newUnitateInfo);
             }
             else
             {
-                newUnitateInfo.NumarInregistrare = 0;
                 parent.AddCurrentUnitate(newUnitateInfo);
             }
 
@@ -113,7 +111,7 @@ namespace VechimeSoftware
 
         private void UnitateForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if(parent.GetCurrentUnitateInfo() == null)
+            if (parent.GetCurrentUnitateInfo() == null)
                 e.Cancel = true;
         }
     }
