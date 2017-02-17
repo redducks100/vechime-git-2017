@@ -299,6 +299,7 @@ namespace VechimeSoftware
             // normaComboBox
             // 
             this.normaComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.normaComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.normaComboBox.Enabled = false;
             this.normaComboBox.FormattingEnabled = true;
             this.normaComboBox.Items.AddRange(new object[] {
@@ -538,6 +539,7 @@ namespace VechimeSoftware
             // iomComboBox
             // 
             this.iomComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.iomComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.iomComboBox.Enabled = false;
             this.iomComboBox.FormattingEnabled = true;
             this.iomComboBox.Items.AddRange(new object[] {
@@ -740,6 +742,7 @@ namespace VechimeSoftware
             // tipConcediuComboBox
             // 
             this.tipConcediuComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.tipConcediuComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.tipConcediuComboBox.Enabled = false;
             this.tipConcediuComboBox.FormattingEnabled = true;
             this.tipConcediuComboBox.Items.AddRange(new object[] {

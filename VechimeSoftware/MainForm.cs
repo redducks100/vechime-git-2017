@@ -3,6 +3,7 @@ using Microsoft.Win32;
 using MigraDoc.DocumentObjectModel;
 using MigraDoc.DocumentObjectModel.Tables;
 using MigraDoc.Rendering;
+using Newtonsoft.Json;
 using PdfSharp.Drawing;
 using PdfSharp.Pdf;
 using System;
@@ -19,44 +20,102 @@ namespace VechimeSoftware
 {
     public partial class MainForm : Form
     {
-        private string databasePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/Baza.mdb";
+        private string databasePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "VechimeManager") + "/Baza.mdb";
         private string connectionString = "";
         public Dictionary<int, Person> peopleDictionary = new Dictionary<int, Person>();
         private List<Person> displayPeople = new List<Person>();
         public UnitateInfo currentUnitate;
 
         public bool DemoVersion = false;
+      
 
-        public MainForm(bool _demoVersion = false)
+
+        public MainForm(bool _demoVersion = false,bool startUp=false)
         {
             InitializeComponent();
+            MoveDatabase();
             connectionString = @"Provider=Microsoft.ACE.OLEDB.12.0; Data Source=" + databasePath + @"; Persist Security Info=False;";
             DemoVersion = _demoVersion;
             peopleDictionary = GetPeople();
             displayPeople = peopleDictionary.Values.ToList();
             UpdatePeopleInfo();
-            RunOnStartup();
+            SetRunOnStartup();
+            
+            if (startUp)
+                RunInBackground();
         }
+
+        
 
         private void MainForm_Shown(object sender, EventArgs e)
         {
             CheckUnitateInfo();
             CheckTransaUpdates();
+           
         }
 
-        private void RunOnStartup()
+    
+
+
+        private void MoveDatabase()
         {
+            string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "VechimeManager");
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
+
+            path = Path.Combine(path, "Baza.mdb");
+
+
+
+            if (!File.Exists(path))
+            {
+                string sourceFile = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/Baza.mdb";
+                string destFile = path;
+                System.IO.File.Copy(sourceFile, destFile, true);
+            }
+
+        }
+
+        private void SetRunOnStartup()
+        {
+
             RegistryKey rkApp = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
 
-            //if (rkApp.GetValue("Vechime") == null)
-            //{
-            //    rkApp.SetValue("Vechime", Application.ExecutablePath);
-            //}
+            string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "VechimeManager");
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
 
-            //if (rkApp.GetValue("Vechime") != null)
-            //{
-            //    rkApp.DeleteValue("Vechime");
-            //}
+            path = Path.Combine(path, "settings.json");
+
+            if (File.Exists(path))
+            {
+                using (StreamReader reader = new StreamReader(path))
+                {
+                    string json = reader.ReadToEnd();
+                    Settings settings = JsonConvert.DeserializeObject<Settings>(json);
+
+                    if (settings.RunOnStartup)
+                    {
+                        if (rkApp.GetValue("Vechime /runminimized") == null)
+                        {
+                            rkApp.SetValue("Vechime /runminimized", Application.ExecutablePath);
+                        }
+                    }
+                    else if (rkApp.GetValue("Vechime /runminimized") != null)
+                    {
+                        rkApp.DeleteValue("Vechime /runminimized");
+                    }
+                }
+            }
+
+}
+        private void RunInBackground()
+        {
+           
+            CheckUnitateInfo();
+            CheckTransaUpdatesStartup();
+            
+            //Environment.Exit(0);
         }
 
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
@@ -128,6 +187,7 @@ namespace VechimeSoftware
                     Transa currentTransaInv = person.CurrentTransaInv;
                     Transa currentTransaMunca = person.CurrentTransaMunca;
 
+                   
                     if (currentTransaInv.TransaString != person.PreviousTransaInv || currentTransaMunca.TransaString != person.PreviousTransaMunca)
                     {
                         if (!string.IsNullOrWhiteSpace(person.PreviousTransaInv) && !string.IsNullOrWhiteSpace(person.PreviousTransaMunca))
@@ -140,6 +200,44 @@ namespace VechimeSoftware
                     }
                 }
             }
+            
+
+        }
+
+        private void CheckTransaUpdatesStartup()
+        {
+            bool pop = false;
+            foreach (Person person in peopleDictionary.Values)
+            {
+                if (person.Perioade.Where(x => x.LucreazaUnitateaCurenta == true).Count() > 0)
+                {
+                    Transa currentTransaInv = person.CurrentTransaInv;
+                    Transa currentTransaMunca = person.CurrentTransaMunca;
+
+
+                    if (currentTransaInv.TransaString != person.PreviousTransaInv || currentTransaMunca.TransaString != person.PreviousTransaMunca)
+                    {
+                        if (!string.IsNullOrWhiteSpace(person.PreviousTransaInv) && !string.IsNullOrWhiteSpace(person.PreviousTransaMunca))
+                        {
+                            pop = true;
+                            using(PopupForm popForm = new PopupForm(string.Format("{0} a trecut la o transa superioara!", person.NumeIntreg)))
+                            {
+                                
+
+                                if (popForm.ShowDialog() != DialogResult.OK)
+                                    Environment.Exit(0);
+                            }
+                        }
+                        person.PreviousTransaInv = currentTransaInv.TransaString;
+                        person.PreviousTransaMunca = currentTransaMunca.TransaString;
+                        ModifyPerson(person);
+                    }
+                }
+            }
+
+            if(!pop)
+                Environment.Exit(0);
+
         }
 
         #endregion UpdateStuff
@@ -601,7 +699,7 @@ namespace VechimeSoftware
                     newRow.Cells[2].Value = perioada.DTInceput.ToShortDateString();
                     newRow.Cells[3].Value = perioada.DTSfarsit.ToShortDateString();
                     newRow.Cells[4].Value = periodCalc.Years + "-" + periodCalc.Months + "-" + periodCalc.Days;
-                    newRow.Cells[5].Value = (string.IsNullOrWhiteSpace(perioada.TipCFS)==true?"Nu":perioada.TipCFS.ToUpper());
+                    newRow.Cells[5].Value = (string.IsNullOrWhiteSpace(perioada.TipCFS) == true ? "Nu" : perioada.TipCFS.ToUpper());
 
                     // Am specificat daca se aplica norma de 1/1
                     DateTime changeNorma = new DateTime(2006, 09, 18);
@@ -698,6 +796,11 @@ namespace VechimeSoftware
 
         #region DetailHandlers
 
+        private void peopleListBox_MouseDown(object sender, MouseEventArgs e)
+        {
+            peopleListBox.SelectedIndex = peopleListBox.IndexFromPoint(e.X, e.Y);
+        }
+
         private void veziDetaliiModificaToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Person selectedPerson = null;
@@ -714,6 +817,15 @@ namespace VechimeSoftware
             {
                 MessageBox.Show("Selectati o persoana!", "Atentie!");
             }
+        }
+
+
+        private void dataGridView1_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            dataGridView1.ClearSelection();
+
+            if (e.Button == MouseButtons.Right)
+                dataGridView1.Rows[e.RowIndex].Selected = true;
         }
 
         private void veziDetaliiPerioadaModificaToolStripMenuItem_Click(object sender, EventArgs e)
@@ -749,15 +861,21 @@ namespace VechimeSoftware
             }
         }
 
+        private void optiuniToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (OptiuniForm optForm = new OptiuniForm())
+                optForm.ShowDialog();
+        }
+
         #endregion DetailHandlers
 
         #region AddHandlers
 
         private void adaugaToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if(DemoVersion == true && peopleDictionary.Values.Count >= 3)
+            if (DemoVersion == true && peopleDictionary.Values.Count >= 3)
             {
-                MessageBox.Show("Pentru a adauga mai multe persoane, va rugam sa cumparati versiunea full!","Atentie!",MessageBoxButtons.OK,MessageBoxIcon.Warning);
+                MessageBox.Show("Pentru a adauga mai multe persoane, va rugam sa cumparati versiunea full!", "Atentie!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -790,21 +908,76 @@ namespace VechimeSoftware
 
         #region DeleteHandlers
 
-        private void stergeToolStripMenuItem_Click(object sender, EventArgs e)
+
+        private void stergeToolStripMenuItem3_Click(object sender, EventArgs e)
         {
+            //if(DemoVersion)
+            //{
+            //    MessageBox.Show("Aceasta optiune nu este valabila in versiunea Demo.");
+            //    return;
+            //}
+
             Person selectedPerson = null;
             if (peopleListBox.SelectedIndex >= 0 && peopleDictionary.ContainsKey((peopleListBox.SelectedItem as Person).ID))
                 selectedPerson = peopleDictionary[(peopleListBox.SelectedItem as Person).ID];
             if (selectedPerson != null)
             {
-                if (MessageBox.Show("Sigur doriti sa stergeti aceasta persoana?", "Atentie", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                if (MessageBox.Show("Sigur doriti sa stergeti aceasta persoana?\n" + selectedPerson.NumeIntreg, "Atentie", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     DeletePerson(selectedPerson.ID);
                 }
             }
             else
             {
-                MessageBox.Show("Selectati o persoana!","Atentie!");
+                MessageBox.Show("Selectati o persoana!", "Atentie!");
+            }
+        }
+
+        private void stergeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //if (DemoVersion)
+            //{
+            //    MessageBox.Show("Aceasta optiune nu este valabila in versiunea Demo.");
+            //    return;
+            //}
+
+            Person selectedPerson = null;
+            if (peopleListBox.SelectedIndex >= 0 && peopleDictionary.ContainsKey((peopleListBox.SelectedItem as Person).ID))
+                selectedPerson = peopleDictionary[(peopleListBox.SelectedItem as Person).ID];
+            if (selectedPerson != null)
+            {
+                if (MessageBox.Show("Sigur doriti sa stergeti aceasta persoana?\n" + selectedPerson.NumeIntreg, "Atentie", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    DeletePerson(selectedPerson.ID);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Selectati o persoana!", "Atentie!");
+            }
+        }
+
+        private void stergeToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            Perioada selectedPerioada = null;
+            int selectedIndex = -1;
+            if (dataGridView1.SelectedRows.Count > 0 && peopleDictionary.ContainsKey((peopleListBox.SelectedItem as Person).ID))
+            {
+                selectedIndex = peopleDictionary[(peopleListBox.SelectedItem as Person).ID].ID;
+                int selectedIndexPerioada = Convert.ToInt32(dataGridView1.SelectedRows[0].Cells["placeList"].Value);
+                selectedPerioada = peopleDictionary[(peopleListBox.SelectedItem as Person).ID].Perioade[selectedIndexPerioada];
+            }
+
+            if (selectedPerioada != null && selectedIndex != -1)
+            {
+                if (MessageBox.Show("Sigur doriti sa stergeti aceasta perioada?", "Atentie", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    DeletePerioada(selectedPerioada.ID, selectedIndex);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Selectati o perioada!", "Atentie!");
             }
         }
 
@@ -931,6 +1104,8 @@ namespace VechimeSoftware
 
         #endregion DrawHandlers
 
+
+
         #region GeneratePdf
 
         // Generez pdf pentru persoana selectata
@@ -973,7 +1148,15 @@ namespace VechimeSoftware
                                new XRect(45, 82, page.Width, page.Height),
                                XStringFormats.TopLeft);
 
-                gfx.DrawString("SERIE: " + selectedPerson.Serie
+
+                string ultimaFunctie = "";
+
+
+                foreach (Perioada perioada in selectedPerson.Perioade.OrderBy(c => c.DTSfarsit).ToList())
+                    ultimaFunctie = perioada.Functie;
+
+
+                gfx.DrawString("Functia : " + ultimaFunctie
                             , font, XBrushes.Black,
                               new XRect(45, 94, page.Width, page.Height),
                               XStringFormats.TopLeft);
@@ -1058,7 +1241,7 @@ namespace VechimeSoftware
                 TimePeriodSum periodsSum = TimePeriodSum.CalculateIndividualTime(selectedPerson.Perioade);
 
                 // Adaug timp invatamant
-                gfx.DrawString("Vechime in invatamant: " + periodsSum.YearsInv + " ani, " + periodsSum.MonthsInv + " luni, " + periodsSum.DaysInv + " zile.   Transa "+selectedPerson.CurrentTransaInv.TransaString
+                gfx.DrawString("Vechime in invatamant: " + periodsSum.YearsInv + " ani, " + periodsSum.MonthsInv + " luni, " + periodsSum.DaysInv + " zile.   Transa " + selectedPerson.CurrentTransaInv.TransaString
                                 , fontList, XBrushes.Black,
                                 new XRect(0, currentHeight, page.Width, page.Height),
                                 XStringFormats.TopCenter);
@@ -1066,7 +1249,7 @@ namespace VechimeSoftware
                 currentHeight += 15;
 
                 // Adaug timp total
-                gfx.DrawString("Vechime total: " + periodsSum.Years + " ani, " + periodsSum.Months + " luni, " + periodsSum.Days + " zile.  Transa "+selectedPerson.CurrentTransaMunca.TransaString
+                gfx.DrawString("Vechime total: " + periodsSum.Years + " ani, " + periodsSum.Months + " luni, " + periodsSum.Days + " zile.  Transa " + selectedPerson.CurrentTransaMunca.TransaString
                                  , fontList, XBrushes.Black,
                                  new XRect(0, currentHeight, page.Width, page.Height),
                                  XStringFormats.TopCenter);
@@ -1190,6 +1373,47 @@ namespace VechimeSoftware
         private void adeverintaVechimeGenerateToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
+            if (peopleListBox.SelectedIndex < 0)
+            {
+                MessageBox.Show("Nu ati selectat nici o persoana!", "Atentie");
+                return;
+            }
+
+            DateTime dataInceput, dataSfarsit;
+            using (Interval intervalForm = new Interval())
+            {
+                if (intervalForm.ShowDialog() == DialogResult.OK)
+                {
+                    dataInceput = intervalForm.dataInceput;
+                    dataSfarsit = intervalForm.dataSfarsit;
+                }
+                else return;
+            }
+
+            Person selectedPerson = null;
+            if (peopleDictionary.ContainsKey((peopleListBox.SelectedItem as Person).ID))
+                selectedPerson = peopleDictionary[(peopleListBox.SelectedItem as Person).ID];
+            else
+            {
+                MessageBox.Show("Person doesn't exist!", "Error!");
+                return;
+            }
+
+
+            bool ok = false;
+
+            foreach (Perioada perioada in selectedPerson.Perioade.OrderBy(c => c.DTSfarsit).ToList())
+            {
+                if (perioada.DTInceput.CompareTo(dataInceput) >= 0 && perioada.DTInceput.CompareTo(dataSfarsit) <= 0
+                    && perioada.DTSfarsit.CompareTo(dataInceput) >= 0 && perioada.DTSfarsit.CompareTo(dataSfarsit) <= 0 && perioada.LocMunca.ToUpper() == currentUnitate.SC.ToUpper())
+                    ok = true;
+            }
+
+            if (!ok)
+            {
+                MessageBox.Show("Aceasta persoana nu a lucrat la unitatea curenta in aceasta perioada!", "Atentie");
+                return;
+            }
 
             Document document = new Document();
 
@@ -1209,7 +1433,7 @@ namespace VechimeSoftware
                                         "Str. " + currentUnitate.Strada + " , nr " + currentUnitate.Numar + ", loc " + currentUnitate.Localitate + ", jud " + currentUnitate.Judet + "\n" +
                                         "Tel: " + currentUnitate.Telefon + ",  Fax: " + currentUnitate.Fax + ", \n" +
                                         "CUI: " + currentUnitate.CUI + ", \n\n" +
-                                        "Nr.de inregistrare: "  + "\n Data " + DateTime.Now.ToString("dd/MM/yyyy"));
+                                        "Nr.de inregistrare: " + "\n Data " + DateTime.Now.ToString("dd/MM/yyyy"));
 
             //Add title
 
@@ -1221,17 +1445,9 @@ namespace VechimeSoftware
             paragraphTitle.Format.Alignment = ParagraphAlignment.Center;
             paragraphTitle.AddText("\nAdeverinta\n\n");
 
-            if (peopleListBox.SelectedIndex < 0)
-                return;
 
-            Person selectedPerson = null;
-            if (peopleDictionary.ContainsKey((peopleListBox.SelectedItem as Person).ID))
-                selectedPerson = peopleDictionary[(peopleListBox.SelectedItem as Person).ID];
-            else
-            {
-                MessageBox.Show("Person doesn't exist!", "Error!");
-                return;
-            }
+
+
 
             if (selectedPerson.Perioade.Where(x => x.LocMunca.ToUpper() == currentUnitate.SC.ToUpper()).Count() <= 0)
             {
@@ -1241,30 +1457,38 @@ namespace VechimeSoftware
 
 
             string ultimaFunctie = "";
-            
+
 
             foreach (Perioada perioada in selectedPerson.Perioade.OrderBy(c => c.DTSfarsit).ToList())
             {
                 if (perioada.LocMunca.ToUpper() == currentUnitate.SC.ToUpper())
                 {
-                    
                     ultimaFunctie = perioada.Functie;
                 }
             }
+
+            string serie = "", nr = "";
+            if (selectedPerson.Serie.Length > 1)
+                serie = selectedPerson.Serie.Substring(0, 2);
+
+            if (selectedPerson.Serie.Length > 2)
+                nr = selectedPerson.Serie.Substring(2);
 
             Paragraph paragraphContent1 = section.AddParagraph();
             paragraphContent1.Format.Font.Name = "Verdana";
             paragraphContent1.Format.Font.Size = 9;
             paragraphContent1.Format.Font.Italic = true;
-            paragraphContent1.AddFormattedText("       " + " Prin prezenta se atesta faptul ca dl./dna " + selectedPerson.NumeIntreg +
-                                      ", posesor al BI/CI, seria " + selectedPerson.Serie.Substring(0, 2) + ", nr " + selectedPerson.Serie.Substring(2) + ", CNP " + selectedPerson.CNP +
-                                      ", a fost angajat al unitatii               ." +
-                                      ", in functia de " + ultimaFunctie + " \n" +
-                                      "         " + " Pe durata executarii contractului individual de munca au intervenit urmatoarele mutatii " +
+            paragraphContent1.AddFormattedText("        " + " Prin prezenta se atesta faptul ca dl./dna " + selectedPerson.NumeIntreg +
+                                      ", posesor al BI/CI, seria " + serie + ", nr " + nr + ", CNP " + selectedPerson.CNP +
+                                      ", a fost angajat al unitatii " + currentUnitate.SC + "  " +
+
+                                      ", in functia de " + ultimaFunctie + ". \n" +
+                                      "        " + " Pe durata executarii contractului individual de munca au intervenit urmatoarele mutatii " +
                                       "( incheierea, modificarea, suspendarea si incetarea contractului individual de munca ): \n\n");
 
             table = section.AddTable();
-
+            table.Borders.Color = Colors.Black;
+            table.Rows.LeftIndent = 55;
             // table.Borders.Color = BackColor;
 
             var form = section.AddTextFrame();
@@ -1285,98 +1509,100 @@ namespace VechimeSoftware
             column.Borders.Color = Colors.Black;
             column.Format.Alignment = ParagraphAlignment.Right;
 
-           
+
             Row row = table.AddRow();
 
             row.Cells[0].AddParagraph("Nr. crt");
             row.Cells[0].Format.Font.Bold = false;
             row.Cells[0].Format.Alignment = ParagraphAlignment.Left;
-           
+
             row.Cells[1].AddParagraph("Mutatia / interventia");
             row.Cells[1].Format.Alignment = ParagraphAlignment.Left;
 
             row.Cells[2].AddParagraph("Data");
             row.Cells[2].Format.Alignment = ParagraphAlignment.Left;
 
-            
+
             row.Cells[3].AddParagraph("Functia");
             row.Cells[3].Format.Alignment = ParagraphAlignment.Left;
 
             int count = 1;
             DateTime ultimaData = new DateTime();
-            bool working = false;
+
             foreach (Perioada perioada in selectedPerson.Perioade.OrderBy(c => c.DTSfarsit).ToList())
             {
-               
-                if (perioada.LocMunca.ToUpper() == currentUnitate.SC.ToUpper() || (working && perioada.TipCFS !=""))
-                {
-                    working = true;
-
-                    row = table.AddRow();
-
-                    for (int i = 0; i < 4; i++)
-                        row.Cells[i].Format.Font.Size = 9;
-
-                    row.Cells[0].AddParagraph(count.ToString());
-                    row.Cells[0].Format.Font.Bold = false;
-                    row.Cells[0].Format.Alignment = ParagraphAlignment.Center;
-                    // row.Cells[0].VerticalAlignment = VerticalAlignment.Bottom;
-                    count++;
-
-                    if(perioada.TipCFS !="")
-                        row.Cells[1].AddParagraph("Suspendare");
-                    else
-                    row.Cells[1].AddParagraph("Incadrat");
+                if (perioada.DTInceput.CompareTo(dataInceput) >= 0 && perioada.DTInceput.CompareTo(dataSfarsit) <= 0
+                    && perioada.DTSfarsit.CompareTo(dataInceput) >= 0 && perioada.DTSfarsit.CompareTo(dataSfarsit) <= 0)
+                    if (perioada.LocMunca.ToUpper() == currentUnitate.SC.ToUpper() || perioada.TipCFS != "")
+                    {
 
 
-                    row.Cells[1].Format.Alignment = ParagraphAlignment.Left;
+                        row = table.AddRow();
 
-                    row.Cells[2].AddParagraph(perioada.DTInceput.ToString("dd/MM/yyyy"));
-                    row.Cells[2].Format.Alignment = ParagraphAlignment.Left;
+                        for (int i = 0; i < 4; i++)
+                            row.Cells[i].Format.Font.Size = 9;
 
+                        row.Cells[0].AddParagraph(count.ToString());
+                        row.Cells[0].Format.Font.Bold = false;
+                        row.Cells[0].Format.Alignment = ParagraphAlignment.Center;
+                        // row.Cells[0].VerticalAlignment = VerticalAlignment.Bottom;
+                        count++;
 
-                    row.Cells[3].AddParagraph(perioada.CFS == true ? perioada.Functie + " " + perioada.TipCFS : perioada.Functie);
-                    row.Cells[3].Format.Alignment = ParagraphAlignment.Left;
-
-
-
-                    row = table.AddRow();
-
-                    for (int i = 0; i < 4; i++)
-                        row.Cells[i].Format.Font.Size = 9;
-
-                    row.Cells[0].AddParagraph(count.ToString());
-                    row.Cells[0].Format.Font.Bold = false;
-                    row.Cells[0].Format.Alignment = ParagraphAlignment.Center;
-                    
-                    count++;
-
-                    if (perioada.TipCFS != "")
-                        row.Cells[1].AddParagraph("Incetat suspendare");
-                    else
-                        row.Cells[1].AddParagraph("Incetat contract de munca");
+                        if (perioada.TipCFS != "")
+                            row.Cells[1].AddParagraph("Suspendare");
+                        else
+                            row.Cells[1].AddParagraph("Incadrat");
 
 
-                    row.Cells[1].Format.Alignment = ParagraphAlignment.Left;
+                        row.Cells[1].Format.Alignment = ParagraphAlignment.Left;
 
-                    row.Cells[2].AddParagraph(perioada.DTSfarsit.ToString("dd/MM/yyyy"));
-                    row.Cells[2].Format.Alignment = ParagraphAlignment.Left;
+                        row.Cells[2].AddParagraph(perioada.DTInceput.ToString("dd/MM/yyyy"));
+                        row.Cells[2].Format.Alignment = ParagraphAlignment.Left;
 
-                    
 
-                    row.Cells[3].AddParagraph(perioada.CFS==true?perioada.Functie + " " + perioada.TipCFS:perioada.Functie);
-                    row.Cells[3].Format.Alignment = ParagraphAlignment.Left;
+                        row.Cells[3].AddParagraph(perioada.CFS == true ? perioada.Functie + " " + perioada.TipCFS : perioada.Functie);
+                        row.Cells[3].Format.Alignment = ParagraphAlignment.Left;
 
-                    ultimaData = perioada.DTSfarsit;
-                }
+
+
+                        row = table.AddRow();
+
+                        for (int i = 0; i < 4; i++)
+                            row.Cells[i].Format.Font.Size = 9;
+
+                        row.Cells[0].AddParagraph(count.ToString());
+                        row.Cells[0].Format.Font.Bold = false;
+                        row.Cells[0].Format.Alignment = ParagraphAlignment.Center;
+
+                        count++;
+
+                        if (perioada.TipCFS != "")
+                            row.Cells[1].AddParagraph("Incetat suspendare");
+                        else
+                            row.Cells[1].AddParagraph("Incetat contract de munca");
+
+
+                        row.Cells[1].Format.Alignment = ParagraphAlignment.Left;
+
+                        row.Cells[2].AddParagraph(perioada.DTSfarsit.ToString("dd/MM/yyyy"));
+                        row.Cells[2].Format.Alignment = ParagraphAlignment.Left;
+
+
+
+                        row.Cells[3].AddParagraph(perioada.CFS == true ? perioada.Functie + " " + perioada.TipCFS : perioada.Functie);
+                        row.Cells[3].Format.Alignment = ParagraphAlignment.Left;
+
+                        ultimaData = perioada.DTSfarsit;
+                    }
+
             }
 
             Paragraph paragraphContent2 = section.AddParagraph();
             paragraphContent2.Format.Font.Size = 9;
             paragraphContent2.Format.Font.Italic = true;
-            paragraphContent2.AddFormattedText("" + "Incepind cu data de  " + ultimaData.ToString("dd/MM/yyyy") +
+            paragraphContent2.AddFormattedText("        " + "Incepind cu data de  " + ultimaData.ToString("dd/MM/yyyy") +
                 ", contractul individual de munca al domnului (ei) a incetat.\n\n\n" +
-          "                        " + "Reprezentant legal," + "                          " + "Intocmit,");
+          "                       " + "Reprezentant legal," + "                                " + "Intocmit,");
 
             PdfDocumentRenderer pdfRenderer = new PdfDocumentRenderer(false, PdfFontEmbedding.Always);
 
@@ -1419,6 +1645,15 @@ namespace VechimeSoftware
               .Select(s => s[random.Next(s.Length)]).ToArray());
         }
 
+
+
+
+
+
+
+
         #endregion GeneratePdf
+
+       
     }
 }

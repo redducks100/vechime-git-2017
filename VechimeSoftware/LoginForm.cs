@@ -27,7 +27,8 @@ namespace VechimeSoftware
 
         public MongoClient mongoDB;
 
-        public LoginForm()
+      
+        public LoginForm(bool startup)
         {
             InitializeComponent();
 
@@ -41,70 +42,81 @@ namespace VechimeSoftware
             
             mongoDB = new MongoClient(connectionString);
 
-            //CheckForUserData();
+            startUp = startup;
+
+            CheckForUserData();
         }
 
-        
-        //public void SaveSettings(string username,string passhash)
-        //{
-        //    Settings settings = new Settings();
+        private bool startUp;
+        public void SaveSettings(string username, string passhash)
+        {
+            Settings settings = new Settings();
 
-        //    string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "VechimeManager");
-        //    if (!Directory.Exists(path))
-        //        Directory.CreateDirectory(path);
-        //    path = Path.Combine(path, "settings.dat");
+            string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "VechimeManager");
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
 
-        //    if (File.Exists(path))
-        //    {
-        //        using (StreamReader reader = new StreamReader(path))
-        //        {
-        //            string json = reader.ReadToEnd();
-        //            Settings oldSettings = JsonConvert.DeserializeObject<Settings>(json);
-        //            settings = oldSettings;
-        //        }
-        //        File.Delete(path);
-        //    }
-        //    File.Create(path).Close();
+            path = Path.Combine(path, "settings.json");
 
-        //    if (rememberCheckBox.Checked)
-        //    {
-        //        settings.Username = username;
-        //        settings.Passhash = passhash;
-        //        settings.SaveUserData = true;
-        //    }
-        //    else
-        //    {
-        //        settings.Username = "";
-        //        settings.Passhash = "";
-        //        settings.SaveUserData = false;
-        //    }
+            if (File.Exists(path))
+            {
+                using (StreamReader reader = new StreamReader(path))
+                {
+                    string json = reader.ReadToEnd();
+                    Settings oldSettings = JsonConvert.DeserializeObject<Settings>(json);
+                    settings = oldSettings;
+                }
+                File.Delete(path);
+            }
+            File.Create(path).Close();
 
-        //    using (StreamWriter writer = new StreamWriter(path))
-        //    {
-        //        writer.Write(JsonConvert.SerializeObject(settings));
-        //    }
-        //}
+            
+            if (rememberCheckBox.Checked || settings.SaveUserData)
+            {
+                settings.Username = username;
+                settings.Passhash = passhash;
+                settings.SaveUserData = true;
+            }
+            else
+            {
+                settings.Username = "";
+                settings.Passhash = "";
+                settings.SaveUserData = false;
+            }
 
-        //public void CheckForUserData()
-        //{
-        //    string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "VechimeManager");
-        //    if(Directory.Exists(path))
-        //    {
-        //        path = Path.Combine(path, "settings.dat");
-        //        if (File.Exists(path))
-        //        {
-        //            using (StreamReader reader = new StreamReader(path))
-        //            {
-        //                string json = reader.ReadToEnd();
-        //                Settings settings = JsonConvert.DeserializeObject<Settings>(json);
-        //                if (settings.Username != "" && settings.Passhash != "")
-        //                {
-        //                    Connect(settings.Username, settings.Passhash);
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
+            using (StreamWriter writer = new StreamWriter(path))
+            {
+                writer.Write(JsonConvert.SerializeObject(settings));
+            }
+        }
+
+        public void CheckForUserData()
+        {
+            string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "VechimeManager");
+            if (Directory.Exists(path))
+            {
+                path = Path.Combine(path, "settings.json");
+                if (File.Exists(path))
+                {
+                    string json = "";
+                    using (StreamReader reader = new StreamReader(path))
+                    {
+                         json = reader.ReadToEnd();
+                    }
+                    Settings settings = JsonConvert.DeserializeObject<Settings>(json);
+                    if (settings.Username != "" && settings.Passhash != "" && settings.SaveUserData)
+                    {
+
+
+                        Connect(settings.Username, settings.Passhash);
+                    }
+                    else if (startUp)
+                        Close();
+
+                    
+                }
+            }
+        }
 
         public Permission CheckUser(string username, string password)
         {
@@ -188,11 +200,11 @@ namespace VechimeSoftware
                 return;
             }
 
-            //SaveSettings(username, pass);
+            SaveSettings(username, pass);
 
             if (permission == Permission.FULL)
             {
-                using (MainForm main = new MainForm(false))
+                using (MainForm main = new MainForm(false,startUp))
                 {
                     main.Text += " - Full Version " + Assembly.GetExecutingAssembly().GetName().Version.ToString();
                     this.Hide();
@@ -201,7 +213,7 @@ namespace VechimeSoftware
             }
             else
             {
-                using (MainForm main = new MainForm(true))
+                using (MainForm main = new MainForm(true,startUp))
                 {
                     main.Text += " - Demo Version";
                     this.Hide();
