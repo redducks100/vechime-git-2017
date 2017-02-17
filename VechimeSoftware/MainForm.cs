@@ -174,7 +174,7 @@ namespace VechimeSoftware
             }
 
             return peopleDict;
-        } //done
+        } //done ..
 
         public List<Perioada> GetPerioadaList(int ID)
         {
