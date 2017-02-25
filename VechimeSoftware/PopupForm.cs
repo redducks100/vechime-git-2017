@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -16,14 +16,13 @@ namespace VechimeSoftware
         {
             InitializeComponent();
 
-
-           this.WindowState = FormWindowState.Normal;
+            this.WindowState = FormWindowState.Normal;
             this.StartPosition = FormStartPosition.Manual;
             this.BringToFront();
-            
+
             Rectangle res = Screen.PrimaryScreen.Bounds;
 
-            this.Location = new Point(Screen.PrimaryScreen.Bounds.Right - this.Width,Screen.PrimaryScreen.Bounds.Bottom - (this.Height+40));
+            this.Location = new Point(Screen.PrimaryScreen.Bounds.Right - this.Width, Screen.PrimaryScreen.Bounds.Bottom - (this.Height + 40));
 
             //this.Location = new Point(500, 500);
 
@@ -38,8 +37,6 @@ namespace VechimeSoftware
         private void buttonIgnore_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Ignore;
-         }
-
-        
+        }
     }
 }

@@ -255,6 +255,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_8550F727494B679472B4B60D947F4C66"
+        "OwnerKey" = "8:_70729857A2BC48658AFF3EAF4E4EACB0"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_8E24325D0CAF8833608F818373F8E220"
         "OwnerKey" = "8:_573C91944FF4D7AE8140F0D92533997D"
         "MsmSig" = "8:_UNDEFINED"
@@ -491,6 +497,12 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_70729857A2BC48658AFF3EAF4E4EACB0"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_8550F727494B679472B4B60D947F4C66"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -1909,6 +1921,37 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_8550F727494B679472B4B60D947F4C66"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:Zlib.Portable, Version=1.11.0.0, Culture=neutral, PublicKeyToken=431cba815f6a8b5b, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_8550F727494B679472B4B60D947F4C66"
+                    {
+                    "Name" = "8:Zlib.Portable.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:Zlib.Portable.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_3AE6395AA7534E5499A4772291C5392B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_8E24325D0CAF8833608F818373F8E220"
             {
             "AssemblyRegister" = "3:1"
@@ -2915,8 +2958,8 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:VechimeManager"
-        "ProductCode" = "8:{CC0DF09D-FE95-41E2-B50D-A234EC24964D}"
-        "PackageCode" = "8:{113AB09B-2030-4F5C-ADC4-2824E25139C8}"
+        "ProductCode" = "8:{0B88BD25-E79C-4688-985E-5B0581720BE1}"
+        "PackageCode" = "8:{658C3B8B-94A8-4AF3-86BD-8C641928CB4C}"
         "UpgradeCode" = "8:{2A9ED1DB-29A9-4717-BA9E-8FC37CAFCA3A}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"

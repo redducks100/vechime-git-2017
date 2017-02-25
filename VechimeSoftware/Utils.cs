@@ -1,6 +1,7 @@
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -8,8 +9,38 @@ using System.Threading.Tasks;
 
 namespace VechimeSoftware
 {
+    public enum HashType
+    {
+        MD5,
+        SHA1,
+        SHA512
+    }
+
     public static class Utils
     {
+        public static string HashFile(string filePath,HashType type)
+        {
+            switch(type)
+            {
+                case HashType.MD5:
+                    {
+                        byte[] hash = MD5.Create().ComputeHash(new FileStream(filePath, FileMode.Open));
+                        StringBuilder s = new StringBuilder(hash.Length * 2);
+
+                        for (int i = 0; i < hash.Length; i++)
+                        {
+                            s.Append(hash[i].ToString("X2").ToLower());
+                        }
+
+                        return s.ToString();
+                    }
+                    break;
+                default:
+                    return "";
+                    break;
+            }
+        }
+
         public static string SHA1(string input)
         {
             byte[] hash;
@@ -52,6 +83,5 @@ namespace VechimeSoftware
                 }
             }
         }
-
     }
 }

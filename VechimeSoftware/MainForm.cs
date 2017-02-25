@@ -20,6 +20,8 @@ namespace VechimeSoftware
 {
     public partial class MainForm : Form
     {
+        private LoginForm loginForm;
+
         private string databasePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "VechimeManager") + "/Baza.mdb";
         private string connectionString = "";
         public Dictionary<int, Person> peopleDictionary = new Dictionary<int, Person>();
@@ -27,12 +29,13 @@ namespace VechimeSoftware
         public UnitateInfo currentUnitate;
 
         public bool DemoVersion = false;
-      
 
-
-        public MainForm(bool _demoVersion = false,bool startUp=false)
+        public MainForm(LoginForm _loginForm,bool _demoVersion = false, bool startUp = false)
         {
             InitializeComponent();
+
+            loginForm = _loginForm;
+
             MoveDatabase();
             connectionString = @"Provider=Microsoft.ACE.OLEDB.12.0; Data Source=" + databasePath + @"; Persist Security Info=False;";
             DemoVersion = _demoVersion;
@@ -40,22 +43,16 @@ namespace VechimeSoftware
             displayPeople = peopleDictionary.Values.ToList();
             UpdatePeopleInfo();
             SetRunOnStartup();
-            
+
             if (startUp)
                 RunInBackground();
         }
-
-        
 
         private void MainForm_Shown(object sender, EventArgs e)
         {
             CheckUnitateInfo();
             CheckTransaUpdates();
-           
         }
-
-    
-
 
         private void MoveDatabase()
         {
@@ -65,20 +62,16 @@ namespace VechimeSoftware
 
             path = Path.Combine(path, "Baza.mdb");
 
-
-
             if (!File.Exists(path))
             {
                 string sourceFile = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/Baza.mdb";
                 string destFile = path;
                 System.IO.File.Copy(sourceFile, destFile, true);
             }
-
         }
 
         private void SetRunOnStartup()
         {
-
             RegistryKey rkApp = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
 
             string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "VechimeManager");
@@ -107,20 +100,19 @@ namespace VechimeSoftware
                     }
                 }
             }
+        }
 
-}
         private void RunInBackground()
         {
-           
             CheckUnitateInfo();
             CheckTransaUpdatesStartup();
-            
             //Environment.Exit(0);
         }
 
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
         {
-            Application.Exit();
+            if(loginForm.Visible == false)
+                Application.Exit();
         }
 
         #region UpdateStuff
@@ -187,7 +179,6 @@ namespace VechimeSoftware
                     Transa currentTransaInv = person.CurrentTransaInv;
                     Transa currentTransaMunca = person.CurrentTransaMunca;
 
-                   
                     if (currentTransaInv.TransaString != person.PreviousTransaInv || currentTransaMunca.TransaString != person.PreviousTransaMunca)
                     {
                         if (!string.IsNullOrWhiteSpace(person.PreviousTransaInv) && !string.IsNullOrWhiteSpace(person.PreviousTransaMunca))
@@ -200,8 +191,6 @@ namespace VechimeSoftware
                     }
                 }
             }
-            
-
         }
 
         private void CheckTransaUpdatesStartup()
@@ -214,16 +203,13 @@ namespace VechimeSoftware
                     Transa currentTransaInv = person.CurrentTransaInv;
                     Transa currentTransaMunca = person.CurrentTransaMunca;
 
-
                     if (currentTransaInv.TransaString != person.PreviousTransaInv || currentTransaMunca.TransaString != person.PreviousTransaMunca)
                     {
                         if (!string.IsNullOrWhiteSpace(person.PreviousTransaInv) && !string.IsNullOrWhiteSpace(person.PreviousTransaMunca))
                         {
                             pop = true;
-                            using(PopupForm popForm = new PopupForm(string.Format("{0} a trecut la o transa superioara!", person.NumeIntreg)))
+                            using (PopupForm popForm = new PopupForm(string.Format("{0} a trecut la o transa superioara!", person.NumeIntreg)))
                             {
-                                
-
                                 if (popForm.ShowDialog() != DialogResult.OK)
                                     Environment.Exit(0);
                             }
@@ -235,9 +221,8 @@ namespace VechimeSoftware
                 }
             }
 
-            if(!pop)
+            if (!pop)
                 Environment.Exit(0);
-
         }
 
         #endregion UpdateStuff
@@ -689,7 +674,6 @@ namespace VechimeSoftware
 
                 foreach (Perioada perioada in selectedPerson.Perioade.OrderBy(c => c.DTSfarsit))
                 {
-
                     TimePeriod periodCalc = TimePeriod.CalculatePeriodTime(perioada);
 
                     DataGridViewRow newRow = new DataGridViewRow();
@@ -789,6 +773,17 @@ namespace VechimeSoftware
 
         #region Menu Strip Handlers
 
+        private void deconectareToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            loginForm.Show();
+            this.Close();
+        }
+
+        private void despreToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Autori:\nAndronache Simone\nIlciuc Sergiu", "Despre", MessageBoxButtons.OK);
+        }
+
         private void iesireToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Application.Exit();
@@ -818,7 +813,6 @@ namespace VechimeSoftware
                 MessageBox.Show("Selectati o persoana!", "Atentie!");
             }
         }
-
 
         private void dataGridView1_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
         {
@@ -907,7 +901,6 @@ namespace VechimeSoftware
         #endregion AddHandlers
 
         #region DeleteHandlers
-
 
         private void stergeToolStripMenuItem3_Click(object sender, EventArgs e)
         {
@@ -1104,8 +1097,6 @@ namespace VechimeSoftware
 
         #endregion DrawHandlers
 
-
-
         #region GeneratePdf
 
         // Generez pdf pentru persoana selectata
@@ -1148,13 +1139,10 @@ namespace VechimeSoftware
                                new XRect(45, 82, page.Width, page.Height),
                                XStringFormats.TopLeft);
 
-
                 string ultimaFunctie = "";
-
 
                 foreach (Perioada perioada in selectedPerson.Perioade.OrderBy(c => c.DTSfarsit).ToList())
                     ultimaFunctie = perioada.Functie;
-
 
                 gfx.DrawString("Functia : " + ultimaFunctie
                             , font, XBrushes.Black,
@@ -1372,7 +1360,6 @@ namespace VechimeSoftware
         // Generez pdf pentru adeverinta
         private void adeverintaVechimeGenerateToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
             if (peopleListBox.SelectedIndex < 0)
             {
                 MessageBox.Show("Nu ati selectat nici o persoana!", "Atentie");
@@ -1399,7 +1386,6 @@ namespace VechimeSoftware
                 return;
             }
 
-
             bool ok = false;
 
             foreach (Perioada perioada in selectedPerson.Perioade.OrderBy(c => c.DTSfarsit).ToList())
@@ -1425,8 +1411,6 @@ namespace VechimeSoftware
 
             Paragraph paragraphSchoolInfo = section.AddParagraph();
 
-
-
             paragraphSchoolInfo.Format.Font.Size = 9;
             paragraphSchoolInfo.Format.Alignment = ParagraphAlignment.Left;
             paragraphSchoolInfo.AddText("S.C. " + currentUnitate.SC + "\n" +
@@ -1445,19 +1429,13 @@ namespace VechimeSoftware
             paragraphTitle.Format.Alignment = ParagraphAlignment.Center;
             paragraphTitle.AddText("\nAdeverinta\n\n");
 
-
-
-
-
             if (selectedPerson.Perioade.Where(x => x.LocMunca.ToUpper() == currentUnitate.SC.ToUpper()).Count() <= 0)
             {
                 MessageBox.Show(string.Format("{0} nu lucreaza la unitatea curenta!", selectedPerson.NumeIntreg), "Atentie!");
                 return;
             }
 
-
             string ultimaFunctie = "";
-
 
             foreach (Perioada perioada in selectedPerson.Perioade.OrderBy(c => c.DTSfarsit).ToList())
             {
@@ -1478,12 +1456,12 @@ namespace VechimeSoftware
             paragraphContent1.Format.Font.Name = "Verdana";
             paragraphContent1.Format.Font.Size = 9;
             paragraphContent1.Format.Font.Italic = true;
-            paragraphContent1.AddFormattedText("        " + " Prin prezenta se atesta faptul ca dl./dna " + selectedPerson.NumeIntreg +
+            paragraphContent1.AddFormattedText("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½" + " Prin prezenta se atesta faptul ca dl./dna " + selectedPerson.NumeIntreg +
                                       ", posesor al BI/CI, seria " + serie + ", nr " + nr + ", CNP " + selectedPerson.CNP +
                                       ", a fost angajat al unitatii " + currentUnitate.SC + "  " +
 
                                       ", in functia de " + ultimaFunctie + ". \n" +
-                                      "        " + " Pe durata executarii contractului individual de munca au intervenit urmatoarele mutatii " +
+                                      "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½" + " Pe durata executarii contractului individual de munca au intervenit urmatoarele mutatii " +
                                       "( incheierea, modificarea, suspendarea si incetarea contractului individual de munca ): \n\n");
 
             table = section.AddTable();
@@ -1509,7 +1487,6 @@ namespace VechimeSoftware
             column.Borders.Color = Colors.Black;
             column.Format.Alignment = ParagraphAlignment.Right;
 
-
             Row row = table.AddRow();
 
             row.Cells[0].AddParagraph("Nr. crt");
@@ -1521,7 +1498,6 @@ namespace VechimeSoftware
 
             row.Cells[2].AddParagraph("Data");
             row.Cells[2].Format.Alignment = ParagraphAlignment.Left;
-
 
             row.Cells[3].AddParagraph("Functia");
             row.Cells[3].Format.Alignment = ParagraphAlignment.Left;
@@ -1535,8 +1511,6 @@ namespace VechimeSoftware
                     && perioada.DTSfarsit.CompareTo(dataInceput) >= 0 && perioada.DTSfarsit.CompareTo(dataSfarsit) <= 0)
                     if (perioada.LocMunca.ToUpper() == currentUnitate.SC.ToUpper() || perioada.TipCFS != "")
                     {
-
-
                         row = table.AddRow();
 
                         for (int i = 0; i < 4; i++)
@@ -1553,17 +1527,13 @@ namespace VechimeSoftware
                         else
                             row.Cells[1].AddParagraph("Incadrat");
 
-
                         row.Cells[1].Format.Alignment = ParagraphAlignment.Left;
 
                         row.Cells[2].AddParagraph(perioada.DTInceput.ToString("dd/MM/yyyy"));
                         row.Cells[2].Format.Alignment = ParagraphAlignment.Left;
 
-
                         row.Cells[3].AddParagraph(perioada.CFS == true ? perioada.Functie + " " + perioada.TipCFS : perioada.Functie);
                         row.Cells[3].Format.Alignment = ParagraphAlignment.Left;
-
-
 
                         row = table.AddRow();
 
@@ -1581,28 +1551,24 @@ namespace VechimeSoftware
                         else
                             row.Cells[1].AddParagraph("Incetat contract de munca");
 
-
                         row.Cells[1].Format.Alignment = ParagraphAlignment.Left;
 
                         row.Cells[2].AddParagraph(perioada.DTSfarsit.ToString("dd/MM/yyyy"));
                         row.Cells[2].Format.Alignment = ParagraphAlignment.Left;
-
-
 
                         row.Cells[3].AddParagraph(perioada.CFS == true ? perioada.Functie + " " + perioada.TipCFS : perioada.Functie);
                         row.Cells[3].Format.Alignment = ParagraphAlignment.Left;
 
                         ultimaData = perioada.DTSfarsit;
                     }
-
             }
 
             Paragraph paragraphContent2 = section.AddParagraph();
             paragraphContent2.Format.Font.Size = 9;
             paragraphContent2.Format.Font.Italic = true;
-            paragraphContent2.AddFormattedText("        " + "Incepind cu data de  " + ultimaData.ToString("dd/MM/yyyy") +
+            paragraphContent2.AddFormattedText("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½" + "Incepind cu data de  " + ultimaData.ToString("dd/MM/yyyy") +
                 ", contractul individual de munca al domnului (ei) a incetat.\n\n\n" +
-          "                       " + "Reprezentant legal," + "                                " + "Intocmit,");
+          "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½" + "Reprezentant legal," + "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½" + "Intocmit,");
 
             PdfDocumentRenderer pdfRenderer = new PdfDocumentRenderer(false, PdfFontEmbedding.Always);
 
@@ -1613,7 +1579,6 @@ namespace VechimeSoftware
             string filename = "Adeverinta_" + RandomString(4) + ".pdf";
 
             string[] files = Directory.GetFiles(Application.StartupPath, "Adeverinta_*.pdf");
-
 
             foreach (string file in files)
             {
@@ -1645,15 +1610,6 @@ namespace VechimeSoftware
               .Select(s => s[random.Next(s.Length)]).ToArray());
         }
 
-
-
-
-
-
-
-
         #endregion GeneratePdf
-
-       
     }
 }

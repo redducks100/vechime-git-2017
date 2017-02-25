@@ -35,15 +35,15 @@ namespace VechimeSoftware
 
         private void registerButton_Click(object sender, EventArgs e)
         {
-            if(String.IsNullOrWhiteSpace(usernameTextBox.Text) || string.IsNullOrWhiteSpace(passwordTextBox.Text) || string.IsNullOrWhiteSpace(emailTextBox.Text))
+            if (String.IsNullOrWhiteSpace(usernameTextBox.Text) || string.IsNullOrWhiteSpace(passwordTextBox.Text) || string.IsNullOrWhiteSpace(emailTextBox.Text))
             {
-                MessageBox.Show("Toate casutele trebuie completate!","Atentie",MessageBoxButtons.OK,MessageBoxIcon.Warning);
+                MessageBox.Show("Toate casutele trebuie completate!", "Atentie", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            if(!IsValidEmail(emailTextBox.Text))
+            if (!IsValidEmail(emailTextBox.Text))
             {
-                MessageBox.Show("Va rog sa introduceti un email valid!","Atentie", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Va rog sa introduceti un email valid!", "Atentie", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -57,19 +57,19 @@ namespace VechimeSoftware
             {
                 newData.Serial = "";
             }
-            else if(parent.CheckSerial(serialTextBox.Text) == false)
+            else if (parent.CheckSerial(serialTextBox.Text) == false)
             {
-                MessageBox.Show("Serial-ul nu este valid!","Atentie!",MessageBoxButtons.OK,MessageBoxIcon.Warning);
+                MessageBox.Show("Serial-ul nu este valid!", "Atentie!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
             newData.Serial = serialTextBox.Text;
-            if(!parent.AddUser(newData))
+            if (!parent.AddUser(newData))
             {
                 return;
             }
             else
             {
-                MessageBox.Show("Utilizator inregistrat cu succes!","Atentie");
+                MessageBox.Show("Utilizator inregistrat cu succes!", "Atentie");
             }
             this.Close();
         }

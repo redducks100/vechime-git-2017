@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -17,7 +17,6 @@ namespace VechimeSoftware
             InitializeComponent();
         }
 
-
         public DateTime dataInceput { get; set; }
         public DateTime dataSfarsit { get; set; }
         public bool algoritm { get; set; }
@@ -30,7 +29,6 @@ namespace VechimeSoftware
             DialogResult = DialogResult.OK;
 
             Close();
-
         }
     }
 }

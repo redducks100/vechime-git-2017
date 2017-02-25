@@ -11,7 +11,6 @@ namespace VechimeSoftware
         [STAThread]
         private static void Main(string[] args)
         {
-
             bool startUp = (args.Length > 0);
 
             Application.EnableVisualStyles();

@@ -1,4 +1,3 @@
-﻿
 using Microsoft.Win32;
 using Newtonsoft.Json;
 using System;
@@ -23,7 +22,6 @@ namespace VechimeSoftware
 
         private void OptiuniForm_Load(object sender, EventArgs e)
         {
-
             string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "VechimeManager");
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
@@ -44,10 +42,10 @@ namespace VechimeSoftware
                         checkBoxAutoConnect.Checked = true;
                 }
             }
-
         }
 
         #region Handler
+
         private void checkBoxAutoConnect_CheckedChanged(object sender, EventArgs e)
         {
             if (checkBoxAutoConnect.Checked)
@@ -59,9 +57,10 @@ namespace VechimeSoftware
                 checkBoxStartUp.Checked = false;
                 checkBoxStartUp.Enabled = false;
             }
-
         }
-        #endregion
+
+        #endregion Handler
+
         private void buttonSave_Click(object sender, EventArgs e)
         {
             Settings settings = new Settings();
@@ -84,7 +83,6 @@ namespace VechimeSoftware
             }
             File.Create(path).Close();
 
-
             RegistryKey rkApp = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
 
             if (checkBoxStartUp.Checked)
@@ -105,10 +103,7 @@ namespace VechimeSoftware
                     rkApp.DeleteValue("Vechime /runminimized");
                 }
             }
-            
-         
 
-          
             if (checkBoxAutoConnect.Checked)
             {
                 settings.SaveUserData = true;
@@ -127,7 +122,5 @@ namespace VechimeSoftware
 
             Close();
         }
-
-       
     }
 }

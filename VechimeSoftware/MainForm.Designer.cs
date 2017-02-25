@@ -89,6 +89,8 @@ namespace VechimeSoftware
             this.perioadaInvTB = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
+            this.despreToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.deconectareToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanel1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -125,6 +127,7 @@ namespace VechimeSoftware
             this.perioadeToolStripMenuItem,
             this.raportToolStripMenuItem,
             this.setariToolStripMenuItem,
+            this.despreToolStripMenuItem,
             this.iesireToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
@@ -229,7 +232,8 @@ namespace VechimeSoftware
             // 
             this.setariToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.unitateaCurentaToolStripMenuItem,
-            this.optiuniToolStripMenuItem});
+            this.optiuniToolStripMenuItem,
+            this.deconectareToolStripMenuItem});
             this.setariToolStripMenuItem.Name = "setariToolStripMenuItem";
             this.setariToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.setariToolStripMenuItem.Text = "Setari";
@@ -466,19 +470,19 @@ namespace VechimeSoftware
             this.veziDetaliiModificaToolStripMenuItem1,
             this.stergeToolStripMenuItem});
             this.perioadaContextMenuStrip.Name = "perioadaContextMenuStrip";
-            this.perioadaContextMenuStrip.Size = new System.Drawing.Size(183, 48);
+            this.perioadaContextMenuStrip.Size = new System.Drawing.Size(182, 48);
             // 
             // veziDetaliiModificaToolStripMenuItem1
             // 
             this.veziDetaliiModificaToolStripMenuItem1.Name = "veziDetaliiModificaToolStripMenuItem1";
-            this.veziDetaliiModificaToolStripMenuItem1.Size = new System.Drawing.Size(182, 22);
+            this.veziDetaliiModificaToolStripMenuItem1.Size = new System.Drawing.Size(181, 22);
             this.veziDetaliiModificaToolStripMenuItem1.Text = "Vezi detalii/Modifica";
             this.veziDetaliiModificaToolStripMenuItem1.Click += new System.EventHandler(this.veziDetaliiPerioadaModificaToolStripMenuItem_Click);
             // 
             // stergeToolStripMenuItem
             // 
             this.stergeToolStripMenuItem.Name = "stergeToolStripMenuItem";
-            this.stergeToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
+            this.stergeToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
             this.stergeToolStripMenuItem.Text = "Sterge";
             this.stergeToolStripMenuItem.Click += new System.EventHandler(this.stergeToolPerioadaStripMenuItem_Click);
             // 
@@ -539,19 +543,19 @@ namespace VechimeSoftware
             this.stergeToolStripMenuItem2});
             this.personContextMenuStrip.Name = "contextMenuStrip1";
             this.personContextMenuStrip.ShowImageMargin = false;
-            this.personContextMenuStrip.Size = new System.Drawing.Size(158, 48);
+            this.personContextMenuStrip.Size = new System.Drawing.Size(157, 48);
             // 
             // veziDetaliiModificaToolStripMenuItem
             // 
             this.veziDetaliiModificaToolStripMenuItem.Name = "veziDetaliiModificaToolStripMenuItem";
-            this.veziDetaliiModificaToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.veziDetaliiModificaToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
             this.veziDetaliiModificaToolStripMenuItem.Text = "Vezi detalii/Modifica";
             this.veziDetaliiModificaToolStripMenuItem.Click += new System.EventHandler(this.veziDetaliiModificaToolStripMenuItem_Click);
             // 
             // stergeToolStripMenuItem2
             // 
             this.stergeToolStripMenuItem2.Name = "stergeToolStripMenuItem2";
-            this.stergeToolStripMenuItem2.Size = new System.Drawing.Size(157, 22);
+            this.stergeToolStripMenuItem2.Size = new System.Drawing.Size(156, 22);
             this.stergeToolStripMenuItem2.Text = "Sterge";
             this.stergeToolStripMenuItem2.ToolTipText = "Sterge";
             this.stergeToolStripMenuItem2.Click += new System.EventHandler(this.stergeToolStripMenuItem_Click);
@@ -737,6 +741,20 @@ namespace VechimeSoftware
             this.label7.TabIndex = 9;
             this.label7.Text = "Transa:";
             // 
+            // despreToolStripMenuItem
+            // 
+            this.despreToolStripMenuItem.Name = "despreToolStripMenuItem";
+            this.despreToolStripMenuItem.Size = new System.Drawing.Size(55, 20);
+            this.despreToolStripMenuItem.Text = "Despre";
+            this.despreToolStripMenuItem.Click += new System.EventHandler(this.despreToolStripMenuItem_Click);
+            // 
+            // deconectareToolStripMenuItem
+            // 
+            this.deconectareToolStripMenuItem.Name = "deconectareToolStripMenuItem";
+            this.deconectareToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.deconectareToolStripMenuItem.Text = "Deconectare";
+            this.deconectareToolStripMenuItem.Click += new System.EventHandler(this.deconectareToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -747,7 +765,6 @@ namespace VechimeSoftware
             this.Name = "MainForm";
             this.Text = "Vechime Manager";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainForm_FormClosed);
-           
             this.Shown += new System.EventHandler(this.MainForm_Shown);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
@@ -831,6 +848,8 @@ namespace VechimeSoftware
         private System.Windows.Forms.DataGridViewCheckBoxColumn lucreaza;
         private System.Windows.Forms.ToolStripMenuItem stergeToolStripMenuItem3;
         private System.Windows.Forms.ToolStripMenuItem optiuniToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem despreToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem deconectareToolStripMenuItem;
     }
 }
 
