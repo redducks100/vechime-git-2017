@@ -1,3 +1,4 @@
+using Itenso.TimePeriod;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -82,6 +83,11 @@ namespace VechimeSoftware
                     return machineGuid.ToString();
                 }
             }
+        }
+
+        public static DateDiff DateDiffFixed(DateTime date1, DateTime date2)
+        {
+            return new DateDiff(date1.Subtract(new TimeSpan(1, 0, 0, 0, 0)), date2);
         }
     }
 }

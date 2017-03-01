@@ -25,7 +25,7 @@ namespace VechimeSoftware
         {
             get
             {
-                return new DateDiff(DTInceput.Subtract(new TimeSpan(1, 0, 0, 0, 0)), DTSfarsit.Subtract(new TimeSpan(1, 0, 0, 0, 0)));
+                return Utils.DateDiffFixed(DTInceput, DTSfarsit);
             }
         }
     }
