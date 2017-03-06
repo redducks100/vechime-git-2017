@@ -74,7 +74,7 @@ namespace VechimeSoftware
             if (currentPerson != null)
             {
                 cnpTextBox.Text = currentPerson.CNP;
-                serieTextBox.Text = currentPerson.Serie;
+                serieTextBox.Text = currentPerson.Functie;
                 nameTextBox.Text = currentPerson.Nume.ToUpper();
                 prenumeTextBox.Text = currentPerson.Prenume.ToUpper();
 
@@ -95,7 +95,7 @@ namespace VechimeSoftware
             if (modified)
             {
                 cnpTextBox.Text = currentPerson.CNP;
-                serieTextBox.Text = currentPerson.Serie;
+                serieTextBox.Text = currentPerson.Functie;
                 nameTextBox.Text = currentPerson.Nume.ToUpper();
                 prenumeTextBox.Text = currentPerson.Prenume.ToUpper();
 
@@ -147,7 +147,7 @@ namespace VechimeSoftware
             currentPerson.CNP = cnpTextBox.Text;
             currentPerson.Nume = nameTextBox.Text.ToUpper();
             currentPerson.Prenume = prenumeTextBox.Text.ToUpper();
-            currentPerson.Serie = serieTextBox.Text.ToUpper();
+            currentPerson.Functie = serieTextBox.Text.ToUpper();
 
             parent.AddPerson(currentPerson);
             MessageBox.Show("Persoana adaugata cu succes!");
@@ -174,7 +174,7 @@ namespace VechimeSoftware
             currentPerson.CNP = cnpTextBox.Text;
             currentPerson.Nume = nameTextBox.Text.ToUpper();
             currentPerson.Prenume = prenumeTextBox.Text.ToUpper();
-            currentPerson.Serie = serieTextBox.Text.ToUpper();
+            currentPerson.Functie = serieTextBox.Text.ToUpper();
 
             parent.ModifyPerson(currentPerson);
             MessageBox.Show("Persoana modificata cu succes!");

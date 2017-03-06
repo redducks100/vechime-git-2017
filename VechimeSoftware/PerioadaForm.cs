@@ -27,6 +27,11 @@ namespace VechimeSoftware
 
             currentChangedPeriods = new List<Perioada>();
 
+            functieComboBox.SelectedIndex = 0;
+            normaComboBox.SelectedIndex = 0;
+            iomComboBox.SelectedIndex = 0;
+            tipConcediuComboBox.SelectedIndex = 0;
+
             UpdateTitle();
             UpdateForm();
         }
@@ -372,7 +377,6 @@ namespace VechimeSoftware
 
             perioadaTextBox.Text = periodCalc.Years + " ani " + periodCalc.Months + " luni " + periodCalc.Days + " zile";
         }
-
 
         private void PerioadaForm_KeyPress(object sender, KeyPressEventArgs e)
         {

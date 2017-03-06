@@ -30,5 +30,10 @@ namespace VechimeSoftware
 
             Close();
         }
+
+        private void inceputTimePicker_ValueChanged(object sender, EventArgs e)
+        {
+            SendKeys.Send("{.}");
+        }
     }
 }

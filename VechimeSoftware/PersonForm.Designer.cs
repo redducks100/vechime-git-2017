@@ -32,19 +32,19 @@ namespace VechimeSoftware
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
-            this.nameTextBox = new System.Windows.Forms.TextBox();
+            this.serieTextBox = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
             this.cnpTextBox = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
             this.prenumeTextBox = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.nameTextBox = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
             this.titleLabel = new System.Windows.Forms.Label();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
             this.editButton = new System.Windows.Forms.Button();
             this.saveButton = new System.Windows.Forms.Button();
             this.addButton = new System.Windows.Forms.Button();
-            this.label5 = new System.Windows.Forms.Label();
-            this.serieTextBox = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
@@ -122,14 +122,14 @@ namespace VechimeSoftware
             this.tableLayoutPanel4.Size = new System.Drawing.Size(461, 203);
             this.tableLayoutPanel4.TabIndex = 0;
             // 
-            // nameTextBox
+            // serieTextBox
             // 
-            this.nameTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.nameTextBox.Enabled = false;
-            this.nameTextBox.Location = new System.Drawing.Point(85, 115);
-            this.nameTextBox.Name = "nameTextBox";
-            this.nameTextBox.Size = new System.Drawing.Size(372, 20);
-            this.nameTextBox.TabIndex = 3;
+            this.serieTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.serieTextBox.Enabled = false;
+            this.serieTextBox.Location = new System.Drawing.Point(85, 65);
+            this.serieTextBox.Name = "serieTextBox";
+            this.serieTextBox.Size = new System.Drawing.Size(372, 20);
+            this.serieTextBox.TabIndex = 2;
             // 
             // label2
             // 
@@ -142,16 +142,16 @@ namespace VechimeSoftware
             this.label2.TabIndex = 0;
             this.label2.Text = "CNP:";
             // 
-            // label3
+            // cnpTextBox
             // 
-            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(4, 118);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(74, 15);
-            this.label3.TabIndex = 1;
-            this.label3.Text = "Nume:";
+            this.cnpTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.cnpTextBox.Enabled = false;
+            this.cnpTextBox.Location = new System.Drawing.Point(85, 15);
+            this.cnpTextBox.MaxLength = 13;
+            this.cnpTextBox.Name = "cnpTextBox";
+            this.cnpTextBox.Size = new System.Drawing.Size(372, 20);
+            this.cnpTextBox.TabIndex = 1;
+            this.cnpTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.cnpTextBox_KeyPress);
             // 
             // label4
             // 
@@ -164,17 +164,6 @@ namespace VechimeSoftware
             this.label4.TabIndex = 2;
             this.label4.Text = "Prenume:";
             // 
-            // cnpTextBox
-            // 
-            this.cnpTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.cnpTextBox.Enabled = false;
-            this.cnpTextBox.Location = new System.Drawing.Point(85, 15);
-            this.cnpTextBox.MaxLength = 13;
-            this.cnpTextBox.Name = "cnpTextBox";
-            this.cnpTextBox.Size = new System.Drawing.Size(372, 20);
-            this.cnpTextBox.TabIndex = 1;
-            this.cnpTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.cnpTextBox_KeyPress);
-            // 
             // prenumeTextBox
             // 
             this.prenumeTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
@@ -183,6 +172,37 @@ namespace VechimeSoftware
             this.prenumeTextBox.Name = "prenumeTextBox";
             this.prenumeTextBox.Size = new System.Drawing.Size(372, 20);
             this.prenumeTextBox.TabIndex = 4;
+            // 
+            // label3
+            // 
+            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(4, 118);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(74, 15);
+            this.label3.TabIndex = 1;
+            this.label3.Text = "Nume:";
+            // 
+            // nameTextBox
+            // 
+            this.nameTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.nameTextBox.Enabled = false;
+            this.nameTextBox.Location = new System.Drawing.Point(85, 115);
+            this.nameTextBox.Name = "nameTextBox";
+            this.nameTextBox.Size = new System.Drawing.Size(372, 20);
+            this.nameTextBox.TabIndex = 3;
+            // 
+            // label5
+            // 
+            this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Location = new System.Drawing.Point(4, 68);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(74, 15);
+            this.label5.TabIndex = 5;
+            this.label5.Text = "Functie:";
             // 
             // titleLabel
             // 
@@ -249,26 +269,6 @@ namespace VechimeSoftware
             this.addButton.Text = "Adauga";
             this.addButton.UseVisualStyleBackColor = true;
             this.addButton.Click += new System.EventHandler(this.addButton_Click);
-            // 
-            // label5
-            // 
-            this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(4, 68);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(74, 15);
-            this.label5.TabIndex = 5;
-            this.label5.Text = "Serie:";
-            // 
-            // serieTextBox
-            // 
-            this.serieTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.serieTextBox.Enabled = false;
-            this.serieTextBox.Location = new System.Drawing.Point(85, 65);
-            this.serieTextBox.Name = "serieTextBox";
-            this.serieTextBox.Size = new System.Drawing.Size(372, 20);
-            this.serieTextBox.TabIndex = 2;
             // 
             // PersonForm
             // 

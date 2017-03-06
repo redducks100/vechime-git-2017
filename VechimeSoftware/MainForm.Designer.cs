@@ -40,7 +40,6 @@ namespace VechimeSoftware
             this.adaugaToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.modificareToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stergeToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.actualizareToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.raportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.persoanaSelectataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toatePersoaneleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -48,6 +47,8 @@ namespace VechimeSoftware
             this.setariToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.unitateaCurentaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optiuniToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.deconectareToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.despreToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.iesireToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
@@ -89,8 +90,6 @@ namespace VechimeSoftware
             this.perioadaInvTB = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
-            this.despreToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.deconectareToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanel1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -163,8 +162,7 @@ namespace VechimeSoftware
             this.perioadeToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.adaugaToolStripMenuItem1,
             this.modificareToolStripMenuItem,
-            this.stergeToolStripMenuItem1,
-            this.actualizareToolStripMenuItem});
+            this.stergeToolStripMenuItem1});
             this.perioadeToolStripMenuItem.Name = "perioadeToolStripMenuItem";
             this.perioadeToolStripMenuItem.Size = new System.Drawing.Size(65, 20);
             this.perioadeToolStripMenuItem.Text = "Perioade";
@@ -172,30 +170,23 @@ namespace VechimeSoftware
             // adaugaToolStripMenuItem1
             // 
             this.adaugaToolStripMenuItem1.Name = "adaugaToolStripMenuItem1";
-            this.adaugaToolStripMenuItem1.Size = new System.Drawing.Size(132, 22);
+            this.adaugaToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
             this.adaugaToolStripMenuItem1.Text = "Adauga";
             this.adaugaToolStripMenuItem1.Click += new System.EventHandler(this.adaugaToolPerioadaStripMenuItem_Click);
             // 
             // modificareToolStripMenuItem
             // 
             this.modificareToolStripMenuItem.Name = "modificareToolStripMenuItem";
-            this.modificareToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
+            this.modificareToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.modificareToolStripMenuItem.Text = "Modificare";
             this.modificareToolStripMenuItem.Click += new System.EventHandler(this.modificareToolStripMenuItem_Click);
             // 
             // stergeToolStripMenuItem1
             // 
             this.stergeToolStripMenuItem1.Name = "stergeToolStripMenuItem1";
-            this.stergeToolStripMenuItem1.Size = new System.Drawing.Size(132, 22);
+            this.stergeToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
             this.stergeToolStripMenuItem1.Text = "Sterge";
             this.stergeToolStripMenuItem1.Click += new System.EventHandler(this.stergeToolStripMenuItem1_Click);
-            // 
-            // actualizareToolStripMenuItem
-            // 
-            this.actualizareToolStripMenuItem.Name = "actualizareToolStripMenuItem";
-            this.actualizareToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
-            this.actualizareToolStripMenuItem.Text = "Actualizare";
-            this.actualizareToolStripMenuItem.Click += new System.EventHandler(this.actualizareToolStripMenuItem_Click);
             // 
             // raportToolStripMenuItem
             // 
@@ -251,6 +242,20 @@ namespace VechimeSoftware
             this.optiuniToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.optiuniToolStripMenuItem.Text = "Optiuni";
             this.optiuniToolStripMenuItem.Click += new System.EventHandler(this.optiuniToolStripMenuItem_Click);
+            // 
+            // deconectareToolStripMenuItem
+            // 
+            this.deconectareToolStripMenuItem.Name = "deconectareToolStripMenuItem";
+            this.deconectareToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.deconectareToolStripMenuItem.Text = "Deconectare";
+            this.deconectareToolStripMenuItem.Click += new System.EventHandler(this.deconectareToolStripMenuItem_Click);
+            // 
+            // despreToolStripMenuItem
+            // 
+            this.despreToolStripMenuItem.Name = "despreToolStripMenuItem";
+            this.despreToolStripMenuItem.Size = new System.Drawing.Size(55, 20);
+            this.despreToolStripMenuItem.Text = "Despre";
+            this.despreToolStripMenuItem.Click += new System.EventHandler(this.despreToolStripMenuItem_Click);
             // 
             // iesireToolStripMenuItem
             // 
@@ -741,20 +746,6 @@ namespace VechimeSoftware
             this.label7.TabIndex = 9;
             this.label7.Text = "Transa:";
             // 
-            // despreToolStripMenuItem
-            // 
-            this.despreToolStripMenuItem.Name = "despreToolStripMenuItem";
-            this.despreToolStripMenuItem.Size = new System.Drawing.Size(55, 20);
-            this.despreToolStripMenuItem.Text = "Despre";
-            this.despreToolStripMenuItem.Click += new System.EventHandler(this.despreToolStripMenuItem_Click);
-            // 
-            // deconectareToolStripMenuItem
-            // 
-            this.deconectareToolStripMenuItem.Name = "deconectareToolStripMenuItem";
-            this.deconectareToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
-            this.deconectareToolStripMenuItem.Text = "Deconectare";
-            this.deconectareToolStripMenuItem.Click += new System.EventHandler(this.deconectareToolStripMenuItem_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -797,7 +788,6 @@ namespace VechimeSoftware
         private System.Windows.Forms.ToolStripMenuItem perioadeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem adaugaToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem stergeToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem actualizareToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem raportToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem persoanaSelectataToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toatePersoaneleToolStripMenuItem;

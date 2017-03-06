@@ -76,6 +76,13 @@ namespace VechimeSoftware
             // Suma timpului
             int ani = 0, luni = 0, zile = 0;
 
+            if(perioada.CFS && perioada.TipCFS.ToUpper() == "PT NEVOI PERSONALE")
+            {
+                TimePeriod zeroPer = new TimePeriod();
+                zeroPer.Days = zeroPer.Months = zeroPer.Years = 0;
+                return zeroPer;
+            }
+
             // Doar timpul in invatamant
             int aniInv = 0, luniInv = 0, zileInv = 0;
 
@@ -83,7 +90,7 @@ namespace VechimeSoftware
 
             DateTime changeSomaj = new DateTime(2002, 03, 01);
 
-            DateTime changeNorma = new DateTime(2006, 09, 18);
+            DateTime changeNorma = new DateTime(2005, 07, 05); //ORDONANTA 65 - 05 IULIE 2005
 
             if (!perioada.Somaj || perioada.DTInceput.CompareTo(changeSomaj) < 0)
             {
@@ -168,9 +175,9 @@ namespace VechimeSoftware
 
                 DateTime changeSomaj = new DateTime(2002, 03, 01);
 
-                DateTime changeNorma = new DateTime(2006, 09, 18);
+                DateTime changeNorma = new DateTime(2005, 07, 05);
 
-                if ((!perioade[i].Somaj || perioade[i].DTInceput.CompareTo(changeSomaj) < 0) && perioade[i].TipCFS != "PERSONAL")
+                if ((!perioade[i].Somaj || perioade[i].DTInceput.CompareTo(changeSomaj) < 0) && perioade[i].TipCFS != "PT NEVOI PERSONALE")
                 {
                     if (perioade[i].DTSfarsit.CompareTo(changeSomaj) > 0 && perioade[i].Somaj)
                         diff = Utils.DateDiffFixed(perioade[i].DTInceput, changeSomaj);
@@ -211,12 +218,14 @@ namespace VechimeSoftware
                                 np = QuarterTime(np);
                         }
 
+                    if (perioade[i].TipCFS.ToUpper() != "PT NEVOI PERSONALE")
+                    {
+                        ani += np.Years;
+                        luni += np.Months;
+                        zile += np.Days;
+                    }
 
-                    ani += np.Years;
-                    luni += np.Months;
-                    zile += np.Days;
-
-                    if (perioade[i].IOM.ToUpper() == "INVATAMANT" || perioade[i].TipCFS.ToUpper() == "STUDII")
+                    if (perioade[i].IOM.ToUpper() == "INVATAMANT" || perioade[i].TipCFS.ToUpper() == "PT STUDII")
                     {
                         aniInv += np.Years;
                         luniInv += np.Months;

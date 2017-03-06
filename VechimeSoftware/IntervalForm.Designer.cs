@@ -1,4 +1,4 @@
-﻿namespace VechimeSoftware
+namespace VechimeSoftware
 {
     partial class Interval
     {
@@ -91,6 +91,7 @@
             this.inceputTimePicker.Name = "inceputTimePicker";
             this.inceputTimePicker.Size = new System.Drawing.Size(125, 20);
             this.inceputTimePicker.TabIndex = 3;
+            this.inceputTimePicker.ValueChanged += new System.EventHandler(this.inceputTimePicker_ValueChanged);
             // 
             // tableLayoutPanel8
             // 
@@ -114,6 +115,7 @@
             this.sfarsitTimePicker.Name = "sfarsitTimePicker";
             this.sfarsitTimePicker.Size = new System.Drawing.Size(120, 20);
             this.sfarsitTimePicker.TabIndex = 4;
+            this.sfarsitTimePicker.ValueChanged += new System.EventHandler(this.inceputTimePicker_ValueChanged);
             // 
             // label2
             // 
