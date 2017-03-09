@@ -435,6 +435,7 @@ namespace VechimeSoftware
             this.locMuncaTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.locMuncaTextBox.Enabled = false;
             this.locMuncaTextBox.Location = new System.Drawing.Point(128, 12);
+            this.locMuncaTextBox.MaxLength = 254;
             this.locMuncaTextBox.Name = "locMuncaTextBox";
             this.locMuncaTextBox.Size = new System.Drawing.Size(120, 20);
             this.locMuncaTextBox.TabIndex = 5;
