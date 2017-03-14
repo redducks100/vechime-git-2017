@@ -58,49 +58,40 @@ namespace VechimeSoftware
             {
                 inceputTimePicker.Value = currentPerioada.DTInceput;
                 sfarsitTimePicker.Value = currentPerioada.DTSfarsit;
-
                 normaComboBox.SelectedItem = currentPerioada.Norma.ToUpper();
-
                 iomComboBox.SelectedItem = currentPerioada.IOM.ToUpper();
-
-
                 functieComboBox.SelectedItem = currentPerioada.Functie.ToUpper();
                 locMuncaTextBox.Text = currentPerioada.LocMunca.ToUpper();
-
 
                 Perioada temporaryPerioada = new Perioada();
                 temporaryPerioada.DTInceput = inceputTimePicker.Value;
                 temporaryPerioada.DTSfarsit = sfarsitTimePicker.Value;
                 temporaryPerioada.Norma = normaComboBox.Text;
-               
                 TimePeriod periodCalc = TimePeriod.CalculatePeriodTime(temporaryPerioada);
 
                 perioadaTextBox.Text = periodCalc.Years + " ani " + periodCalc.Months + " luni " + periodCalc.Days + " zile";
-
-
+                perioadaTextBox.Enabled = false;
                 lucreazaCheckBox.Checked = currentPerioada.Lucreaza;
-
-                concediuCheckBox.Checked = (currentPerioada.TipCFS == "" ? false : true);
-
+                lucreazaUCurentaCheckBox.Checked = (currentPerioada.LocMunca.ToUpper() == parent.currentUnitate.SC.ToUpper());
+                locMuncaTextBox.Enabled = false;
+                concediuCheckBox.Checked = (string.IsNullOrWhiteSpace(currentPerioada.TipCFS) ? false : true);
                 tipConcediuComboBox.SelectedItem = currentPerioada.TipCFS.ToUpper();
-
+                tipConcediuComboBox.Enabled = false;
                 somerCheckBox.Checked = currentPerioada.Somaj;
-
                 if (currentPerioada.Somaj)
                 {
                     iomComboBox.Items.Add("SOMAJ");
                     iomComboBox.SelectedIndex = 2;
                 }
-
                 editButton.Enabled = true;
             }
             else
             {
                 SetEnabled(this, true);
-
                 editButton.Enabled = false;
                 saveButton.Enabled = false;
                 perioadaTextBox.Enabled = false;
+                tipConcediuComboBox.Enabled = false;
             }
         }
 
@@ -118,8 +109,11 @@ namespace VechimeSoftware
                 perioadaTextBox.Text = "0 ani 0 luni 0 zile";
                 lucreazaCheckBox.Checked = false;
                 concediuCheckBox.Checked = false;
+                tipConcediuComboBox.Enabled = false;
+                lucreazaUCurentaCheckBox.Checked = false;
                 tipConcediuComboBox.SelectedIndex = 0;
                 somerCheckBox.Checked = false;
+                iomComboBox.Enabled = true;
                 editButton.Enabled = false;
                 saveButton.Enabled = false;
                 addButton.Enabled = true;
@@ -158,17 +152,20 @@ namespace VechimeSoftware
                 temporaryPerioada.DTInceput = inceputTimePicker.Value;
                 temporaryPerioada.DTSfarsit = sfarsitTimePicker.Value;
                 temporaryPerioada.Norma = normaComboBox.Text;
-                
+
                 TimePeriod periodCalc = TimePeriod.CalculatePeriodTime(temporaryPerioada);
 
                 perioadaTextBox.Text = periodCalc.Years + " ani " + periodCalc.Months + " luni " + periodCalc.Days + " zile";
 
-                 lucreazaCheckBox.Checked = currentPerioada.Lucreaza;
+                lucreazaUCurentaCheckBox.Checked = (currentPerioada.LocMunca.ToUpper() == parent.currentUnitate.SC.ToUpper());
+                locMuncaTextBox.Enabled = !lucreazaUCurentaCheckBox.Checked;
 
-                concediuCheckBox.Checked = (currentPerioada.TipCFS == "" ? false : true);
+                lucreazaCheckBox.Checked = currentPerioada.Lucreaza;
 
+                concediuCheckBox.Checked = (string.IsNullOrWhiteSpace(currentPerioada.TipCFS) ? false : true);
+
+                tipConcediuComboBox.Enabled = concediuCheckBox.Checked;
                 tipConcediuComboBox.SelectedItem = currentPerioada.TipCFS.ToUpper();
-
 
                 somerCheckBox.Checked = currentPerioada.Somaj;
 
@@ -176,6 +173,21 @@ namespace VechimeSoftware
                 {
                     iomComboBox.Items.Add("SOMAJ");
                     iomComboBox.SelectedIndex = 2;
+                }
+
+                if (concediuCheckBox.Checked)
+                {
+                    tipConcediuComboBox.Enabled = true;
+                    somerCheckBox.Enabled = false;
+                    lucreazaCheckBox.Enabled = false;
+                    functieComboBox.SelectedItem = "CONCEDIU";
+                    functieComboBox.Enabled = false;
+                    iomComboBox.Enabled = false;
+                    lucreazaUCurentaCheckBox.Enabled = false;
+                    lucreazaCheckBox.Enabled = false;
+                    locMuncaTextBox.Text = "CONCEDIU";
+                    locMuncaTextBox.Enabled = false;
+                    normaComboBox.Enabled = false;
                 }
 
                 editButton.Enabled = true;
@@ -199,11 +211,11 @@ namespace VechimeSoftware
 
                 modifyMode = true;
 
-                if (currentPerioada.Somaj == true)
-                    iomComboBox.Enabled = false;
+                ResetForm(true);
 
                 perioadaTextBox.Enabled = false;
                 editButton.Enabled = false;
+                saveButton.Enabled = true;
                 addButton.Enabled = false;
             }
         }
@@ -263,6 +275,7 @@ namespace VechimeSoftware
 
             //TO-DO RESET FORM
             ResetForm();
+
         }
 
         private void saveButton_Click(object sender, EventArgs e)
@@ -318,6 +331,8 @@ namespace VechimeSoftware
 
             //TO-DO RESET FORM
             ResetForm(true);
+            editButton.Enabled = false;
+            saveButton.Enabled = true;
         }
 
         private bool VerificaData(DateTime inceput, DateTime sfarsit, bool adding = false)
@@ -367,7 +382,7 @@ namespace VechimeSoftware
 
             DateTime firstDate = inceputTimePicker.Value;
             DateTime secondDate = sfarsitTimePicker.Value;
-           // DateDiff span = new DateDiff(firstDate.Subtract(new TimeSpan(1, 0, 0, 0, 0)), secondDate.Subtract(new TimeSpan(1, 0, 0, 0, 0)));
+            // DateDiff span = new DateDiff(firstDate.Subtract(new TimeSpan(1, 0, 0, 0, 0)), secondDate.Subtract(new TimeSpan(1, 0, 0, 0, 0)));
 
             Perioada temporaryPerioada = new Perioada();
             temporaryPerioada.DTInceput = firstDate;
@@ -380,14 +395,12 @@ namespace VechimeSoftware
 
         private void PerioadaForm_KeyPress(object sender, KeyPressEventArgs e)
         {
-           
             if (e.KeyChar == (char)13)
                 SendKeys.Send("{Tab}");
         }
 
         private void normaComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            
             Perioada temporaryPerioada = new Perioada();
             temporaryPerioada.DTInceput = inceputTimePicker.Value;
             temporaryPerioada.DTSfarsit = sfarsitTimePicker.Value;
@@ -455,8 +468,7 @@ namespace VechimeSoftware
         {
             if (concediuCheckBox.Checked)
             {
-
-                tipConcediuComboBox.Enabled = modifyMode == true;
+                tipConcediuComboBox.Enabled = true;
                 somerCheckBox.Enabled = false;
                 lucreazaCheckBox.Enabled = false;
                 functieComboBox.SelectedItem = "CONCEDIU";
@@ -507,8 +519,6 @@ namespace VechimeSoftware
             }
         }
 
-      
-
         #endregion Handlers
 
         private void AddToLocalList(Perioada perioada, bool modified = false)
@@ -534,7 +544,6 @@ namespace VechimeSoftware
             int count = 0;
             foreach (Perioada perioada in currentChangedPeriods.OrderBy(c => c.DTSfarsit))
             {
-
                 TimePeriod periodCalc = TimePeriod.CalculatePeriodTime(perioada);
 
                 DataGridViewRow newRow = new DataGridViewRow();
@@ -561,10 +570,6 @@ namespace VechimeSoftware
             }
         }
 
-
-
         #endregion Utils
-
-       
     }
 }

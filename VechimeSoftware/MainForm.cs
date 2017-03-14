@@ -42,6 +42,7 @@ namespace VechimeSoftware
             peopleDictionary = GetPeople();
             displayPeople = peopleDictionary.Values.ToList();
             UpdatePeopleInfo();
+            CheckUnitateInfo();
             UpdatePerioade();
             SetRunOnStartup();
 
@@ -51,7 +52,6 @@ namespace VechimeSoftware
 
         private void MainForm_Shown(object sender, EventArgs e)
         {
-            CheckUnitateInfo();
             CheckTransaUpdates();
         }
 
@@ -154,8 +154,6 @@ namespace VechimeSoftware
                     unitateForm.ShowDialog();
                 }
             }
-
-            CheckLucreazaUnitateaCurenta();
         }
 
         private void CheckLucreazaUnitateaCurenta()
@@ -232,18 +230,19 @@ namespace VechimeSoftware
         }
 
         private void UpdatePerioade()
-        { 
-                    foreach (Person person in peopleDictionary.Values)
-                    {
-                        for (int i = 0; i < person.Perioade.Count; i++)
-                        {
-                            if (person.Perioade[i].Lucreaza == true && person.Perioade[i].LucreazaUnitateaCurenta)
-                            {
-                                person.Perioade[i].DTSfarsit = DateTime.Today;
-                                ModifyPerioada(person.Perioade[i], person.ID);
-                            }
-                        }
-                    }
+        {
+           CheckLucreazaUnitateaCurenta();
+           foreach (Person person in peopleDictionary.Values)
+           {
+               for (int i = 0; i < person.Perioade.Count; i++)
+               {
+                   if (person.Perioade[i].Lucreaza == true && person.Perioade[i].LucreazaUnitateaCurenta)
+                   {
+                       person.Perioade[i].DTSfarsit = DateTime.Today;
+                       ModifyPerioada(person.Perioade[i], person.ID);
+                   }
+               }
+           }
         }
 
         #endregion UpdateStuff
@@ -360,7 +359,7 @@ namespace VechimeSoftware
                     command.Parameters.Add("@nume", OleDbType.VarChar, 50).Value = newPerson.Nume;
                     command.Parameters.Add("@prenume", OleDbType.VarChar, 50).Value = newPerson.Prenume;
                     command.Parameters.Add("@cnp", OleDbType.VarChar, 13).Value = newPerson.CNP;
-                    command.Parameters.Add("@serie", OleDbType.VarChar, 6).Value = newPerson.Functie;
+                    command.Parameters.Add("@serie", OleDbType.VarChar).Value = newPerson.Functie;
                     //Nu adauga transa pt o persoana noua pt ca nu are perioade!
                     command.Parameters.Add("@TransaInv", OleDbType.VarChar).Value = "";//newPerson.CurrentTransaInv.TransaString;
                     command.Parameters.Add("@TransaMunca", OleDbType.VarChar).Value = "";//newPerson.CurrentTransaMunca.TransaString;
@@ -388,7 +387,7 @@ namespace VechimeSoftware
                     command.Parameters.Add("@nume", OleDbType.VarChar, 50).Value = newPerson.Nume;
                     command.Parameters.Add("@prenume", OleDbType.VarChar, 50).Value = newPerson.Prenume;
                     command.Parameters.Add("@cnp", OleDbType.VarChar, 13).Value = newPerson.CNP;
-                    command.Parameters.Add("@serie", OleDbType.VarChar, 6).Value = newPerson.Functie;
+                    command.Parameters.Add("@serie", OleDbType.VarChar).Value = newPerson.Functie;
                     command.Parameters.Add("@TransaInv", OleDbType.VarChar).Value = newPerson.CurrentTransaInv.TransaString;
                     command.Parameters.Add("@TransaMunca", OleDbType.VarChar).Value = newPerson.CurrentTransaMunca.TransaString;
                     command.Parameters.Add("@id", OleDbType.Integer).Value = newPerson.ID;
@@ -1047,6 +1046,12 @@ namespace VechimeSoftware
             }
         }
 
+        private void actualizareToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            UpdatePerioade();
+            CheckTransaUpdates();
+        }
+
         #endregion UpdateHandlers
 
         #endregion Menu Strip Handlers
@@ -1159,7 +1164,7 @@ namespace VechimeSoftware
                 // Pastreaza inaltimea la care am ajuns in pagina
                 int currentHeight = 148;
 
-                foreach (Perioada perioada in selectedPerson.Perioade)
+                foreach (Perioada perioada in selectedPerson.Perioade.OrderBy(c=>c.DTSfarsit))
                 {
                     count++;
 

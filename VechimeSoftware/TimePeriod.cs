@@ -78,9 +78,9 @@ namespace VechimeSoftware
 
             if(perioada.CFS && perioada.TipCFS.ToUpper() == "PT NEVOI PERSONALE")
             {
-                TimePeriod zeroPer = new TimePeriod();
-                zeroPer.Days = zeroPer.Months = zeroPer.Years = 0;
-                return zeroPer;
+               TimePeriod zeroPer = new TimePeriod();
+               zeroPer.Days = zeroPer.Months = zeroPer.Years = 0;
+               return zeroPer;
             }
 
             // Doar timpul in invatamant
@@ -91,6 +91,8 @@ namespace VechimeSoftware
             DateTime changeSomaj = new DateTime(2002, 03, 01);
 
             DateTime changeNorma = new DateTime(2005, 07, 05); //ORDONANTA 65 - 05 IULIE 2005
+
+            DateTime changeConcediu = new DateTime(2011, 02, 07);
 
             if (!perioada.Somaj || perioada.DTInceput.CompareTo(changeSomaj) < 0)
             {
@@ -104,7 +106,8 @@ namespace VechimeSoftware
 
                 // aplic norma
                 //Somajul este calculat mereu 1/1
-                if (perioada.DTInceput.CompareTo(changeNorma) < 0 && perioada.Norma != "1/1" && !perioada.Somaj)
+                if (perioada.DTInceput.CompareTo(changeNorma) < 0 && perioada.Norma != "1/1" && !perioada.Somaj && !perioada.CFS)
+                {
                     if (perioada.DTSfarsit.CompareTo(changeNorma) > 0)
                     {
                         diff = Utils.DateDiffFixed(perioada.DTInceput, changeNorma);
@@ -131,6 +134,24 @@ namespace VechimeSoftware
                         else if (perioada.Norma == "1/4")
                             np = QuarterTime(np);
                     }
+                }
+
+                if(perioada.CFS && perioada.TipCFS.ToUpper() == "PT STUDII")
+                {
+                    if(perioada.DTInceput.CompareTo(changeConcediu) < 0 && perioada.DTSfarsit.CompareTo(changeConcediu) > 0)
+                    {
+                        diff = Utils.DateDiffFixed(perioada.DTInceput, changeConcediu);
+                        np.Years = diff.ElapsedYears;
+                        np.Months = diff.ElapsedMonths;
+                        np.Days = diff.ElapsedDays+1;
+                    }
+                    else if(perioada.DTInceput.CompareTo(changeConcediu) > 0 && perioada.DTSfarsit.CompareTo(changeConcediu) > 0)
+                    {
+                        np.Years = 0;
+                        np.Months = 0;
+                        np.Days = 0;
+                    }
+                }
 
                 ani += np.Years;
                 luni += np.Months;
@@ -177,7 +198,9 @@ namespace VechimeSoftware
 
                 DateTime changeNorma = new DateTime(2005, 07, 05);
 
-                if ((!perioade[i].Somaj || perioade[i].DTInceput.CompareTo(changeSomaj) < 0) && perioade[i].TipCFS != "PT NEVOI PERSONALE")
+                DateTime changeConcediu = new DateTime(2011, 02, 07);
+
+                if ((!perioade[i].Somaj || perioade[i].DTInceput.CompareTo(changeSomaj) < 0) && perioade[i].CFS == false)
                 {
                     if (perioade[i].DTSfarsit.CompareTo(changeSomaj) > 0 && perioade[i].Somaj)
                         diff = Utils.DateDiffFixed(perioade[i].DTInceput, changeSomaj);
@@ -191,6 +214,7 @@ namespace VechimeSoftware
 
                     // aplic norma
                     if (perioade[i].DTInceput.CompareTo(changeNorma) < 0 && perioade[i].Norma != "1/1" && !perioade[i].Somaj)
+                    {
                         if (perioade[i].DTSfarsit.CompareTo(changeNorma) > 0)
                         {
                             diff = Utils.DateDiffFixed(perioade[i].DTInceput, changeNorma);
@@ -217,6 +241,24 @@ namespace VechimeSoftware
                             else if (perioade[i].Norma == "1/4")
                                 np = QuarterTime(np);
                         }
+                    }
+
+                    if (perioade[i].CFS && perioade[i].TipCFS.ToUpper() == "PT STUDII")
+                    {
+                        if (perioade[i].DTInceput.CompareTo(changeConcediu) < 0 && perioade[i].DTSfarsit.CompareTo(changeConcediu) > 0)
+                        {
+                            diff = Utils.DateDiffFixed(perioade[i].DTInceput, changeConcediu);
+                            np.Years = diff.ElapsedYears;
+                            np.Months = diff.ElapsedMonths;
+                            np.Days = diff.ElapsedDays+1;
+                        }
+                        else if (perioade[i].DTInceput.CompareTo(changeConcediu) > 0 && perioade[i].DTSfarsit.CompareTo(changeConcediu) > 0)
+                        {
+                            np.Years = 0;
+                            np.Months = 0;
+                            np.Days = 0;
+                        }
+                    }
 
                     if (perioade[i].TipCFS.ToUpper() != "PT NEVOI PERSONALE")
                     {
@@ -225,7 +267,7 @@ namespace VechimeSoftware
                         zile += np.Days;
                     }
 
-                    if (perioade[i].IOM.ToUpper() == "INVATAMANT" || perioade[i].TipCFS.ToUpper() == "PT STUDII")
+                    if (perioade[i].IOM.ToUpper() == "INVATAMANT")
                     {
                         aniInv += np.Years;
                         luniInv += np.Months;

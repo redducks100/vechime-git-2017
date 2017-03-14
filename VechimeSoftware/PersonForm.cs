@@ -74,7 +74,7 @@ namespace VechimeSoftware
             if (currentPerson != null)
             {
                 cnpTextBox.Text = currentPerson.CNP;
-                serieTextBox.Text = currentPerson.Functie;
+                serieTextBox.Text = currentPerson.Functie.ToUpper();
                 nameTextBox.Text = currentPerson.Nume.ToUpper();
                 prenumeTextBox.Text = currentPerson.Prenume.ToUpper();
 
@@ -95,7 +95,7 @@ namespace VechimeSoftware
             if (modified)
             {
                 cnpTextBox.Text = currentPerson.CNP;
-                serieTextBox.Text = currentPerson.Functie;
+                serieTextBox.Text = currentPerson.Functie.ToUpper();
                 nameTextBox.Text = currentPerson.Nume.ToUpper();
                 prenumeTextBox.Text = currentPerson.Prenume.ToUpper();
 

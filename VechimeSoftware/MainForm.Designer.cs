@@ -44,6 +44,7 @@ namespace VechimeSoftware
             this.persoanaSelectataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toatePersoaneleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.adeverintaVechimeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.actualizareToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setariToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.unitateaCurentaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optiuniToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -170,21 +171,21 @@ namespace VechimeSoftware
             // adaugaToolStripMenuItem1
             // 
             this.adaugaToolStripMenuItem1.Name = "adaugaToolStripMenuItem1";
-            this.adaugaToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.adaugaToolStripMenuItem1.Size = new System.Drawing.Size(131, 22);
             this.adaugaToolStripMenuItem1.Text = "Adauga";
             this.adaugaToolStripMenuItem1.Click += new System.EventHandler(this.adaugaToolPerioadaStripMenuItem_Click);
             // 
             // modificareToolStripMenuItem
             // 
             this.modificareToolStripMenuItem.Name = "modificareToolStripMenuItem";
-            this.modificareToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.modificareToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
             this.modificareToolStripMenuItem.Text = "Modificare";
             this.modificareToolStripMenuItem.Click += new System.EventHandler(this.modificareToolStripMenuItem_Click);
             // 
             // stergeToolStripMenuItem1
             // 
             this.stergeToolStripMenuItem1.Name = "stergeToolStripMenuItem1";
-            this.stergeToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.stergeToolStripMenuItem1.Size = new System.Drawing.Size(131, 22);
             this.stergeToolStripMenuItem1.Text = "Sterge";
             this.stergeToolStripMenuItem1.Click += new System.EventHandler(this.stergeToolStripMenuItem1_Click);
             // 
@@ -193,7 +194,8 @@ namespace VechimeSoftware
             this.raportToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.persoanaSelectataToolStripMenuItem,
             this.toatePersoaneleToolStripMenuItem,
-            this.adeverintaVechimeToolStripMenuItem});
+            this.adeverintaVechimeToolStripMenuItem,
+            this.actualizareToolStripMenuItem});
             this.raportToolStripMenuItem.Name = "raportToolStripMenuItem";
             this.raportToolStripMenuItem.Size = new System.Drawing.Size(54, 20);
             this.raportToolStripMenuItem.Text = "Raport";
@@ -218,6 +220,13 @@ namespace VechimeSoftware
             this.adeverintaVechimeToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
             this.adeverintaVechimeToolStripMenuItem.Text = "Adeverinta vechime";
             this.adeverintaVechimeToolStripMenuItem.Click += new System.EventHandler(this.adeverintaVechimeGenerateToolStripMenuItem_Click);
+            // 
+            // actualizareToolStripMenuItem
+            // 
+            this.actualizareToolStripMenuItem.Name = "actualizareToolStripMenuItem";
+            this.actualizareToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.actualizareToolStripMenuItem.Text = "Actualizare";
+            this.actualizareToolStripMenuItem.Click += new System.EventHandler(this.actualizareToolStripMenuItem_Click);
             // 
             // setariToolStripMenuItem
             // 
@@ -753,6 +762,7 @@ namespace VechimeSoftware
             this.ClientSize = new System.Drawing.Size(1074, 478);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MinimumSize = new System.Drawing.Size(1090, 517);
             this.Name = "MainForm";
             this.Text = "Vechime Manager";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainForm_FormClosed);
@@ -840,6 +850,7 @@ namespace VechimeSoftware
         private System.Windows.Forms.ToolStripMenuItem optiuniToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem despreToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem deconectareToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem actualizareToolStripMenuItem;
     }
 }
 
