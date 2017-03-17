@@ -30,7 +30,7 @@ namespace VechimeSoftware
 
         public bool DemoVersion = false;
 
-        public MainForm(LoginForm _loginForm,bool _demoVersion = false, bool startUp = false)
+        public MainForm(LoginForm _loginForm, bool _demoVersion = false, bool startUp = false)
         {
             InitializeComponent();
 
@@ -111,7 +111,7 @@ namespace VechimeSoftware
 
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
         {
-            if(loginForm.Visible == false)
+            if (loginForm.Visible == false)
                 Application.Exit();
         }
 
@@ -231,18 +231,18 @@ namespace VechimeSoftware
 
         private void UpdatePerioade()
         {
-           CheckLucreazaUnitateaCurenta();
-           foreach (Person person in peopleDictionary.Values)
-           {
-               for (int i = 0; i < person.Perioade.Count; i++)
-               {
-                   if (person.Perioade[i].Lucreaza == true && person.Perioade[i].LucreazaUnitateaCurenta)
-                   {
-                       person.Perioade[i].DTSfarsit = DateTime.Today;
-                       ModifyPerioada(person.Perioade[i], person.ID);
-                   }
-               }
-           }
+            CheckLucreazaUnitateaCurenta();
+            foreach (Person person in peopleDictionary.Values)
+            {
+                for (int i = 0; i < person.Perioade.Count; i++)
+                {
+                    if (person.Perioade[i].Lucreaza == true && person.Perioade[i].LucreazaUnitateaCurenta)
+                    {
+                        person.Perioade[i].DTSfarsit = DateTime.Today;
+                        ModifyPerioada(person.Perioade[i], person.ID);
+                    }
+                }
+            }
         }
 
         #endregion UpdateStuff
@@ -1107,7 +1107,7 @@ namespace VechimeSoftware
                     selectedPerson = peopleDictionary[(peopleListBox.SelectedItem as Person).ID];
                 else
                 {
-                    MessageBox.Show("Person doesn't exist!", "Error!");
+                    MessageBox.Show("Această persoană nu există!", "Error!");
                     return;
                 }
 
@@ -1115,9 +1115,13 @@ namespace VechimeSoftware
 
                 PdfPage page = document.AddPage();
 
+                page.Orientation = PdfSharp.PageOrientation.Landscape;
+
                 XGraphics gfx = XGraphics.FromPdfPage(page);
 
-                XFont fontTitle = new XFont("Verdana", 20);
+                XPdfFontOptions options = new XPdfFontOptions(PdfFontEncoding.Unicode, PdfFontEmbedding.Always);
+
+                XFont fontTitle = new XFont("Verdana", 20, XFontStyle.Regular, options);
 
                 // Adaug titlu
                 gfx.DrawString("Raport vechime individual"
@@ -1125,7 +1129,7 @@ namespace VechimeSoftware
                               , XStringFormats.TopCenter);
 
                 // Adaug informatii despre persoana
-                XFont font = new XFont("Verdana", 11);
+                XFont font = new XFont("Verdana", 11, XFontStyle.Regular, options);
 
                 gfx.DrawString("Persoana: " + selectedPerson.NumeIntreg
                               , font, XBrushes.Black,
@@ -1137,7 +1141,7 @@ namespace VechimeSoftware
                                new XRect(45, 82, page.Width, page.Height),
                                XStringFormats.TopLeft);
 
-                gfx.DrawString("Functia : " + selectedPerson.Functie
+                gfx.DrawString("Funcţia : " + selectedPerson.Functie
                             , font, XBrushes.Black,
                               new XRect(45, 94, page.Width, page.Height),
                               XStringFormats.TopLeft);
@@ -1147,14 +1151,14 @@ namespace VechimeSoftware
                 // Prima linie
                 gfx.DrawLine(new XPen(XColor.FromName("black")), new System.Windows.Point(20, 118), new System.Windows.Point(wd - 20, 118));
 
-                XFont fontTableHead = new XFont("Verdana", 10);
+                XFont fontTableHead = new XFont("Verdana", 10, XFontStyle.Regular, options);
 
-                gfx.DrawString("Nr.crt.  Data inceput  Data sfarsit  Norma  Invatamant/Munca  Ani  Luni  Zile  Locul de munca"
+                gfx.DrawString("Nr.crt.  Dată început  Dată sfârşit  Normă  Funcţie           Tip          Ani  Luni  Zile       Locul de muncă"
                               , fontTableHead, XBrushes.Black,
                               new XRect(25, 128, page.Width, page.Height),
                               XStringFormats.TopLeft);
 
-                XFont fontList = new XFont("Consolas", 10);
+                XFont fontList = new XFont("Consolas", 10, XFontStyle.Regular, options);
 
                 // A doua linie
                 gfx.DrawLine(new XPen(XColor.FromName("black")), new System.Windows.Point(20, 148), new System.Windows.Point(wd - 20, 148));
@@ -1164,7 +1168,7 @@ namespace VechimeSoftware
                 // Pastreaza inaltimea la care am ajuns in pagina
                 int currentHeight = 148;
 
-                foreach (Perioada perioada in selectedPerson.Perioade.OrderBy(c=>c.DTSfarsit))
+                foreach (Perioada perioada in selectedPerson.Perioade.OrderBy(c => c.DTSfarsit))
                 {
                     count++;
 
@@ -1190,15 +1194,23 @@ namespace VechimeSoftware
                     rowString = rowString.Insert(8, perioada.DTInceput.ToShortDateString());
                     rowString = rowString.Insert(21, perioada.DTSfarsit.ToShortDateString());
                     rowString = rowString.Insert(33, perioada.Norma.ToUpper());
-                    rowString = rowString.Insert(41, perioada.IOM.ToUpper());
-                    rowString = rowString.Insert(58, periodCalc.Years.ToString());
-                    rowString = rowString.Insert(63, periodCalc.Months.ToString());
-                    rowString = rowString.Insert(68, periodCalc.Days.ToString());
+                    rowString = rowString.Insert(39, perioada.Functie.ToUpper());
+
+                    string iom = perioada.IOM.ToUpper();
+                    if (perioada.IOM.ToUpper() == "INVATAMANT")
+                        iom = "ÎNVĂŢĂMÂNT";
+                    else if (perioada.IOM.ToUpper() == "MUNCA")
+                        iom = "MUNCĂ";
+
+                    rowString = rowString.Insert(50, iom);
+                    rowString = rowString.Insert(63, periodCalc.Years.ToString());
+                    rowString = rowString.Insert(67, periodCalc.Months.ToString());
+                    rowString = rowString.Insert(72, periodCalc.Days.ToString());
 
                     if (perioada.LocMunca.ToUpper() == "CONCEDIU")
-                        rowString = rowString.Insert(76, perioada.LocMunca.ToUpper() + " " + perioada.TipCFS);
+                        rowString = rowString.Insert(77, perioada.LocMunca.ToUpper() + " " + perioada.TipCFS);
                     else
-                        rowString = rowString.Insert(76, perioada.LocMunca.ToUpper());
+                        rowString = rowString.Insert(77, perioada.LocMunca.ToUpper());
 
                     gfx.DrawString(rowString, fontList, XBrushes.Black,
                                    new XRect(25, currentHeight, page.Width, page.Height),
@@ -1222,7 +1234,7 @@ namespace VechimeSoftware
                 TimePeriodSum periodsSum = TimePeriodSum.CalculateIndividualTime(selectedPerson.Perioade);
 
                 // Adaug timp invatamant
-                gfx.DrawString("Vechime in invatamant: " + periodsSum.YearsInv + " ani, " + periodsSum.MonthsInv + " luni, " + periodsSum.DaysInv + " zile.   Transa " + selectedPerson.CurrentTransaInv.TransaString
+                gfx.DrawString("Vechime în învăţământ: " + periodsSum.YearsInv + " ani, " + periodsSum.MonthsInv + " luni, " + periodsSum.DaysInv + " zile.   Tranşă " + selectedPerson.CurrentTransaInv.TransaString
                                 , fontList, XBrushes.Black,
                                 new XRect(0, currentHeight, page.Width, page.Height),
                                 XStringFormats.TopCenter);
@@ -1230,7 +1242,7 @@ namespace VechimeSoftware
                 currentHeight += 15;
 
                 // Adaug timp total
-                gfx.DrawString("Vechime total: " + periodsSum.Years + " ani, " + periodsSum.Months + " luni, " + periodsSum.Days + " zile.  Transa " + selectedPerson.CurrentTransaMunca.TransaString
+                gfx.DrawString("Vechime total: " + periodsSum.Years + " ani, " + periodsSum.Months + " luni, " + periodsSum.Days + " zile.  Tranşă " + selectedPerson.CurrentTransaMunca.TransaString
                                  , fontList, XBrushes.Black,
                                  new XRect(0, currentHeight, page.Width, page.Height),
                                  XStringFormats.TopCenter);
@@ -1238,7 +1250,9 @@ namespace VechimeSoftware
                 // Adaug 4 litere random sa evit o problema cu PdfReader
                 string filename = "Raport_" + RandomString(5) + ".pdf";
 
-                string[] files = Directory.GetFiles(Application.StartupPath, "Raport_*.pdf");
+                string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "VechimeManager");
+
+                string[] files = Directory.GetFiles(path, "Raport_*.pdf");
 
                 // Sterg fisierele pe care le-am creat anterior
                 foreach (string file in files)
@@ -1252,9 +1266,10 @@ namespace VechimeSoftware
                     }
                 }
 
-                document.Save(filename);
+                path = Path.Combine(path, filename);
+                document.Save(path);
 
-                var pdfProcess = Process.Start(filename);
+                var pdfProcess = Process.Start(path);
             }
             else MessageBox.Show("Selectati mai intai o persoana!");
         }
@@ -1268,7 +1283,9 @@ namespace VechimeSoftware
 
             XGraphics gfx = XGraphics.FromPdfPage(page);
 
-            XFont fontTitle = new XFont("Verdana", 20);
+            XPdfFontOptions options = new XPdfFontOptions(PdfFontEncoding.Unicode, PdfFontEmbedding.Always);
+
+            XFont fontTitle = new XFont("Verdana", 20, XFontStyle.Regular, options);
 
             gfx.DrawString("Raport vechime general", fontTitle, XBrushes.Black,
                              new XRect(0, 20, page.Width, page.Height),
@@ -1278,17 +1295,17 @@ namespace VechimeSoftware
 
             gfx.DrawLine(new XPen(XColor.FromName("black")), new System.Windows.Point(20, 70), new System.Windows.Point(wd - 20, 70));
 
-            XFont fontTableHead = new XFont("Verdana", 10);
+            XFont fontTableHead = new XFont("Verdana", 10, XFontStyle.Regular, options);
 
             gfx.DrawString("Nr. crt.     Persoana                        CNP" +
-                              "                   Vechime in invatamant            Vechime in munca"
+                              "                   Vechime în învăţământ            Vechime în muncă"
                             , fontTableHead, XBrushes.Black,
                              new XRect(25, 80, page.Width, page.Height),
                              XStringFormats.TopLeft);
 
             gfx.DrawLine(new XPen(XColor.FromName("black")), new System.Windows.Point(20, 100), new System.Windows.Point(wd - 20, 100));
 
-            XFont fontList = new XFont("Verdana", 8);
+            XFont fontList = new XFont("Verdana", 8, XFontStyle.Regular, options);
 
             int currentHeight = 100, count = 0;
 
@@ -1332,8 +1349,12 @@ namespace VechimeSoftware
 
             string filename = "General_" + RandomString(5) + ".pdf";
 
-            string[] files = Directory.GetFiles(Application.StartupPath, "General_*.pdf");
 
+            string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "VechimeManager");
+
+            string[] files = Directory.GetFiles(path, "General_*.pdf");
+
+            // Sterg fisierele pe care le-am creat anterior
             foreach (string file in files)
             {
                 try
@@ -1345,9 +1366,10 @@ namespace VechimeSoftware
                 }
             }
 
-            document.Save(filename);
+            path = Path.Combine(path, filename);
+            document.Save(path);
 
-            var pdfProcess = Process.Start(filename);
+            var pdfProcess = Process.Start(path);
         }
 
         // Generez pdf pentru adeverinta
@@ -1355,7 +1377,7 @@ namespace VechimeSoftware
         {
             if (peopleListBox.SelectedIndex < 0)
             {
-                MessageBox.Show("Nu ati selectat nici o persoana!", "Atentie");
+                MessageBox.Show("Nu aţi selectat nici o persoană!", "Atenţie");
                 return;
             }
 
@@ -1375,7 +1397,7 @@ namespace VechimeSoftware
                 selectedPerson = peopleDictionary[(peopleListBox.SelectedItem as Person).ID];
             else
             {
-                MessageBox.Show("Person doesn't exist!", "Error!");
+                MessageBox.Show("Persoana nu exista!", "Error!");
                 return;
             }
 
@@ -1390,7 +1412,7 @@ namespace VechimeSoftware
 
             if (!ok)
             {
-                MessageBox.Show("Aceasta persoana nu a lucrat in acest interval!", "Atentie");
+                MessageBox.Show("Această persoană nu a lucrat în acest interval!", "Atentie");
                 return;
             }
 
@@ -1406,11 +1428,11 @@ namespace VechimeSoftware
 
             paragraphSchoolInfo.Format.Font.Size = 9;
             paragraphSchoolInfo.Format.Alignment = ParagraphAlignment.Left;
-            paragraphSchoolInfo.AddText("Unitatea scolara: " + currentUnitate.SC + "\n" +
+            paragraphSchoolInfo.AddText("Unitatea şcolară: " + currentUnitate.SC + "\n" +
                                         "Str. " + currentUnitate.Strada + " , nr " + currentUnitate.Numar + ", loc " + currentUnitate.Localitate + ", jud " + currentUnitate.Judet + "\n" +
                                         "Tel: " + currentUnitate.Telefon + ",  Fax: " + currentUnitate.Fax + ", \n" +
                                         "CUI: " + currentUnitate.CUI + ", \n\n" +
-                                        "Nr.de inregistrare: " + "\n Data " + DateTime.Now.ToString("dd/MM/yyyy"));
+                                        "Nr.de înregistrare: " + "\n Data " + DateTime.Now.ToString("dd/MM/yyyy"));
 
             //Add title
 
@@ -1420,19 +1442,19 @@ namespace VechimeSoftware
 
             paragraphTitle.Format.Font.Size = 15;
             paragraphTitle.Format.Alignment = ParagraphAlignment.Center;
-            paragraphTitle.AddText("\nAdeverinta\n\n");
+            paragraphTitle.AddText("\nAdeverinţă\n\n");
 
             Paragraph paragraphContent1 = section.AddParagraph();
             paragraphContent1.Format.Font.Name = "Verdana";
             paragraphContent1.Format.Font.Size = 9;
             paragraphContent1.Format.Font.Italic = true;
-            paragraphContent1.AddFormattedText("      " + " Prin prezenta se atesta faptul ca dl./dna " + selectedPerson.NumeIntreg +
+            paragraphContent1.AddFormattedText("      " + "Prin prezenţa se atestă faptul că dl./dna " + selectedPerson.NumeIntreg +
                                       ", CNP " + selectedPerson.CNP +
-                                      ", a fost angajat al unitatii " + currentUnitate.SC + "  " +
+                                      ", a fost angajat al unităţii " + currentUnitate.SC + "  " +
 
-                                      ", in functia de " + selectedPerson.Functie + ". \n" +
-                                      "      " + " Pe durata executarii contractului individual de munca au intervenit urmatoarele mutatii " +
-                                      "( incheierea, modificarea, suspendarea si incetarea contractului individual de munca ): \n\n");
+                                      ", în funcţia de de " + selectedPerson.Functie + ". \n" +
+                                      "      " + " Pe durata executării contractului individual de muncă au intervenit următoarele mutaţii" +
+                                      "( încheierea, modificarea, suspendarea şi încetarea contractului individual de muncă): \n\n");
 
             table = section.AddTable();
             table.Borders.Color = Colors.Black;
@@ -1463,7 +1485,7 @@ namespace VechimeSoftware
             row.Cells[0].Format.Font.Bold = false;
             row.Cells[0].Format.Alignment = ParagraphAlignment.Left;
 
-            row.Cells[1].AddParagraph("Mutatia / interventia");
+            row.Cells[1].AddParagraph("Mutaţia / intervenţia");
             row.Cells[1].Format.Alignment = ParagraphAlignment.Left;
 
             row.Cells[2].AddParagraph("Data");
@@ -1495,7 +1517,7 @@ namespace VechimeSoftware
                         if (perioada.TipCFS != "")
                             row.Cells[1].AddParagraph("Suspendare");
                         else
-                            row.Cells[1].AddParagraph("Incadrat");
+                            row.Cells[1].AddParagraph("Încadrat");
 
                         row.Cells[1].Format.Alignment = ParagraphAlignment.Left;
 
@@ -1517,9 +1539,9 @@ namespace VechimeSoftware
                         count++;
 
                         if (perioada.TipCFS != "")
-                            row.Cells[1].AddParagraph("Incetat suspendare");
+                            row.Cells[1].AddParagraph("Încetat suspendare");
                         else
-                            row.Cells[1].AddParagraph("Incetat contract de munca");
+                            row.Cells[1].AddParagraph("Încetat contract de muncă");
 
                         row.Cells[1].Format.Alignment = ParagraphAlignment.Left;
 
@@ -1536,11 +1558,11 @@ namespace VechimeSoftware
             Paragraph paragraphContent2 = section.AddParagraph();
             paragraphContent2.Format.Font.Size = 9;
             paragraphContent2.Format.Font.Italic = true;
-            paragraphContent2.AddFormattedText("      " + "Incepind cu data de  " + ultimaData.ToString("dd/MM/yyyy") +
-                ", contractul individual de munca al domnului (ei) a incetat.\n\n\n" +
-            "               " + "Director," + "                                 " + "Intocmit,");
+            paragraphContent2.AddFormattedText("      " + "Începînd cu data de" + ultimaData.ToString("dd/MM/yyyy") +
+                ", contractul individual de muncă al domnului (ei) a încetat.\n\n\n" +
+            "               " + "Director," + "                                 " + "Întocmit,");
 
-            PdfDocumentRenderer pdfRenderer = new PdfDocumentRenderer(false, PdfFontEmbedding.Always);
+            PdfDocumentRenderer pdfRenderer = new PdfDocumentRenderer(true, PdfFontEmbedding.Always);
 
             pdfRenderer.Document = document;
 
@@ -1548,8 +1570,12 @@ namespace VechimeSoftware
 
             string filename = "Adeverinta_" + RandomString(4) + ".pdf";
 
-            string[] files = Directory.GetFiles(Application.StartupPath, "Adeverinta_*.pdf");
 
+            string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "VechimeManager");
+
+            string[] files = Directory.GetFiles(path, "Adeverinta_*.pdf");
+
+            // Sterg fisierele pe care le-am creat anterior
             foreach (string file in files)
             {
                 try
@@ -1561,9 +1587,15 @@ namespace VechimeSoftware
                 }
             }
 
-            pdfRenderer.PdfDocument.Save(filename);
 
-            Process.Start(filename);
+            path = Path.Combine(path, filename);
+
+
+            pdfRenderer.PdfDocument.Save(path);
+            Process.Start(path);
+
+
+
         }
 
         // Functia care returneaza un sir random de caractere

@@ -27,7 +27,7 @@ namespace VechimeSoftware
 
             currentChangedPeriods = new List<Perioada>();
 
-            functieComboBox.SelectedIndex = 0;
+            //functieComboBox.SelectedIndex = 0;
             normaComboBox.SelectedIndex = 0;
             iomComboBox.SelectedIndex = 0;
             tipConcediuComboBox.SelectedIndex = 0;
@@ -60,7 +60,7 @@ namespace VechimeSoftware
                 sfarsitTimePicker.Value = currentPerioada.DTSfarsit;
                 normaComboBox.SelectedItem = currentPerioada.Norma.ToUpper();
                 iomComboBox.SelectedItem = currentPerioada.IOM.ToUpper();
-                functieComboBox.SelectedItem = currentPerioada.Functie.ToUpper();
+                functieComboBox.Text = currentPerioada.Functie.ToUpper();
                 locMuncaTextBox.Text = currentPerioada.LocMunca.ToUpper();
 
                 Perioada temporaryPerioada = new Perioada();
@@ -145,7 +145,7 @@ namespace VechimeSoftware
                     iomComboBox.SelectedIndex = 1;
                 }
 
-                functieComboBox.SelectedItem = currentPerioada.Functie.ToString().ToUpper();
+                functieComboBox.Text = currentPerioada.Functie.ToString().ToUpper();
                 locMuncaTextBox.Text = currentPerioada.LocMunca.ToString().ToUpper();
 
                 Perioada temporaryPerioada = new Perioada();
@@ -263,7 +263,7 @@ namespace VechimeSoftware
                     currentPerioada.Norma = normaComboBox.SelectedItem.ToString();
                     currentPerioada.Lucreaza = lucreazaCheckBox.Checked;
                     currentPerioada.LucreazaUnitateaCurenta = lucreazaUCurentaCheckBox.Checked;
-                    currentPerioada.Functie = functieComboBox.SelectedItem.ToString().ToUpper();
+                    currentPerioada.Functie = functieComboBox.Text.ToString().ToUpper();
                 }
             }
 
@@ -320,7 +320,7 @@ namespace VechimeSoftware
                     currentPerioada.Norma = normaComboBox.SelectedItem.ToString();
                     currentPerioada.Lucreaza = lucreazaCheckBox.Checked;
                     currentPerioada.LucreazaUnitateaCurenta = lucreazaUCurentaCheckBox.Checked;
-                    currentPerioada.Functie = functieComboBox.SelectedItem.ToString().ToUpper();
+                    currentPerioada.Functie = functieComboBox.Text.ToUpper();
                 }
             }
             currentPerioada.Somaj = somerCheckBox.Checked;
@@ -451,7 +451,7 @@ namespace VechimeSoftware
                     iomComboBox.Enabled = true;
                 }
 
-                functieComboBox.SelectedItem = currentPerioada != null ? currentPerioada.Functie.ToUpper() : "";
+                functieComboBox.Text = currentPerioada != null ? currentPerioada.Functie.ToUpper() : "";
                 functieComboBox.Enabled = true;
 
                 locMuncaTextBox.Text = currentPerioada != null ? currentPerioada.LocMunca.ToUpper() : "";
@@ -495,7 +495,7 @@ namespace VechimeSoftware
                 if (currentPerioada != null)
                 {
                     locMuncaTextBox.Text = currentPerioada.LocMunca;
-                    functieComboBox.SelectedItem = currentPerioada.Functie;
+                    functieComboBox.Text = currentPerioada.Functie;
                 }
                 else
                 {
