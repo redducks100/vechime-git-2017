@@ -42,7 +42,7 @@ namespace VechimeSoftware
             serverPort = "35089";
             databaseName = "license_manager";
             databaseUser = "license_manager_admin";
-            databasePassword = "cbyuvtigymohmfuhoe124ss";
+            databasePassword = "********************";
 
             connectionString = $"mongodb://{databaseUser}:{databasePassword}@{server}:{serverPort}/{databaseName}";
 
